@@ -16,7 +16,7 @@
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #1f2833 0, #0b0c10 55%);
+      background: #0b0c10;
       color: var(--fg);
       min-height: 100vh;
       display: flex;
@@ -164,6 +164,15 @@
       margin-bottom: 0.6rem;
       font-size: 0.85rem;
     }
+
+    .pw-input {
+      padding: 0.35rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(10,15,25,0.9);
+      color: var(--fg);
+      font-size: 0.8rem;
+    }
     .auth-btn {
       border-radius: var(--btn-radius);
       padding: 0.35rem 0.8rem;
@@ -192,10 +201,10 @@
       <div>
         <a class="back-link" href="./">← back to home</a>
         <h1>work_status</h1>
-        <small>Remote status indicator (view for everyone, control only for me)</small>
+        <small>Remote status indicator (view for everyone)</small>
       </div>
       <div class="pill">
-        v0.2 – Firebase-connected
+        v0.3 – Firebase connected (test mode)
       </div>
     </header>
 
@@ -215,29 +224,29 @@
         </div>
 
         <p class="helper-text">
-          Mapping firmware consigliato: default = full rainbow fade · lab = fade arancione · busy = rosso · free = verde · X = viola.
+          Mapping firmware consigliato: default = full rainbow fade · lab = arancione · busy = rosso · free = verde · X = viola.
         </p>
       </section>
 
-      <!-- RIGHT: control panel (only for you when logged in) -->
+      <!-- RIGHT: simple password + control panel -->
       <section class="card">
         <div class="auth-row">
           <div>
             <strong>Control panel</strong><br>
-            <span id="auth-info">Not signed in</span>
+            <span id="auth-info">Locked (view only)</span>
           </div>
           <div>
-            <button id="login-btn" class="auth-btn">Sign in with Google</button>
-            <button id="logout-btn" class="auth-btn hidden">Sign out</button>
+            <input id="pw-input" class="pw-input" type="password" placeholder="password" />
+            <button id="pw-btn" class="auth-btn">Unlock</button>
           </div>
         </div>
 
         <div id="control-locked" class="helper-text">
-          Solo il mio account può modificare lo stato. Se non sei io, questo pannello rimarrà bloccato.
+          Solo chi conosce la password può cambiare lo stato. Questo è un blocco lato client (non è sicurezza forte).
         </div>
 
         <div id="control-panel" class="hidden">
-          <p>Seleziona lo stato da applicare all’indicatore fisico:</p>
+          <p>Seleziona lo stato da applicare all’indicatore:</p>
           <div class="state-buttons">
             <button class="state-btn" data-state="default">
               <span class="state-dot dot-default"></span>
@@ -261,27 +270,20 @@
             </button>
           </div>
           <p class="helper-text">
-            Ogni click scrive <code>indicator/status</code> nel Realtime Database. L’ESP8266 fa polling e aggiorna i LED.
+            Ogni click scrive <code>indicator/status</code> nel Realtime Database.
           </p>
         </div>
       </section>
     </main>
 
     <footer>
-      work_status – everyone can read · only owner can write.
+      work_status – tutti leggono, chi ha la password può scrivere (per ora solo lato client).
     </footer>
   </div>
 
-  <!-- Firebase SDK (modular, via CDN) -->
+  <!-- SCRIPT: Firebase + logica -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import {
-      getAuth,
-      GoogleAuthProvider,
-      signInWithPopup,
-      signOut,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import {
       getDatabase,
       ref,
@@ -289,31 +291,29 @@
       onValue
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-    // TODO: incolla qui la tua config dal pannello Firebase
     const firebaseConfig = {
-      apiKey: "XXX",
-      authDomain: "XXX.firebaseapp.com",
-      databaseURL: "https://XXX-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "XXX",
-      storageBucket: "XXX.appspot.com",
-      messagingSenderId: "XXX",
-      appId: "XXX"
+      apiKey: "AIzaSyCymGUKXdpBtVJPC1YH2bLuRLc16p-E93A",
+      authDomain: "workstatus-5a293.firebaseapp.com",
+      databaseURL: "https://workstatus-5a293-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "workstatus-5a293",
+      storageBucket: "workstatus-5a293.firebasestorage.app",
+      messagingSenderId: "737892892698",
+      appId: "1:737892892698:web:6f7112f9f5e724625451a3",
+      measurementId: "G-60KPLB1GDG"
     };
 
-    const OWNER_EMAIL = "LA_TUA_MAIL_GOOGLE@qualcosa.com"; // <-- cambia questo
+    const LOCAL_PASSWORD = "ccremkjgp9f54";
 
     const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db   = getDatabase(app);
-
+    const db  = getDatabase(app);
     const statusRef = ref(db, "indicator/status");
 
     const statusDisplay = document.getElementById("status-display");
     const statusLabel   = document.getElementById("status-label");
     const statusSource  = document.getElementById("status-source");
 
-    const loginBtn      = document.getElementById("login-btn");
-    const logoutBtn     = document.getElementById("logout-btn");
+    const pwInput       = document.getElementById("pw-input");
+    const pwBtn         = document.getElementById("pw-btn");
     const authInfo      = document.getElementById("auth-info");
     const controlPanel  = document.getElementById("control-panel");
     const controlLocked = document.getElementById("control-locked");
@@ -346,73 +346,40 @@
       });
     }
 
-    // Firebase: ascolta cambiamenti di stato (view per tutti)
+    // Ascolta cambiamenti dal DB
     onValue(statusRef, (snapshot) => {
       const val = snapshot.val();
       applyStatusVisual(val);
       statusSource.textContent = "source: Realtime DB";
     }, (error) => {
-      statusDisplay.textContent = "error loading status";
       console.error(error);
+      statusDisplay.textContent = "error loading status";
       statusSource.textContent = "source: error";
     });
 
-    // Auth: login/logout
-    const provider = new GoogleAuthProvider();
-
-    loginBtn.addEventListener("click", async () => {
-      try {
-        await signInWithPopup(auth, provider);
-      } catch (err) {
-        console.error("Login error", err);
-        alert("Login failed");
-      }
-    });
-
-    logoutBtn.addEventListener("click", async () => {
-      try {
-        await signOut(auth);
-      } catch (err) {
-        console.error("Logout error", err);
-      }
-    });
-
-    // React a cambi di auth
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        authInfo.textContent = "Not signed in";
-        loginBtn.classList.remove("hidden");
-        logoutBtn.classList.add("hidden");
-        controlPanel.classList.add("hidden");
-        controlLocked.classList.remove("hidden");
-        return;
-      }
-
-      const email = user.email || "";
-      authInfo.textContent = "Signed in as " + email;
-      loginBtn.classList.add("hidden");
-      logoutBtn.classList.remove("hidden");
-
-      const isOwner = email.toLowerCase() === OWNER_EMAIL.toLowerCase();
-      if (isOwner) {
+    // Sblocco con password finta (solo lato client)
+    pwBtn.addEventListener("click", () => {
+      const val = pwInput.value || "";
+      if (val === LOCAL_PASSWORD) {
+        authInfo.textContent = "Unlocked (local password)";
         controlPanel.classList.remove("hidden");
         controlLocked.classList.add("hidden");
       } else {
+        authInfo.textContent = "Wrong password";
         controlPanel.classList.add("hidden");
         controlLocked.classList.remove("hidden");
       }
     });
 
-    // Scrittura dello stato (solo se le rules lo permettono)
+    // Scrittura dello stato (se hai sbloccato i bottoni)
     buttons.forEach(btn => {
       btn.addEventListener("click", async () => {
         const state = btn.getAttribute("data-state");
         try {
           await set(statusRef, state);
-          // onValue aggiornerà la UI per tutti
         } catch (err) {
           console.error("Write error", err);
-          alert("Cannot update status (not authorized or network error).");
+          alert("Cannot update status (rules or network).");
         }
       });
     });
