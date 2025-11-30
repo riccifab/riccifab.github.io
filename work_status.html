@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>work_status – status indicator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0b0c10;
+      --fg: #e5e5e5;
+      --accent: #45a29e;
+      --border: #324050;
+      --btn-radius: 999px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1f2833 0, #0b0c10 55%);
+      color: var(--fg);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+    .page {
+      width: 100%;
+      max-width: 960px;
+      padding: 1.5rem;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    header h1 {
+      margin: 0.3rem 0 0 0;
+      font-size: 1.7rem;
+      letter-spacing: 0.04em;
+    }
+    header small {
+      opacity: 0.7;
+      font-size: 0.85rem;
+    }
+    .pill {
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.85;
+    }
+    .back-link {
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .back-link:hover { text-decoration: underline; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: rgba(15, 23, 36, 0.95);
+      border-radius: 16px;
+      border: 1px solid rgba(50, 64, 80, 0.8);
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(14px);
+    }
+    .card h2 {
+      margin-top: 0;
+      margin-bottom: 0.6rem;
+      font-size: 1.2rem;
+    }
+    .card p {
+      margin-top: 0;
+      margin-bottom: 0.8rem;
+      font-size: 0.92rem;
+      opacity: 0.85;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .status-label {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+    .status-current {
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+
+    .state-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .state-btn {
+      border: 1px solid transparent;
+      border-radius: var(--btn-radius);
+      padding: 0.5rem 0.9rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background: rgba(31,40,51,0.9);
+      color: var(--fg);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, border-color 0.08s;
+    }
+    .state-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+      border-color: rgba(69,162,158,0.6);
+    }
+    .state-btn.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(69,162,158,0.6), 0 10px 26px rgba(0,0,0,0.5);
+      background: linear-gradient(135deg, rgba(69,162,158,0.2), rgba(15,23,36,0.95));
+    }
+    .state-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      box-shadow: 0 0 10px currentColor;
+    }
+    .dot-default { background: conic-gradient(from 0deg, #ff0080, #ff8c00, #ffe600, #00e676, #00b0ff, #d500f9, #ff0080); }
+    .dot-lab     { background: #ffb347; }
+    .dot-busy    { background: #ff4b5c; }
+    .dot-free    { background: #4caf50; }
+    .dot-x       { background: #b388ff; }
+
+    .helper-text {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    ul { margin-top: 0; padding-left: 1.2rem; font-size: 0.9rem; }
+    li { margin-bottom: 0.25rem; }
+
+    footer {
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      opacity: 0.6;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div>
+        <a class="back-link" href="./">← back to home</a>
+        <h1>work_status</h1>
+        <small>Remote status selector for the LED indicator (ESP8266)</small>
+      </div>
+      <div class="pill">
+        v0.1 – static UI (no backend yet)
+      </div>
+    </header>
+
+    <main class="layout">
+      <!-- LEFT: status control -->
+      <section class="card">
+        <h2>Status control</h2>
+        <p>
+          Questa pagina per ora aggiorna solo lo stato locale. Dopo colleghiamo i pulsanti a un backend
+          (es. Firebase) e l'indicatore fisico leggerà lo stato via ESP8266.
+        </p>
+
+        <div class="status-row">
+          <div class="status-label">Current status (local):</div>
+          <div class="status-current" id="current-status">default (full fade)</div>
+        </div>
+
+        <div class="state-buttons">
+          <button class="state-btn active" data-state="default">
+            <span class="state-dot dot-default"></span>
+            <span>Default</span>
+          </button>
+          <button class="state-btn" data-state="lab">
+            <span class="state-dot dot-lab"></span>
+            <span>Lab</span>
+          </button>
+          <button class="state-btn" data-state="busy">
+            <span class="state-dot dot-busy"></span>
+            <span>Busy</span>
+          </button>
+          <button class="state-btn" data-state="free">
+            <span class="state-dot dot-free"></span>
+            <span>Free</span>
+          </button>
+          <button class="state-btn" data-state="x">
+            <span class="state-dot dot-x"></span>
+            <span>Status X</span>
+          </button>
+        </div>
+
+        <p class="helper-text">
+          Mapping firmware previsto: default = full rainbow fade · lab = fade arancione · busy = rosso · free = verde · X = viola.
+        </p>
+      </section>
+
+      <!-- RIGHT: notes -->
+      <section class="card">
+        <h2>Notes</h2>
+        <p>Pipeline prevista:</p>
+        <ul>
+          <li>Questa UI scrive lo stato <code>work_status</code> in un backend (es. chiave <code>indicator/status</code>).</li>
+          <li>L’ESP8266 fa polling via HTTP GET e aggiorna i LED in base allo stato letto.</li>
+          <li>I sensori di presenza vengono ignorati: lo stato è deciso solo dal web.</li>
+        </ul>
+
+        <h3 style="font-size:1rem;margin-top:1rem;">Firmware hook</h3>
+        <p style="font-size:0.9rem;opacity:0.85;">
+          Lato firmware avrai un enum tipo <code>IndicatorState</code> e una funzione
+          <code>updateLedsFromState()</code> che traduce lo stato nel pattern di luce.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      work_status – status indicator UI. Backend integration WIP.
+    </footer>
+  </div>
+
+  <script>
+    // Solo UI locale per ora – nessun backend.
+    const statusSpan = document.getElementById('current-status');
+    const buttons = document.querySelectorAll('.state-btn');
+
+    const labels = {
+      default: 'default (full fade)',
+      lab: 'lab (orange fade)',
+      busy: 'busy (red)',
+      free: 'free (green)',
+      x: 'status X (violet)',
+    };
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const state = btn.getAttribute('data-state');
+        buttons.forEach(b => b.classList.toggle('active', b === btn));
+        statusSpan.textContent = labels[state] || state;
+        // TODO: qui poi chiameremo Firebase/REST API per salvare lo stato
+        console.log('Local status change:', state);
+      });
+    });
+  </script>
+</body>
+</html>
