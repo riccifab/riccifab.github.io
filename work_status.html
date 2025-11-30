@@ -6,27 +6,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      --bg: #0b0c10;
+      --bg: #050712;
+      --bg2: #121826;
       --fg: #e5e5e5;
-      --accent: #45a29e;
-      --border: #324050;
+      --muted: #9ba4b5;
+      --accent: #4ade80;
+      --border: rgba(148,163,184,0.4);
+      --danger: #fb7185;
+      --card-bg: rgba(15,23,42,0.92);
       --btn-radius: 999px;
     }
-    * { box-sizing: border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #0b0c10;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(59,130,246,0.18), transparent 60%),
+        radial-gradient(circle at bottom, rgba(244,63,94,0.22), transparent 65%),
+        linear-gradient(135deg, var(--bg), var(--bg2));
       color: var(--fg);
       min-height: 100vh;
       display: flex;
       justify-content: center;
     }
+
     .page {
       width: 100%;
-      max-width: 960px;
-      padding: 1.5rem;
+      max-width: 1120px;
+      padding: 1.75rem 1.25rem 2rem;
     }
+
     header {
       display: flex;
       justify-content: space-between;
@@ -34,161 +47,333 @@
       gap: 1rem;
       margin-bottom: 1.5rem;
     }
+
     header h1 {
-      margin: 0.3rem 0 0 0;
-      font-size: 1.7rem;
-      letter-spacing: 0.04em;
+      margin: 0.1rem 0 0.2rem 0;
+      font-size: 1.6rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 650;
     }
+
     header small {
-      opacity: 0.7;
-      font-size: 0.85rem;
+      opacity: 0.75;
+      font-size: 0.82rem;
     }
+
+    .back-link {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .back-link::before {
+      content: "←";
+      font-size: 0.8rem;
+    }
+
+    .back-link:hover {
+      color: var(--fg);
+    }
+
     .pill {
       padding: 0.35rem 0.8rem;
       border-radius: 999px;
       border: 1px solid var(--border);
-      font-size: 0.8rem;
-      opacity: 0.85;
+      font-size: 0.78rem;
+      opacity: 0.9;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: rgba(15,23,42,0.72);
+      backdrop-filter: blur(16px);
     }
-    .back-link {
-      font-size: 0.8rem;
-      color: var(--accent);
-      text-decoration: none;
-    }
-    .back-link:hover { text-decoration: underline; }
 
-    .layout {
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34,197,94,0.8);
+    }
+
+    main.layout {
       display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.9fr);
       gap: 1.5rem;
     }
-    @media (max-width: 768px) {
-      .layout { grid-template-columns: 1fr; }
+
+    @media (max-width: 900px) {
+      main.layout {
+        grid-template-columns: 1fr;
+      }
     }
 
     .card {
-      background: rgba(15, 23, 36, 0.95);
-      border-radius: 16px;
-      border: 1px solid rgba(50, 64, 80, 0.8);
-      padding: 1.25rem 1.5rem;
-      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(14px);
+      background: var(--card-bg);
+      border-radius: 18px;
+      border: 1px solid rgba(148,163,184,0.32);
+      padding: 1.4rem 1.5rem 1.3rem;
+      box-shadow:
+        0 24px 60px rgba(15,23,42,0.9),
+        0 0 0 1px rgba(15,23,42,0.7);
+      backdrop-filter: blur(18px);
     }
+
     .card h2 {
       margin-top: 0;
       margin-bottom: 0.6rem;
-      font-size: 1.2rem;
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
     }
+
+    .card h2 span.label {
+      font-size: 0.78rem;
+      font-weight: 450;
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.3);
+      color: var(--muted);
+    }
+
     .card p {
       margin-top: 0;
       margin-bottom: 0.8rem;
-      font-size: 0.92rem;
-      opacity: 0.85;
+      font-size: 0.9rem;
+      color: var(--muted);
     }
 
-    /* GROSSO COLORE */
-    .status-display {
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.1);
-      height: 260px;
+    /* STATUS DISPLAY */
+
+    .status-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .status-circle {
+      margin: 0 auto;
+      width: min(360px, 70vw);
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 0.8rem;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-      font-size: 1.3rem;
-      font-weight: 600;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(148,163,184,0.35),
+        0 35px 80px rgba(15,23,42,0.95);
+      background: radial-gradient(circle at top, rgba(255,255,255,0.14), transparent 55%);
     }
 
-    .status-info {
+    .status-circle-inner {
+      width: 86%;
+      height: 86%;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 650;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #0b0f1c;
+      text-shadow: 0 1px 3px rgba(255,255,255,0.35);
+      box-shadow:
+        inset 0 0 40px rgba(15,23,42,0.35),
+        0 0 35px rgba(0,0,0,0.5);
+    }
+
+    .status-meta {
       display: flex;
       justify-content: space-between;
-      font-size: 0.9rem;
-      opacity: 0.85;
+      font-size: 0.85rem;
+      color: var(--muted);
       flex-wrap: wrap;
-      gap: 0.4rem;
+      gap: 0.3rem;
     }
 
-    .state-buttons {
+    .status-meta strong {
+      color: var(--fg);
+      font-weight: 500;
+    }
+
+    .legend {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
+      gap: 0.45rem 0.9rem;
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      color: var(--muted);
     }
-    .state-btn {
-      border: 1px solid transparent;
-      border-radius: var(--btn-radius);
-      padding: 0.5rem 0.9rem;
-      font-size: 0.9rem;
-      cursor: pointer;
-      background: rgba(31,40,51,0.9);
-      color: var(--fg);
+
+    .legend-item {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, border-color 0.08s;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.2);
+      background: rgba(15,23,42,0.85);
     }
-    .state-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-      border-color: rgba(69,162,158,0.6);
-    }
-    .state-btn.active {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(69,162,158,0.6), 0 10px 26px rgba(0,0,0,0.5);
-      background: linear-gradient(135deg, rgba(69,162,158,0.2), rgba(15,23,36,0.95));
-    }
-    .state-dot {
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
       box-shadow: 0 0 10px currentColor;
     }
-    .dot-default { background: conic-gradient(from 0deg, #ff0080, #ff8c00, #ffe600, #00e676, #00b0ff, #d500f9, #ff0080); }
-    .dot-lab     { background: #ffb347; }
-    .dot-busy    { background: #ff4b5c; }
-    .dot-free    { background: #4caf50; }
-    .dot-x       { background: #b388ff; }
 
-    .helper-text {
-      font-size: 0.8rem;
-      opacity: 0.7;
-    }
+    .legend-dot.default { background: conic-gradient(from 0deg, #ff0080, #ff8c00, #ffe600, #22c55e, #0ea5e9, #a855f7, #ff0080); }
+    .legend-dot.lab     { background: #fb923c; }
+    .legend-dot.busy    { background: #f97373; }
+    .legend-dot.free    { background: #22c55e; }
+    .legend-dot.x       { background: #a855f7; }
+
+    /* CONTROL PANEL */
 
     .auth-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.6rem;
+      gap: 0.75rem;
+      margin-bottom: 0.7rem;
       font-size: 0.85rem;
     }
 
+    .auth-info-main {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    #auth-info {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
     .pw-input {
-      padding: 0.35rem 0.6rem;
-      border-radius: 999px;
+      padding: 0.35rem 0.7rem;
+      border-radius: var(--btn-radius);
       border: 1px solid var(--border);
       background: rgba(10,15,25,0.9);
       color: var(--fg);
       font-size: 0.8rem;
+      min-width: 140px;
     }
+
     .auth-btn {
       border-radius: var(--btn-radius);
       padding: 0.35rem 0.8rem;
-      border: 1px solid var(--border);
-      background: rgba(15,23,36,0.9);
+      border: 1px solid rgba(148,163,184,0.35);
+      background: rgba(15,23,42,0.95);
       color: var(--fg);
       cursor: pointer;
       font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
     }
+
     .auth-btn:hover {
       border-color: var(--accent);
+      background: rgba(22,30,53,1);
     }
-    .hidden { display: none !important; }
+
+    .helper-text {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.7rem;
+    }
+
+    .helper-text strong {
+      color: var(--fg);
+      font-weight: 500;
+    }
+
+    .state-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .state-btn {
+      border: 1px solid transparent;
+      border-radius: var(--btn-radius);
+      padding: 0.5rem 0.9rem;
+      font-size: 0.88rem;
+      cursor: pointer;
+      background: rgba(15,23,42,0.98);
+      color: var(--fg);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.38rem;
+      transition:
+        transform 0.08s ease-out,
+        box-shadow 0.08s ease-out,
+        border-color 0.08s ease-out,
+        background 0.08s ease-out;
+    }
+
+    .state-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(15,23,42,0.85);
+      border-color: rgba(148,163,184,0.7);
+    }
+
+    .state-btn.active {
+      border-color: rgba(74,222,128,0.8);
+      background: radial-gradient(circle at top left, rgba(74,222,128,0.2), rgba(15,23,42,1));
+      box-shadow:
+        0 0 0 1px rgba(34,197,94,0.6),
+        0 16px 45px rgba(22,163,74,0.55);
+    }
+
+    .state-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    .dot-default { background: conic-gradient(from 0deg, #ff0080, #ff8c00, #ffe600, #22c55e, #0ea5e9, #a855f7, #ff0080); }
+    .dot-lab     { background: #fb923c; }
+    .dot-busy    { background: #f97373; }
+    .dot-free    { background: #22c55e; }
+    .dot-x       { background: #a855f7; }
+
+    .locked-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.6rem;
+    }
+
+    .locked-dot {
+      margin-top: 0.15rem;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--danger);
+      box-shadow: 0 0 8px rgba(248,113,113,0.8);
+    }
+
+    .hidden {
+      display: none !important;
+    }
 
     footer {
-      margin-top: 1.5rem;
+      margin-top: 1.4rem;
       font-size: 0.75rem;
       opacity: 0.6;
       text-align: center;
@@ -199,40 +384,74 @@
   <div class="page">
     <header>
       <div>
-        <a class="back-link" href="./">← back to home</a>
+        <a class="back-link" href="./">back to home</a>
         <h1>work_status</h1>
-        <small>Remote status indicator (view for everyone)</small>
+        <small>Remote status indicator – everyone reads, only you write (with password)</small>
       </div>
       <div class="pill">
-        v0.3 – Firebase connected (test mode)
+        <span class="pill-dot"></span>
+        <span>live · Firebase</span>
       </div>
     </header>
 
     <main class="layout">
-      <!-- LEFT: big status display -->
+      <!-- LEFT: status display -->
       <section class="card">
-        <h2>Current status</h2>
-        <p>Chiunque apra questa pagina vede qui lo stato attuale.</p>
-
-        <div id="status-display" class="status-display">
-          loading...
-        </div>
-
-        <div class="status-info">
-          <span id="status-label">status: ?</span>
-          <span id="status-source">source: loading...</span>
-        </div>
-
-        <p class="helper-text">
-          Mapping firmware consigliato: default = full rainbow fade · lab = arancione · busy = rosso · free = verde · X = viola.
+        <h2>
+          Current status
+          <span class="label">viewer</span>
+        </h2>
+        <p>
+          Chiunque apra questa pagina vede in tempo reale lo stato corrente dell’indicatore.
         </p>
+
+        <div class="status-wrapper">
+          <div class="status-circle">
+            <div id="status-display" class="status-circle-inner">
+              loading...
+            </div>
+          </div>
+
+          <div class="status-meta">
+            <span id="status-label">status: ?</span>
+            <span id="status-source">source: loading...</span>
+          </div>
+
+          <div class="legend">
+            <div class="legend-item">
+              <span class="legend-dot default"></span>
+              <span>default · rainbow fade</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot lab"></span>
+              <span>lab · orange fade</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot busy"></span>
+              <span>busy · red</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot free"></span>
+              <span>free · green</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot x"></span>
+              <span>status X · violet</span>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <!-- RIGHT: simple password + control panel -->
+      <!-- RIGHT: control panel (password locale) -->
       <section class="card">
+        <h2>
+          Control
+          <span class="label">owner (password)</span>
+        </h2>
+
         <div class="auth-row">
-          <div>
-            <strong>Control panel</strong><br>
+          <div class="auth-info-main">
+            <strong>Access</strong>
             <span id="auth-info">Locked (view only)</span>
           </div>
           <div>
@@ -241,12 +460,17 @@
           </div>
         </div>
 
-        <div id="control-locked" class="helper-text">
-          Solo chi conosce la password può cambiare lo stato. Questo è un blocco lato client (non è sicurezza forte).
-        </div>
+        <p id="control-locked" class="helper-text">
+          Solo chi conosce la password può cambiare lo stato. È un blocco solo lato client, non è sicurezza forte.
+        </p>
 
         <div id="control-panel" class="hidden">
-          <p>Seleziona lo stato da applicare all’indicatore:</p>
+          <p class="helper-text">
+            Seleziona lo stato da applicare all’indicatore fisico.
+            Il valore viene scritto su <strong>indicator/status</strong> nel Realtime Database;
+            l’ESP8266 fa polling e aggiorna i LED.
+          </p>
+
           <div class="state-buttons">
             <button class="state-btn" data-state="default">
               <span class="state-dot dot-default"></span>
@@ -269,19 +493,24 @@
               <span>Status X</span>
             </button>
           </div>
-          <p class="helper-text">
-            Ogni click scrive <code>indicator/status</code> nel Realtime Database.
-          </p>
+        </div>
+
+        <div class="locked-note">
+          <div class="locked-dot"></div>
+          <div>
+            Le regole del Realtime Database attualmente sono in test (o aperte).
+            La password qui serve solo per non far cambiare stato a chiunque si collega.
+          </div>
         </div>
       </section>
     </main>
 
     <footer>
-      work_status – tutti leggono, chi ha la password può scrivere (per ora solo lato client).
+      work_status · static frontend on GitHub Pages · realtime backend on Firebase.
     </footer>
   </div>
 
-  <!-- SCRIPT: Firebase + logica -->
+  <!-- SCRIPT: Firebase + logica (usa la tua config) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import {
@@ -291,6 +520,7 @@
       onValue
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
+    // tua config, come mi hai mandato
     const firebaseConfig = {
       apiKey: "AIzaSyCymGUKXdpBtVJPC1YH2bLuRLc16p-E93A",
       authDomain: "workstatus-5a293.firebaseapp.com",
@@ -302,6 +532,7 @@
       measurementId: "G-60KPLB1GDG"
     };
 
+    // password locale (solo per sbloccare i bottoni nella UI)
     const LOCAL_PASSWORD = "ccremkjgp9f54";
 
     const app = initializeApp(firebaseConfig);
@@ -320,11 +551,11 @@
     const buttons       = document.querySelectorAll(".state-btn");
 
     const COLORS = {
-      default: "linear-gradient(135deg, #ff0080, #ff8c00, #ffe600, #00e676, #00b0ff, #d500f9)",
-      lab:     "linear-gradient(135deg, #ffb347, #ff8c00)",
-      busy:    "linear-gradient(135deg, #ff4b5c, #b71c1c)",
-      free:    "linear-gradient(135deg, #4caf50, #1b5e20)",
-      x:       "linear-gradient(135deg, #b388ff, #7e57c2)"
+      default: "radial-gradient(circle at top, rgba(255,255,255,0.2), transparent 55%), conic-gradient(from 0deg, #ff0080, #ff8c00, #ffe600, #22c55e, #0ea5e9, #a855f7, #ff0080)",
+      lab:     "radial-gradient(circle at top, rgba(255,255,255,0.24), transparent 55%), linear-gradient(135deg, #fed7aa, #fb923c, #ea580c)",
+      busy:    "radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 55%), linear-gradient(135deg, #fecaca, #f97373, #b91c1c)",
+      free:    "radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 55%), linear-gradient(135deg, #bbf7d0, #22c55e, #15803d)",
+      x:       "radial-gradient(circle at top, rgba(255,255,255,0.2), transparent 55%), linear-gradient(135deg, #e9d5ff, #a855f7, #6b21a8)"
     };
 
     const LABELS = {
@@ -337,7 +568,7 @@
 
     function applyStatusVisual(state) {
       const s = state && COLORS[state] ? state : "default";
-      statusDisplay.style.background = COLORS[s];
+      statusDisplay.style.backgroundImage = COLORS[s];
       statusLabel.textContent = "status: " + (LABELS[s] || s);
       statusDisplay.textContent = (s || "?").toUpperCase();
       buttons.forEach(b => {
@@ -346,18 +577,18 @@
       });
     }
 
-    // Ascolta cambiamenti dal DB
+    // Listener realtime sul DB
     onValue(statusRef, (snapshot) => {
       const val = snapshot.val();
       applyStatusVisual(val);
       statusSource.textContent = "source: Realtime DB";
     }, (error) => {
       console.error(error);
-      statusDisplay.textContent = "error loading status";
+      statusDisplay.textContent = "error";
       statusSource.textContent = "source: error";
     });
 
-    // Sblocco con password finta (solo lato client)
+    // Sblocco con password locale (solo UI)
     pwBtn.addEventListener("click", () => {
       const val = pwInput.value || "";
       if (val === LOCAL_PASSWORD) {
@@ -371,7 +602,7 @@
       }
     });
 
-    // Scrittura dello stato (se hai sbloccato i bottoni)
+    // Scrittura dello stato (quando UI è sbloccata)
     buttons.forEach(btn => {
       btn.addEventListener("click", async () => {
         const state = btn.getAttribute("data-state");
