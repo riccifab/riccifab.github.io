@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>work_status – lab tools & status</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0b0c10;
+      --fg: #e5e5e5;
+      --accent: #45a29e;
+      --border: #324050;
+      --card-bg: #151c26;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1f2833 0, #0b0c10 55%);
+      color: var(--fg);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+    .page {
+      width: 100%;
+      max-width: 960px;
+      padding: 1.5rem;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.7rem;
+      letter-spacing: 0.04em;
+    }
+    header small {
+      opacity: 0.7;
+      font-size: 0.85rem;
+    }
+    .pill {
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.85;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      main { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: rgba(15, 23, 36, 0.95);
+      border-radius: 16px;
+      border: 1px solid rgba(50, 64, 80, 0.8);
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(14px);
+    }
+    .card h2 {
+      margin-top: 0;
+      margin-bottom: 0.6rem;
+      font-size: 1.2rem;
+    }
+    .card p {
+      margin-top: 0;
+      margin-bottom: 0.8rem;
+      font-size: 0.92rem;
+      opacity: 0.85;
+    }
+
+    .tools-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+    .tool {
+      border-radius: 12px;
+      border: 1px solid rgba(50,64,80,0.9);
+      padding: 0.8rem 0.9rem;
+      background: radial-gradient(circle at top left, rgba(69,162,158,0.12), rgba(15,23,36,1));
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .tool-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .tool-desc {
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+    .tool-meta {
+      font-size: 0.75rem;
+      opacity: 0.65;
+    }
+    .tool a {
+      align-self: flex-start;
+      margin-top: 0.1rem;
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .tool a:hover {
+      text-decoration: underline;
+    }
+
+    .dev-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-top: 0.5rem;
+    }
+    .dev-item {
+      border-radius: 12px;
+      border: 1px solid rgba(50,64,80,0.9);
+      padding: 0.75rem 0.9rem;
+      background: radial-gradient(circle at top left, rgba(69,162,158,0.08), rgba(15,23,36,1));
+    }
+    .dev-item h3 {
+      margin: 0 0 0.25rem 0;
+      font-size: 1rem;
+    }
+    .dev-item p {
+      margin: 0 0 0.35rem 0;
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+    .dev-meta {
+      font-size: 0.75rem;
+      opacity: 0.65;
+    }
+    .dev-item a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.8rem;
+    }
+    .dev-item a:hover { text-decoration: underline; }
+
+    footer {
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      opacity: 0.6;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div>
+        <h1>work_status</h1>
+        <small>Lab tools, status indicator and future assistant</small>
+      </div>
+      <div class="pill">
+        GitHub Pages · static frontend
+      </div>
+    </header>
+
+    <main>
+      <!-- LEFT: tools / apps -->
+      <section class="card">
+        <h2>Tools</h2>
+        <p>Homepage generale. Da qui accedi al modulo di stato e, in futuro, ad altre utility.</p>
+        <div class="tools-list">
+          <div class="tool">
+            <div class="tool-title">Work status indicator</div>
+            <div class="tool-desc">
+              Interfaccia web per impostare lo stato (default / lab / busy / free / X) del tuo indicatore fisico
+              (un orologio a LED controllato da ESP8266).
+            </div>
+            <div class="tool-meta">status · ESP8266 · led indicator</div>
+            <a href="work_status.html">Open work_status →</a>
+          </div>
+
+          <div class="tool">
+            <div class="tool-title">Digital assistant (RAG)</div>
+            <div class="tool-desc">
+              Placeholder per un futuro assistente che conosce setup, progetti e documentazione del lab.
+            </div>
+            <div class="tool-meta">planned · backend + vector DB</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: recent development -->
+      <section class="card">
+        <h2>Recent development</h2>
+        <p>Qualche progetto recente, aggiornabile quando vuoi.</p>
+        <div class="dev-list">
+          <article class="dev-item">
+            <h3>Work status indicator</h3>
+            <p>Indicatore di stato basato su ESP8266 e anello di LED, controllato via web mediante work_status.</p>
+            <div class="dev-meta">hardware · firmware · web UI</div>
+            <a href="https://github.com/riccifab/Shadow_clock" target="_blank" rel="noreferrer">Firmware repository →</a>
+          </article>
+
+          <article class="dev-item">
+            <h3>Wide-field MRI-compatible imaging</h3>
+            <p>Sistema ottico 4f per imaging corticale dentro un 7T con camera remota.</p>
+            <div class="dev-meta">optics · mechanics · integration</div>
+          </article>
+
+          <article class="dev-item">
+            <h3>Pupillometry rigs</h3>
+            <p>Setup per tracking della pupilla con camera Thorlabs e illuminazione IR controllata.</p>
+            <div class="dev-meta">neuroscience tools</div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      work_status – prototype hub. In futuro: backend API + RAG assistant.
+    </footer>
+  </div>
+</body>
+</html>
