@@ -86,21 +86,28 @@
       opacity: 0.85;
     }
 
-    .status-row {
+    /* GROSSO COLORE */
+    .status-display {
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+      height: 260px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 0.8rem;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      font-size: 1.3rem;
+      font-weight: 600;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.7);
     }
-    .status-label {
+
+    .status-info {
+      display: flex;
+      justify-content: space-between;
       font-size: 0.9rem;
       opacity: 0.85;
-    }
-    .status-current {
-      font-weight: 600;
-      font-size: 1.05rem;
+      flex-wrap: wrap;
+      gap: 0.4rem;
     }
 
     .state-buttons {
@@ -149,8 +156,27 @@
       opacity: 0.7;
     }
 
-    ul { margin-top: 0; padding-left: 1.2rem; font-size: 0.9rem; }
-    li { margin-bottom: 0.25rem; }
+    .auth-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.6rem;
+      font-size: 0.85rem;
+    }
+    .auth-btn {
+      border-radius: var(--btn-radius);
+      padding: 0.35rem 0.8rem;
+      border: 1px solid var(--border);
+      background: rgba(15,23,36,0.9);
+      color: var(--fg);
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .auth-btn:hover {
+      border-color: var(--accent);
+    }
+    .hidden { display: none !important; }
 
     footer {
       margin-top: 1.5rem;
@@ -166,98 +192,228 @@
       <div>
         <a class="back-link" href="./">← back to home</a>
         <h1>work_status</h1>
-        <small>Remote status selector for the LED indicator (ESP8266)</small>
+        <small>Remote status indicator (view for everyone, control only for me)</small>
       </div>
       <div class="pill">
-        v0.1 – static UI (no backend yet)
+        v0.2 – Firebase-connected
       </div>
     </header>
 
     <main class="layout">
-      <!-- LEFT: status control -->
+      <!-- LEFT: big status display -->
       <section class="card">
-        <h2>Status control</h2>
-        <p>
-          Questa pagina per ora aggiorna solo lo stato locale. Dopo colleghiamo i pulsanti a un backend
-          (es. Firebase) e l'indicatore fisico leggerà lo stato via ESP8266.
-        </p>
+        <h2>Current status</h2>
+        <p>Chiunque apra questa pagina vede qui lo stato attuale.</p>
 
-        <div class="status-row">
-          <div class="status-label">Current status (local):</div>
-          <div class="status-current" id="current-status">default (full fade)</div>
+        <div id="status-display" class="status-display">
+          loading...
         </div>
 
-        <div class="state-buttons">
-          <button class="state-btn active" data-state="default">
-            <span class="state-dot dot-default"></span>
-            <span>Default</span>
-          </button>
-          <button class="state-btn" data-state="lab">
-            <span class="state-dot dot-lab"></span>
-            <span>Lab</span>
-          </button>
-          <button class="state-btn" data-state="busy">
-            <span class="state-dot dot-busy"></span>
-            <span>Busy</span>
-          </button>
-          <button class="state-btn" data-state="free">
-            <span class="state-dot dot-free"></span>
-            <span>Free</span>
-          </button>
-          <button class="state-btn" data-state="x">
-            <span class="state-dot dot-x"></span>
-            <span>Status X</span>
-          </button>
+        <div class="status-info">
+          <span id="status-label">status: ?</span>
+          <span id="status-source">source: loading...</span>
         </div>
 
         <p class="helper-text">
-          Mapping firmware previsto: default = full rainbow fade · lab = fade arancione · busy = rosso · free = verde · X = viola.
+          Mapping firmware consigliato: default = full rainbow fade · lab = fade arancione · busy = rosso · free = verde · X = viola.
         </p>
       </section>
 
-      <!-- RIGHT: notes -->
+      <!-- RIGHT: control panel (only for you when logged in) -->
       <section class="card">
-        <h2>Notes</h2>
-        <p>Pipeline prevista:</p>
-        <ul>
-          <li>Questa UI scrive lo stato <code>work_status</code> in un backend (es. chiave <code>indicator/status</code>).</li>
-          <li>L’ESP8266 fa polling via HTTP GET e aggiorna i LED in base allo stato letto.</li>
-          <li>I sensori di presenza vengono ignorati: lo stato è deciso solo dal web.</li>
-        </ul>
+        <div class="auth-row">
+          <div>
+            <strong>Control panel</strong><br>
+            <span id="auth-info">Not signed in</span>
+          </div>
+          <div>
+            <button id="login-btn" class="auth-btn">Sign in with Google</button>
+            <button id="logout-btn" class="auth-btn hidden">Sign out</button>
+          </div>
+        </div>
 
-        <h3 style="font-size:1rem;margin-top:1rem;">Firmware hook</h3>
-        <p style="font-size:0.9rem;opacity:0.85;">
-          Lato firmware avrai un enum tipo <code>IndicatorState</code> e una funzione
-          <code>updateLedsFromState()</code> che traduce lo stato nel pattern di luce.
-        </p>
+        <div id="control-locked" class="helper-text">
+          Solo il mio account può modificare lo stato. Se non sei io, questo pannello rimarrà bloccato.
+        </div>
+
+        <div id="control-panel" class="hidden">
+          <p>Seleziona lo stato da applicare all’indicatore fisico:</p>
+          <div class="state-buttons">
+            <button class="state-btn" data-state="default">
+              <span class="state-dot dot-default"></span>
+              <span>Default</span>
+            </button>
+            <button class="state-btn" data-state="lab">
+              <span class="state-dot dot-lab"></span>
+              <span>Lab</span>
+            </button>
+            <button class="state-btn" data-state="busy">
+              <span class="state-dot dot-busy"></span>
+              <span>Busy</span>
+            </button>
+            <button class="state-btn" data-state="free">
+              <span class="state-dot dot-free"></span>
+              <span>Free</span>
+            </button>
+            <button class="state-btn" data-state="x">
+              <span class="state-dot dot-x"></span>
+              <span>Status X</span>
+            </button>
+          </div>
+          <p class="helper-text">
+            Ogni click scrive <code>indicator/status</code> nel Realtime Database. L’ESP8266 fa polling e aggiorna i LED.
+          </p>
+        </div>
       </section>
     </main>
 
     <footer>
-      work_status – status indicator UI. Backend integration WIP.
+      work_status – everyone can read · only owner can write.
     </footer>
   </div>
 
-  <script>
-    // Solo UI locale per ora – nessun backend.
-    const statusSpan = document.getElementById('current-status');
-    const buttons = document.querySelectorAll('.state-btn');
+  <!-- Firebase SDK (modular, via CDN) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      signInWithPopup,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getDatabase,
+      ref,
+      set,
+      onValue
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-    const labels = {
-      default: 'default (full fade)',
-      lab: 'lab (orange fade)',
-      busy: 'busy (red)',
-      free: 'free (green)',
-      x: 'status X (violet)',
+    // TODO: incolla qui la tua config dal pannello Firebase
+    const firebaseConfig = {
+      apiKey: "XXX",
+      authDomain: "XXX.firebaseapp.com",
+      databaseURL: "https://XXX-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "XXX",
+      storageBucket: "XXX.appspot.com",
+      messagingSenderId: "XXX",
+      appId: "XXX"
     };
 
+    const OWNER_EMAIL = "LA_TUA_MAIL_GOOGLE@qualcosa.com"; // <-- cambia questo
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getDatabase(app);
+
+    const statusRef = ref(db, "indicator/status");
+
+    const statusDisplay = document.getElementById("status-display");
+    const statusLabel   = document.getElementById("status-label");
+    const statusSource  = document.getElementById("status-source");
+
+    const loginBtn      = document.getElementById("login-btn");
+    const logoutBtn     = document.getElementById("logout-btn");
+    const authInfo      = document.getElementById("auth-info");
+    const controlPanel  = document.getElementById("control-panel");
+    const controlLocked = document.getElementById("control-locked");
+    const buttons       = document.querySelectorAll(".state-btn");
+
+    const COLORS = {
+      default: "linear-gradient(135deg, #ff0080, #ff8c00, #ffe600, #00e676, #00b0ff, #d500f9)",
+      lab:     "linear-gradient(135deg, #ffb347, #ff8c00)",
+      busy:    "linear-gradient(135deg, #ff4b5c, #b71c1c)",
+      free:    "linear-gradient(135deg, #4caf50, #1b5e20)",
+      x:       "linear-gradient(135deg, #b388ff, #7e57c2)"
+    };
+
+    const LABELS = {
+      default: "default (full fade)",
+      lab:     "lab (orange fade)",
+      busy:    "busy (red)",
+      free:    "free (green)",
+      x:       "status X (violet)"
+    };
+
+    function applyStatusVisual(state) {
+      const s = state && COLORS[state] ? state : "default";
+      statusDisplay.style.background = COLORS[s];
+      statusLabel.textContent = "status: " + (LABELS[s] || s);
+      statusDisplay.textContent = (s || "?").toUpperCase();
+      buttons.forEach(b => {
+        const st = b.getAttribute("data-state");
+        b.classList.toggle("active", st === s);
+      });
+    }
+
+    // Firebase: ascolta cambiamenti di stato (view per tutti)
+    onValue(statusRef, (snapshot) => {
+      const val = snapshot.val();
+      applyStatusVisual(val);
+      statusSource.textContent = "source: Realtime DB";
+    }, (error) => {
+      statusDisplay.textContent = "error loading status";
+      console.error(error);
+      statusSource.textContent = "source: error";
+    });
+
+    // Auth: login/logout
+    const provider = new GoogleAuthProvider();
+
+    loginBtn.addEventListener("click", async () => {
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (err) {
+        console.error("Login error", err);
+        alert("Login failed");
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+      } catch (err) {
+        console.error("Logout error", err);
+      }
+    });
+
+    // React a cambi di auth
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        authInfo.textContent = "Not signed in";
+        loginBtn.classList.remove("hidden");
+        logoutBtn.classList.add("hidden");
+        controlPanel.classList.add("hidden");
+        controlLocked.classList.remove("hidden");
+        return;
+      }
+
+      const email = user.email || "";
+      authInfo.textContent = "Signed in as " + email;
+      loginBtn.classList.add("hidden");
+      logoutBtn.classList.remove("hidden");
+
+      const isOwner = email.toLowerCase() === OWNER_EMAIL.toLowerCase();
+      if (isOwner) {
+        controlPanel.classList.remove("hidden");
+        controlLocked.classList.add("hidden");
+      } else {
+        controlPanel.classList.add("hidden");
+        controlLocked.classList.remove("hidden");
+      }
+    });
+
+    // Scrittura dello stato (solo se le rules lo permettono)
     buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const state = btn.getAttribute('data-state');
-        buttons.forEach(b => b.classList.toggle('active', b === btn));
-        statusSpan.textContent = labels[state] || state;
-        // TODO: qui poi chiameremo Firebase/REST API per salvare lo stato
-        console.log('Local status change:', state);
+      btn.addEventListener("click", async () => {
+        const state = btn.getAttribute("data-state");
+        try {
+          await set(statusRef, state);
+          // onValue aggiornerà la UI per tutti
+        } catch (err) {
+          console.error("Write error", err);
+          alert("Cannot update status (not authorized or network error).");
+        }
       });
     });
   </script>
