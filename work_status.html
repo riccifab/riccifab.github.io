@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>work status indicator</title>
+  <title>work_status – status indicator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -235,8 +235,36 @@
     .legend-dot.lab     { background: #fb923c; }
     .legend-dot.busy    { background: #f97373; }
     .legend-dot.free    { background: #22c55e; }
-    .legend-dot.away    { background: #facc15; }
+    .legend-dot.away    { background: #ffffff; }
     .legend-dot.x       { background: #a855f7; }
+
+    /* WEEKLY TASKS VIEW (LEFT) */
+
+    .tasks-view-section {
+      margin-top: 1.1rem;
+      border-top: 1px solid rgba(148,163,184,0.3);
+      padding-top: 0.8rem;
+    }
+
+    .tasks-view-section h3 {
+      margin: 0 0 0.4rem 0;
+      font-size: 0.98rem;
+    }
+
+    .tasks-view-box {
+      border-radius: 12px;
+      border: 1px solid rgba(148,163,184,0.36);
+      padding: 0.55rem 0.7rem;
+      font-size: 0.84rem;
+      background: rgba(10,15,25,0.9);
+      white-space: pre-wrap;
+      min-height: 80px;
+    }
+
+    .tasks-view-empty {
+      opacity: 0.6;
+      font-style: italic;
+    }
 
     /* CONTROL PANEL */
 
@@ -349,7 +377,7 @@
     .dot-lab     { background: #fb923c; }
     .dot-busy    { background: #f97373; }
     .dot-free    { background: #22c55e; }
-    .dot-away    { background: #facc15; }
+    .dot-away    { background: #ffffff; }
     .dot-x       { background: #a855f7; }
 
     .locked-note {
@@ -370,7 +398,7 @@
       box-shadow: 0 0 8px rgba(248,113,113,0.8);
     }
 
-    /* WEEKLY TASKS */
+    /* WEEKLY TASKS (EDIT SIDE) */
 
     .tasks-section {
       margin-top: 1rem;
@@ -426,8 +454,8 @@
     <header>
       <div>
         <a class="back-link" href="./">back to home</a>
-        <h1>work status</h1>
-        <small>Remote status indicator </small>
+        <h1>work_status</h1>
+        <small>Remote status indicator</small>
       </div>
       <div class="pill">
         <span class="pill-dot"></span>
@@ -436,14 +464,14 @@
     </header>
 
     <main class="layout">
-      <!-- LEFT: status display -->
+      <!-- LEFT: status display + weekly tasks view -->
       <section class="card">
         <h2>
           Current status
           <span class="label">viewer</span>
         </h2>
         <p>
-          This page can show my current state in real time.
+          Anyone opening this page can see the current state and weekly tasks.
         </p>
 
         <div class="status-wrapper">
@@ -481,7 +509,14 @@
             </div>
             <div class="legend-item">
               <span class="legend-dot x"></span>
-              <span>tbd · violet</span>
+              <span>status X · violet</span>
+            </div>
+          </div>
+
+          <div class="tasks-view-section">
+            <h3>Weekly tasks</h3>
+            <div id="tasks-view" class="tasks-view-box tasks-view-empty">
+              No tasks defined.
             </div>
           </div>
         </div>
@@ -497,7 +532,7 @@
         <div class="auth-row">
           <div class="auth-info-main">
             <strong>Access</strong>
-            <span id="auth-info">Locked (view only)</span>
+            <span id="auth-info">Locked</span>
           </div>
           <div>
             <input id="pw-input" class="pw-input" type="password" placeholder="password" />
@@ -506,8 +541,7 @@
         </div>
 
         <p id="control-locked" class="helper-text">
-          Only someone who knows the password can change the state or weekly tasks.
-          This is client-side only; rules in Firebase are still open while prototyping.
+          Enter the password to enable status and task editing.
         </p>
 
         <div id="control-panel" class="hidden">
@@ -546,13 +580,10 @@
           <div class="tasks-section">
             <h3>Weekly tasks</h3>
             <p class="helper-text">
-              Simple shared list for the current week. One task per line.
-              The content is stored in <strong>indicator/weekly_tasks_text</strong>.
+              One task per line. Content is stored in <strong>indicator/weekly_tasks_text</strong>.
             </p>
-            <textarea id="tasks-textarea" class="tasks-textarea" placeholder="Example:
-– Check MRI setup
-– Prepare odor valves
-– Update analysis scripts"></textarea>
+            <textarea id="tasks-textarea" class="tasks-textarea" placeholder="- Task 1
+- Task 2"></textarea>
             <div class="tasks-actions">
               <button id="tasks-save-btn" class="auth-btn">Save tasks</button>
               <span id="tasks-status" class="tasks-status"></span>
@@ -563,8 +594,7 @@
         <div class="locked-note">
           <div class="locked-dot"></div>
           <div>
-            Realtime Database rules are currently in test / open mode.
-            Once you are happy with the workflow, you can lock writes to your account only.
+            Backend: Firebase Realtime Database.
           </div>
         </div>
       </section>
@@ -585,7 +615,6 @@
       update
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-    // Firebase config you provided
     const firebaseConfig = {
       apiKey: "AIzaSyCymGUKXdpBtVJPC1YH2bLuRLc16p-E93A",
       authDomain: "workstatus-5a293.firebaseapp.com",
@@ -602,8 +631,6 @@
 
     const app = initializeApp(firebaseConfig);
     const db  = getDatabase(app);
-
-    // We now read/write the whole "indicator" node:
     const indicatorRef = ref(db, "indicator");
 
     const statusDisplay = document.getElementById("status-display");
@@ -620,13 +647,14 @@
     const tasksTextarea = document.getElementById("tasks-textarea");
     const tasksSaveBtn  = document.getElementById("tasks-save-btn");
     const tasksStatus   = document.getElementById("tasks-status");
+    const tasksView     = document.getElementById("tasks-view");
 
     const COLORS = {
       default: "radial-gradient(circle at top, rgba(255,255,255,0.2), transparent 55%), conic-gradient(from 0deg, #ff0080, #ff8c00, #ffe600, #22c55e, #0ea5e9, #a855f7, #ff0080)",
       lab:     "radial-gradient(circle at top, rgba(255,255,255,0.24), transparent 55%), linear-gradient(135deg, #fed7aa, #fb923c, #ea580c)",
       busy:    "radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 55%), linear-gradient(135deg, #fecaca, #f97373, #b91c1c)",
       free:    "radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 55%), linear-gradient(135deg, #bbf7d0, #22c55e, #15803d)",
-      away:    "radial-gradient(circle at top, rgba(255,255,255,1), transparent 55%), linear-gradient(135deg, #fef9c3, #facc15, #ca8a04)",
+      away:    "radial-gradient(circle at top, rgba(255,255,255,0.3), transparent 55%), linear-gradient(135deg, #ffffff, #e5e7eb, #d4d4d8)",
       x:       "radial-gradient(circle at top, rgba(255,255,255,0.2), transparent 55%), linear-gradient(135deg, #e9d5ff, #a855f7, #6b21a8)"
     };
 
@@ -666,13 +694,28 @@
       });
     }
 
+    function updateTasksView(text) {
+      const value = (text || "").trim();
+      if (!value) {
+        tasksView.textContent = "No tasks defined.";
+        tasksView.classList.add("tasks-view-empty");
+      } else {
+        tasksView.textContent = value;
+        tasksView.classList.remove("tasks-view-empty");
+      }
+    }
+
     // Listen to all indicator data (status, last_update, weekly_tasks_text)
     onValue(indicatorRef, (snapshot) => {
       const data = snapshot.val() || {};
       applyStatusVisual(data.status);
       lastUpdateEl.textContent = formatTimestamp(data.last_update);
+
       if (typeof data.weekly_tasks_text === "string") {
         tasksTextarea.value = data.weekly_tasks_text;
+        updateTasksView(data.weekly_tasks_text);
+      } else {
+        updateTasksView("");
       }
     }, (error) => {
       console.error(error);
@@ -684,7 +727,7 @@
     pwBtn.addEventListener("click", () => {
       const val = pwInput.value || "";
       if (val === LOCAL_PASSWORD) {
-        authInfo.textContent = "Unlocked (local password)";
+        authInfo.textContent = "Unlocked";
         controlPanel.classList.remove("hidden");
         controlLocked.classList.add("hidden");
       } else {
@@ -710,7 +753,7 @@
       });
     });
 
-    // Save weekly tasks (does NOT touch last_update, you decide if you want that)
+    // Save weekly tasks
     tasksSaveBtn.addEventListener("click", async () => {
       const text = tasksTextarea.value || "";
       tasksStatus.textContent = "Saving…";
@@ -719,6 +762,7 @@
           weekly_tasks_text: text
         });
         tasksStatus.textContent = "Saved";
+        updateTasksView(text);
         setTimeout(() => { tasksStatus.textContent = ""; }, 2000);
       } catch (err) {
         console.error("Tasks write error", err);
