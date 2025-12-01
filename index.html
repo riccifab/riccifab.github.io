@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>work_status – lab tools & status</title>
+  <title>Neurotech – lab tools & status</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -194,6 +194,7 @@
       color: var(--fg);
       text-decoration: none;
       background: radial-gradient(circle at top left, rgba(74,222,128,0.18), rgba(15,23,42,1));
+      transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, border-color 0.08s ease-out;
     }
 
     .tool-link:hover {
@@ -277,14 +278,14 @@
   <div class="page">
     <header>
       <div>
-        <h1>work_status</h1>
+        <h1>Fabio Ricci IIT Neurotech</h1>
         <small>
-          Lab tools, status indicator and future digital assistant.
+          Lab tools, development archive, work status indicator.
         </small>
       </div>
       <div class="pill">
         <span class="pill-dot"></span>
-        <span>static frontend · GitHub Pages</span>
+        <span>GitHub Pages</span>
       </div>
     </header>
 
@@ -296,8 +297,7 @@
           <span class="label">modules</span>
         </h2>
         <p>
-          Homepage generale. Da qui puoi accedere al modulo di stato e, in futuro, aggiungere altre utility
-          (assistant, piccoli tool per il lab, ecc.).
+          List of useful lab tools
         </p>
 
         <div class="tools-list">
@@ -307,9 +307,9 @@
               <div class="tool-tag">status · ESP8266</div>
             </div>
             <div class="tool-desc">
-              Interfaccia web per impostare lo stato (default / lab / busy / free / X)
-              di un indicatore fisico collegato alla rete locale.  
-              La pagina mostra sempre lo stato corrente a chiunque si colleghi.
+              Web interface to control if I'm around (default / Lab / busy / free / away / other)
+              the same color is displayed on a physical LED indicator at my desk on the lab network.
+              The page always shows the current state to anyone visiting.
             </div>
             <div class="tool-actions">
               <a class="tool-link" href="work_status.html">
@@ -325,9 +325,8 @@
               <div class="tool-tag">planned</div>
             </div>
             <div class="tool-desc">
-              Slot previsto per un futuro assistente che conosce setup, documentazione
-              e procedure. Potrà girare su un backend separato, questo sito rimane
-              solo come interfaccia.
+              Placeholder for a future assistant aware of setups, documentation and lab procedures.
+              It will run on a separate backend, with this site as the front-end entry point.
             </div>
             <div class="tool-actions">
               <span class="tool-link secondary">
@@ -346,17 +345,15 @@
           <span class="label">projects</span>
         </h2>
         <p>
-          Alcune cose su cui hai lavorato di recente. È puro testo statico: quando vuoi
-          aggiorni il file e cambi descrizioni o link.
+          A few recent projects done in the past months.
         </p>
 
         <div class="dev-list">
           <article class="dev-item">
-            <h3>Work status indicator</h3>
+            <h3>Clock work status indicator</h3>
             <p>
-              Indicatore di stato basato su ESP8266 e anello di LED, controllato
-              via web mediante il modulo <code>work_status</code> e sincronizzato
-              tramite Firebase Realtime Database.
+              Status indicator based on an ESP8266 and an LED ring, controlled via the
+              <code>work_status</code> web module and synchronized through Firebase Realtime Database.
             </p>
             <div class="dev-meta">hardware · firmware · web UI</div>
             <a class="dev-link" href="https://github.com/riccifab/Shadow_clock" target="_blank" rel="noreferrer">
@@ -366,19 +363,19 @@
           </article>
 
           <article class="dev-item">
-            <h3>Wide-field MRI-compatible imaging</h3>
+            <h3>Wide-field MRI-compatible imaging (Test bench)</h3>
             <p>
-              Sistema ottico 4f per imaging corticale all’interno di un magnete ad alto campo,
-              con camera remota, relay ottico e vincoli di compatibilità MR.
+              4f optical system for mesoscale cortical imaging inside a high-field magnet,
+              with a remote camera and relay optics under strict MR-compatibility constraints.
+              The setup is in bench test but shows promising results
             </p>
-            <div class="dev-meta">optics · mechanics · integration</div>
+            <div class="dev-meta">optics · electronic · mechanics · integration</div>
           </article>
 
           <article class="dev-item">
-            <h3>Pupillometry rigs</h3>
+            <h3>VR fresnel rigs</h3>
             <p>
-              Setup per tracking della pupilla con camera scientifica e illuminazione IR
-              controllata, utilizzato in studi di neuroscienze comportamentali.
+              A 3 screen mosaic that create a virtual reality for mices and uses fresnel lens to equalize light intensity
             </p>
             <div class="dev-meta">neuroscience tools</div>
           </article>
@@ -387,8 +384,7 @@
     </main>
 
     <footer>
-      work_status · landing page.  
-      In futuro: più moduli e un assistant collegato ai tuoi setup.
+      IIT Neurotech.
     </footer>
   </div>
 </body>
