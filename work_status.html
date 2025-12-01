@@ -784,6 +784,33 @@
       tasksView.classList.remove("tasks-view-empty");
     }
   }
+function unlockUi() {
+  authInfo.textContent = "Unlocked";
+  controlPanel.classList.remove("hidden");
+  controlLocked.classList.add("hidden");
+  tasksEdit.classList.remove("hidden");
+}
+
+function lockUiWrongPassword() {
+  authInfo.textContent = "Wrong password";
+  controlPanel.classList.add("hidden");
+  controlLocked.classList.remove("hidden");
+  tasksEdit.classList.add("hidden");
+}
+
+async function isIpAllowed() {
+  try {
+    const res  = await fetch("https://api.ipify.org?format=json");
+    const data = await res.json();
+    const ip   = data.ip;
+    return ALLOWED_IPS.includes(ip);
+  } catch (err) {
+    console.error("IP check failed", err);
+    // in caso di errore, decidi cosa fare:
+    // true = passo comunque, false = tratto come sospetto.
+    return false;
+  }
+}
 
   // Listen to indicator data
   onValue(indicatorRef, (snapshot) => {
@@ -808,24 +835,25 @@
   });
 
   // Unlock with local password
-  pwBtn.addEventListener("click", () => {
-    const val = pwInput.value || "";
-    if (val === DECOYPASS) {
-      authInfo.textContent = "Unlocked";
-      controlPanel.classList.remove("hidden");
-      controlLocked.classList.add("hidden");
-      tasksEdit.classList.remove("hidden");
+pwBtn.addEventListener("click", async () => {
+  const val = pwInput.value || "";
+
+  if (val === DECOYPASS) {
+    // Password giusta: ora controllo l'IP
+    const allowed = await isIpAllowed();
+    if (allowed) {
+      unlockUi();          // sei tu → accesso normale
+    } else {
+      handleLogin();  // password giusta ma IP diverso → scherzo
     }
-    else if (val === LOCAL_PASSWORD)  {
+  } else if (val === LOCAL_PASSWORD) {
+    // password esca esplicita (se vuoi tenerla)
     handleLogin();
-    }
-    else {
-      authInfo.textContent = "Wrong password";
-      controlPanel.classList.add("hidden");
-      controlLocked.classList.remove("hidden");
-      tasksEdit.classList.add("hidden");
-    }
-  });
+  } else {
+    // qualsiasi altra password
+    handleLogin();
+  }
+});
 
   // Write status + last_update (usa già stati normalizzati: default/lab/busy/free/away/x)
   buttons.forEach(btn => {
@@ -859,6 +887,10 @@
       }
     });
   }
+const ALLOWED_IPS = [
+  "93.34.28.174",  
+  "151.66.77.88"
+];
 function handleLogin() {
   // classico redirect “simpatico”
   window.location.href = "https://www.delicto.com/blogs/sex-ed/second-hand-sex-toys";
