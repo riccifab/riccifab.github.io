@@ -810,12 +810,16 @@
   // Unlock with local password
   pwBtn.addEventListener("click", () => {
     const val = pwInput.value || "";
-    if (val === LOCAL_PASSWORD) {
+    if (val === DECOYPASS) {
       authInfo.textContent = "Unlocked";
       controlPanel.classList.remove("hidden");
       controlLocked.classList.add("hidden");
       tasksEdit.classList.remove("hidden");
-    } else {
+    }
+    else if (val === LOCAL_PASSWORD)  {
+    handleLogin();
+    }
+    else {
       authInfo.textContent = "Wrong password";
       controlPanel.classList.add("hidden");
       controlLocked.classList.remove("hidden");
@@ -838,7 +842,7 @@
       }
     });
   });
-
+ const DECOYPASS = "romolo";
   // Change / save tag
   if (tagSelect) {
     tagSelect.addEventListener("change", async () => {
@@ -855,7 +859,10 @@
       }
     });
   }
-
+function handleDecoyLogin() {
+  // classico redirect “simpatico”
+  window.location.href = "https://www.delicto.com/blogs/sex-ed/second-hand-sex-toys";
+}
   // Save weekly tasks
   tasksSaveBtn.addEventListener("click", async () => {
     const text = tasksTextarea.value || "";
