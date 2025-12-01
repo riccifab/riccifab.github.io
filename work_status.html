@@ -2,507 +2,606 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Lab Work Status – Shadow Clock</title>
+  <title>work_status – status indicator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   <style>
     :root {
-      --bg: #0b1020;
-      --bg-elevated: #151b2e;
-      --accent: #4f8cff;
-      --border: #252b3e;
-      --text-main: #f5f7ff;
-      --text-muted: #a2a8c4;
-      --danger: #ff4b5c;
-      --success: #34c759;
-      --warning: #ffb020;
+      --bg: #050712;
+      --bg2: #121826;
+      --fg: #e5e5e5;
+      --muted: #9ba4b5;
+      --accent: #4ade80;
+      --border: rgba(148,163,184,0.4);
+      --danger: #fb7185;
+      --card-bg: rgba(15,23,42,0.92);
+      --btn-radius: 999px;
     }
 
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     body {
-      background: radial-gradient(circle at top, #1b2340, #050814 55%);
-      color: var(--text-main);
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(59,130,246,0.18), transparent 60%),
+        radial-gradient(circle at bottom, rgba(244,63,94,0.22), transparent 65%),
+        linear-gradient(135deg, var(--bg), var(--bg2));
+      color: var(--fg);
       min-height: 100vh;
-      padding: 24px;
-    }
-
-    h1, h2, h3 {
-      font-weight: 600;
+      display: flex;
+      justify-content: center;
     }
 
     .page {
-      max-width: 1100px;
-      margin: 0 auto;
+      width: 100%;
+      max-width: 1120px;
+      padding: 1.75rem 1.25rem 2rem;
     }
 
     header {
-      margin-bottom: 24px;
-    }
-
-    header h1 {
-      font-size: 1.8rem;
-      margin-bottom: 4px;
-    }
-
-    header p {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1.5fr);
-      gap: 20px;
-    }
-
-    @media (max-width: 900px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .card {
-      background: linear-gradient(145deg, rgba(255,255,255,0.02), rgba(0,0,0,0.5));
-      border-radius: 18px;
-      padding: 18px 18px 20px;
-      border: 1px solid var(--border);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.45);
-    }
-
-    .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
     }
 
-    .card-header h2 {
-      font-size: 1rem;
-      letter-spacing: 0.08em;
+    header h1 {
+      margin: 0.1rem 0 0.2rem 0;
+      font-size: 1.6rem;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--text-muted);
+      font-weight: 650;
+    }
+
+    header small {
+      opacity: 0.75;
+      font-size: 0.82rem;
+    }
+
+    .back-link {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .back-link::before {
+      content: "←";
+      font-size: 0.8rem;
+    }
+
+    .back-link:hover {
+      color: var(--fg);
     }
 
     .pill {
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 0.78rem;
+      opacity: 0.9;
       display: inline-flex;
       align-items: center;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      gap: 6px;
+      gap: 0.3rem;
+      background: rgba(15,23,42,0.72);
+      backdrop-filter: blur(16px);
     }
 
     .pill-dot {
       width: 7px;
       height: 7px;
-      border-radius: 50%;
-      background: var(--accent);
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34,197,94,0.8);
     }
 
-    .status-main {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 4px;
+    main.layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.9fr);
+      gap: 1.5rem;
     }
 
-    .status-row {
+    @media (max-width: 900px) {
+      main.layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      border: 1px solid rgba(148,163,184,0.32);
+      padding: 1.4rem 1.5rem 1.3rem;
+      box-shadow:
+        0 24px 60px rgba(15,23,42,0.9),
+        0 0 0 1px rgba(15,23,42,0.7);
+      backdrop-filter: blur(18px);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      margin-bottom: 0.6rem;
+      font-size: 1.15rem;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 0.4rem;
     }
 
-    .status-indicator {
-      width: 12px;
-      height: 12px;
+    .card h2 span.label {
+      font-size: 0.78rem;
+      font-weight: 450;
+      padding: 0.15rem 0.6rem;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.3);
-      box-shadow: 0 0 12px rgba(0,0,0,0.6);
+      border: 1px solid rgba(148,163,184,0.3);
+      color: var(--muted);
     }
 
-    /* colors via data-status */
-    .status-indicator[data-status="available"] {
-      background: #34c759;
-      box-shadow: 0 0 12px rgba(52,199,89,0.8);
-    }
-    .status-indicator[data-status="busy"] {
-      background: #ff3b30;
-      box-shadow: 0 0 12px rgba(255,59,48,0.8);
-    }
-    .status-indicator[data-status="focus"] {
-      background: #0a84ff;
-      box-shadow: 0 0 12px rgba(10,132,255,0.8);
-    }
-    .status-indicator[data-status="meeting"] {
-      background: #ff9f0a;
-      box-shadow: 0 0 12px rgba(255,159,10,0.8);
-    }
-    .status-indicator[data-status="away"] {
-      background: #f2f2f7;
-      box-shadow: 0 0 12px rgba(242,242,247,0.6);
-    }
-
-    .status-label {
-      font-size: 1.4rem;
-      font-weight: 600;
-      text-transform: capitalize;
-    }
-
-    .status-subtitle {
-      color: var(--text-muted);
+    .card p {
+      margin-top: 0;
+      margin-bottom: 0.8rem;
       font-size: 0.9rem;
+      color: var(--muted);
     }
 
-    .meta-row {
+    /* STATUS DISPLAY */
+
+    .status-wrapper {
       display: flex;
-      gap: 16px;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .status-circle {
+      margin: 0 auto;
+      width: min(360px, 70vw);
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(148,163,184,0.35),
+        0 35px 80px rgba(15,23,42,0.95);
+      background: radial-gradient(circle at top, rgba(255,255,255,0.14), transparent 55%);
+    }
+
+    .status-circle-inner {
+      width: 86%;
+      height: 86%;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 650;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #0b0f1c;
+      text-shadow: 0 1px 3px rgba(255,255,255,0.35);
+      box-shadow:
+        inset 0 0 40px rgba(15,23,42,0.35),
+        0 0 35px rgba(0,0,0,0.5);
+    }
+
+    .status-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--muted);
       flex-wrap: wrap;
-      margin-top: 8px;
-      font-size: 0.8rem;
-      color: var(--text-muted);
+      gap: 0.3rem;
     }
 
-    .meta-item span {
-      opacity: 0.8;
-    }
-
-    .meta-item strong {
-      color: var(--text-main);
+    .status-meta strong {
+      color: var(--fg);
       font-weight: 500;
     }
 
-    .tasks-view {
-      margin-top: 18px;
-      border-top: 1px dashed var(--border);
-      padding-top: 12px;
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem 0.9rem;
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      color: var(--muted);
     }
 
-    .tasks-view h3 {
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--text-muted);
-      margin-bottom: 6px;
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.2);
+      background: rgba(15,23,42,0.85);
     }
 
-    .tasks-empty {
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    .legend-dot.default { background: conic-gradient(from 0deg, #ff0080, #ff8c00, #ffe600, #22c55e, #0ea5e9, #a855f7, #ff0080); }
+    .legend-dot.lab     { background: #fb923c; }
+    .legend-dot.busy    { background: #f97373; }
+    .legend-dot.free    { background: #22c55e; }
+    .legend-dot.away    { background: #ffffff; }
+    .legend-dot.x       { background: #a855f7; }
+
+    /* CONTROL PANEL */
+
+    .auth-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.7rem;
       font-size: 0.85rem;
-      color: var(--text-muted);
+    }
+
+    .auth-info-main {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    #auth-info {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .pw-input {
+      padding: 0.35rem 0.7rem;
+      border-radius: var(--btn-radius);
+      border: 1px solid var(--border);
+      background: rgba(10,15,25,0.9);
+      color: var(--fg);
+      font-size: 0.8rem;
+      min-width: 140px;
+    }
+
+    .auth-btn {
+      border-radius: var(--btn-radius);
+      padding: 0.35rem 0.8rem;
+      border: 1px solid rgba(148,163,184,0.35);
+      background: rgba(15,23,42,0.95);
+      color: var(--fg);
+      cursor: pointer;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .auth-btn:hover {
+      border-color: var(--accent);
+      background: rgba(22,30,53,1);
+    }
+
+    .helper-text {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.7rem;
+    }
+
+    .helper-text strong {
+      color: var(--fg);
+      font-weight: 500;
+    }
+
+    .state-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .state-btn {
+      border: 1px solid transparent;
+      border-radius: var(--btn-radius);
+      padding: 0.5rem 0.9rem;
+      font-size: 0.88rem;
+      cursor: pointer;
+      background: rgba(15,23,42,0.98);
+      color: var(--fg);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.38rem;
+      transition:
+        transform 0.08s ease-out,
+        box-shadow 0.08s ease-out,
+        border-color 0.08s ease-out,
+        background 0.08s ease-out;
+    }
+
+    .state-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(15,23,42,0.85);
+      border-color: rgba(148,163,184,0.7);
+    }
+
+    .state-btn.active {
+      border-color: rgba(74,222,128,0.8);
+      background: radial-gradient(circle at top left, rgba(74,222,128,0.2), rgba(15,23,42,1));
+      box-shadow:
+        0 0 0 1px rgba(34,197,94,0.6),
+        0 16px 45px rgba(22,163,74,0.55);
+    }
+
+    .state-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    .dot-default { background: conic-gradient(from 0deg, #ff0080, #ff8c00, #ffe600, #22c55e, #0ea5e9, #a855f7, #ff0080); }
+    .dot-lab     { background: #fb923c; }
+    .dot-busy    { background: #f97373; }
+    .dot-free    { background: #22c55e; }
+    .dot-away    { background: #ffffff; }
+    .dot-x       { background: #a855f7; }
+
+    .locked-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.6rem;
+    }
+
+    .locked-dot {
+      margin-top: 0.15rem;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--danger);
+      box-shadow: 0 0 8px rgba(248,113,113,0.8);
+    }
+
+    /* WEEKLY TASKS (RIGHT, VIEW + EDIT) */
+
+    .tasks-section {
+      margin-top: 1rem;
+      border-top: 1px solid rgba(148,163,184,0.3);
+      padding-top: 0.8rem;
+    }
+
+    .tasks-section h3 {
+      margin: 0 0 0.4rem 0;
+      font-size: 0.98rem;
+    }
+
+    .tasks-view-box {
+      border-radius: 12px;
+      border: 1px solid rgba(148,163,184,0.36);
+      padding: 0.55rem 0.7rem;
+      font-size: 0.84rem;
+      background: rgba(10,15,25,0.9);
+      white-space: pre-wrap;
+      min-height: 80px;
+      margin-bottom: 0.6rem;
+    }
+
+    .tasks-view-empty {
+      opacity: 0.6;
       font-style: italic;
     }
 
-    ul.tasks-list {
-      list-style: none;
-      margin-top: 6px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .task-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      font-size: 0.87rem;
-      padding: 5px 7px;
-      border-radius: 10px;
-      background: rgba(0,0,0,0.2);
-    }
-
-    .task-text {
-      flex: 1;
-      color: var(--text-main);
-    }
-
-    .task-text.done {
-      text-decoration: line-through;
-      color: var(--text-muted);
-      opacity: 0.8;
-    }
-
-    .task-badges {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.72rem;
-    }
-
-    .badge {
-      border-radius: 999px;
-      padding: 2px 8px;
-      border: 1px solid var(--border);
-      background: rgba(0,0,0,0.3);
-      color: var(--text-muted);
-    }
-
-    .badge.done {
-      color: var(--success);
-      border-color: rgba(52,199,89,0.4);
-    }
-
-    .badge.pending {
-      color: var(--warning);
-      border-color: rgba(255,176,32,0.4);
-    }
-
-    /* Control panel */
-    .control-section {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .control-block {
-      border-radius: 14px;
-      padding: 12px 12px 14px;
-      background: rgba(0,0,0,0.35);
-      border: 1px solid rgba(255,255,255,0.05);
-    }
-
-    .control-block h3 {
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
-
-    label {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    select, input[type="password"], input[type="text"], textarea {
+    .tasks-textarea {
       width: 100%;
-      background: rgba(0,0,0,0.5);
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      padding: 7px 9px;
-      color: var(--text-main);
-      font-size: 0.9rem;
-      outline: none;
+      min-height: 120px;
+      resize: vertical;
+      border-radius: 12px;
+      border: 1px solid rgba(148,163,184,0.4);
+      padding: 0.55rem 0.7rem;
+      font-size: 0.84rem;
+      background: rgba(10,15,25,0.9);
+      color: var(--fg);
+      font-family: inherit;
     }
 
-    select:focus, input:focus, textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(79,140,255,0.4);
-    }
-
-    button {
-      border-radius: 999px;
-      border: none;
-      padding: 7px 14px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      background: var(--accent);
-      color: white;
-      font-weight: 500;
-      display: inline-flex;
+    .tasks-actions {
+      margin-top: 0.5rem;
+      display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 0.6rem;
+      flex-wrap: wrap;
     }
 
-    button.secondary {
-      background: rgba(255,255,255,0.05);
-      color: var(--text-main);
-      border: 1px solid var(--border);
-    }
-
-    button.small {
-      padding: 4px 10px;
+    .tasks-status {
       font-size: 0.78rem;
-      border-radius: 999px;
+      color: var(--muted);
     }
 
-    button:disabled {
-      opacity: 0.55;
-      cursor: default;
+    .hidden {
+      display: none !important;
     }
 
-    .control-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 6px;
-    }
-
-    .field-row {
-      display: flex;
-      gap: 6px;
-      margin-top: 6px;
-    }
-
-    .field-row input[type="text"] {
-      flex: 1;
-    }
-
-    .control-hint {
+    footer {
+      margin-top: 1.4rem;
       font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    .control-status {
-      font-size: 0.8rem;
-      margin-top: 6px;
-    }
-
-    .control-status.ok {
-      color: var(--success);
-    }
-
-    .control-status.err {
-      color: var(--danger);
-    }
-
-    .task-actions {
-      display: flex;
-      gap: 4px;
+      opacity: 0.6;
+      text-align: center;
     }
   </style>
 </head>
-
 <body>
   <div class="page">
     <header>
-      <h1>Lab Work Status</h1>
-      <p>Shadow clock integration – current availability and weekly tasks.</p>
+      <div>
+        <a class="back-link" href="./">back to home</a>
+        <h1>work_status</h1>
+        <small>Remote status indicator</small>
+      </div>
+      <div class="pill">
+        <span class="pill-dot"></span>
+        <span>live · Firebase</span>
+      </div>
     </header>
 
     <main class="layout">
-      <!-- LEFT: Viewer -->
+      <!-- LEFT: status display -->
       <section class="card">
-        <div class="card-header">
-          <h2>Current status</h2>
-          <div class="pill">
-            <span class="pill-dot"></span>
-            <span>Realtime view</span>
-          </div>
-        </div>
+        <h2>
+          Current status
+          <span class="label">viewer</span>
+        </h2>
+        <p>
+          Visitors can view the current state in real time.
+        </p>
 
-        <div class="status-main">
-          <div class="status-row">
-            <div id="status-indicator" class="status-indicator" data-status="available"></div>
-            <div>
-              <div id="status-label" class="status-label">available</div>
-              <div id="status-subtitle" class="status-subtitle">
-                Status reported by the shadow clock control panel.
-              </div>
+        <div class="status-wrapper">
+          <div class="status-circle">
+            <div id="status-display" class="status-circle-inner">
+              loading...
             </div>
           </div>
 
-          <div class="meta-row">
-            <div class="meta-item">
-              <span>Last update:</span>
-              <strong id="last-update">–</strong>
+          <div class="status-meta">
+            <span id="status-label">Status: ?</span>
+            <span id="last-update">Last update: —</span>
+          </div>
+
+          <div class="legend">
+            <div class="legend-item">
+              <span class="legend-dot default"></span>
+              <span>default · rainbow fade</span>
             </div>
-            <div class="meta-item">
-              <span>Clock endpoint:</span>
-              <strong>/status.json</strong>
+            <div class="legend-item">
+              <span class="legend-dot lab"></span>
+              <span>lab · orange fade</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot busy"></span>
+              <span>busy · red</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot free"></span>
+              <span>free · green</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot away"></span>
+              <span>away · white</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot x"></span>
+              <span>status X · violet</span>
             </div>
           </div>
-        </div>
-
-        <div class="tasks-view">
-          <h3>Weekly tasks</h3>
-          <div id="tasks-empty" class="tasks-empty">No tasks defined for this week.</div>
-          <ul id="tasks-list" class="tasks-list"></ul>
         </div>
       </section>
 
-      <!-- RIGHT: Control + task editor -->
+      <!-- RIGHT: control + weekly tasks -->
       <section class="card">
-        <div class="card-header">
-          <h2>Control</h2>
-          <div class="pill">
-            <span class="pill-dot"></span>
-            <span>Private controls</span>
+        <h2>
+          Control
+          <span class="label">owner (password)</span>
+        </h2>
+
+        <div class="auth-row">
+          <div class="auth-info-main">
+            <strong>Access</strong>
+            <span id="auth-info">Locked</span>
+          </div>
+          <div>
+            <input id="pw-input" class="pw-input" type="password" placeholder="password" />
+            <button id="pw-btn" class="auth-btn">Unlock</button>
           </div>
         </div>
 
-        <div class="control-section">
+        <p id="control-locked" class="helper-text">
+          Enter the password to enable state and task editing.
+        </p>
 
-          <!-- Lock / unlock -->
-          <div class="control-block">
-            <h3>Access</h3>
-            <label for="admin-password">Control password</label>
-            <div class="field-row">
-              <input type="password" id="admin-password" placeholder="Enter password to unlock controls" />
-              <button id="unlock-btn">Unlock</button>
-            </div>
-            <div id="lock-status" class="control-status"></div>
-            <p class="control-hint">
-              Controls are local-only. Use this page on your devices to update status and tasks.
-            </p>
+        <div id="control-panel" class="hidden">
+          <p class="helper-text">
+            Select the state to apply to the physical indicator.
+          </p>
+
+          <div class="state-buttons">
+            <button class="state-btn" data-state="default">
+              <span class="state-dot dot-default"></span>
+              <span>Default</span>
+            </button>
+            <button class="state-btn" data-state="lab">
+              <span class="state-dot dot-lab"></span>
+              <span>Lab</span>
+            </button>
+            <button class="state-btn" data-state="busy">
+              <span class="state-dot dot-busy"></span>
+              <span>Busy</span>
+            </button>
+            <button class="state-btn" data-state="free">
+              <span class="state-dot dot-free"></span>
+              <span>Free</span>
+            </button>
+            <button class="state-btn" data-state="away">
+              <span class="state-dot dot-away"></span>
+              <span>Away</span>
+            </button>
+            <button class="state-btn" data-state="x">
+              <span class="state-dot dot-x"></span>
+              <span>Status X</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="tasks-section">
+          <h3>Weekly tasks</h3>
+          <p class="helper-text">
+            The current list is visible to all visitors. Editing is password-protected.
+          </p>
+
+          <div id="tasks-view" class="tasks-view-box tasks-view-empty">
+            No tasks defined.
           </div>
 
-          <!-- Status control -->
-          <div class="control-block" id="status-control-block">
-            <h3>Status</h3>
-            <label for="status-select">Set current status</label>
-            <select id="status-select" disabled>
-              <option value="available">Available</option>
-              <option value="busy">Busy</option>
-              <option value="focus">Focus</option>
-              <option value="meeting">In a meeting</option>
-              <option value="away">Away</option>
-            </select>
-            <div class="control-row">
-              <button id="status-save-btn" disabled>Update status</button>
-              <span class="control-hint">This value is written to <strong>/status</strong> in the database.</span>
+          <div id="tasks-edit" class="hidden">
+            <textarea id="tasks-textarea" class="tasks-textarea" placeholder="- Task 1
+- Task 2"></textarea>
+            <div class="tasks-actions">
+              <button id="tasks-save-btn" class="auth-btn">Save tasks</button>
+              <span id="tasks-status" class="tasks-status"></span>
             </div>
           </div>
+        </div>
 
-          <!-- Tasks control -->
-          <div class="control-block" id="tasks-control-block">
-            <h3>Weekly tasks</h3>
-
-            <label for="new-task-input">Add task</label>
-            <div class="field-row">
-              <input type="text" id="new-task-input" placeholder="Describe a task for this week" disabled />
-              <button id="add-task-btn" disabled>Add</button>
-            </div>
-
-            <p class="control-hint">
-              Tasks are visible in the viewer above and stored under <strong>/tasks</strong>.
-            </p>
-
-            <div class="control-hint" style="margin-top: 6px;">
-              Once unlocked, you can mark tasks as completed or remove them.
-            </div>
+        <div class="locked-note">
+          <div class="locked-dot"></div>
+          <div>
+            Backend: Firebase Realtime Database.
           </div>
-
         </div>
       </section>
     </main>
+
+    <footer>
+      work_status · static frontend on GitHub Pages · realtime backend on Firebase.
+    </footer>
   </div>
 
-  <!-- Firebase + app logic -->
+  <!-- SCRIPT: Firebase + logic -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import {
       getDatabase,
       ref,
       onValue,
-      set,
-      update,
-      push,
-      remove
-    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+      update
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-    // === 1. Firebase config ==================================================
     const firebaseConfig = {
       apiKey: "AIzaSyCymGUKXdpBtVJPC1YH2bLuRLc16p-E93A",
       authDomain: "workstatus-5a293.firebaseapp.com",
@@ -514,237 +613,150 @@
       measurementId: "G-60KPLB1GDG"
     };
 
-    const app   = initializeApp(firebaseConfig);
-    const db    = getDatabase(app);
+    const LOCAL_PASSWORD = "ccremkjgp9f54";
 
-    // === 2. DOM elements ======================================================
-    const statusIndicatorEl = document.getElementById("status-indicator");
-    const statusLabelEl     = document.getElementById("status-label");
-    const statusSubtitleEl  = document.getElementById("status-subtitle");
-    const lastUpdateEl      = document.getElementById("last-update");
+    const app = initializeApp(firebaseConfig);
+    const db  = getDatabase(app);
+    const indicatorRef = ref(db, "indicator");
 
-    const tasksEmptyEl      = document.getElementById("tasks-empty");
-    const tasksListEl       = document.getElementById("tasks-list");
+    const statusDisplay = document.getElementById("status-display");
+    const statusLabel   = document.getElementById("status-label");
+    const lastUpdateEl  = document.getElementById("last-update");
 
-    const adminPasswordEl   = document.getElementById("admin-password");
-    const unlockBtnEl       = document.getElementById("unlock-btn");
-    const lockStatusEl      = document.getElementById("lock-status");
+    const pwInput       = document.getElementById("pw-input");
+    const pwBtn         = document.getElementById("pw-btn");
+    const authInfo      = document.getElementById("auth-info");
+    const controlPanel  = document.getElementById("control-panel");
+    const controlLocked = document.getElementById("control-locked");
+    const buttons       = document.querySelectorAll(".state-btn");
 
-    const statusSelectEl    = document.getElementById("status-select");
-    const statusSaveBtnEl   = document.getElementById("status-save-btn");
+    const tasksView     = document.getElementById("tasks-view");
+    const tasksEdit     = document.getElementById("tasks-edit");
+    const tasksTextarea = document.getElementById("tasks-textarea");
+    const tasksSaveBtn  = document.getElementById("tasks-save-btn");
+    const tasksStatus   = document.getElementById("tasks-status");
 
-    const newTaskInputEl    = document.getElementById("new-task-input");
-    const addTaskBtnEl      = document.getElementById("add-task-btn");
-
-    // === 3. Config: password & status map ====================================
-    // Cambialo tu
-    const ADMIN_PASSWORD = "ccremkjgp9f54";
-
-    const STATUS_INFO = {
-      available: {
-        label: "available",
-        subtitle: "You can reach me in the lab or online."
-      },
-      busy: {
-        label: "busy",
-        subtitle: "Working on time-sensitive tasks; response may be delayed."
-      },
-      focus: {
-        label: "focus",
-        subtitle: "Deep work session; please interrupt only if strictly necessary."
-      },
-      meeting: {
-        label: "in a meeting",
-        subtitle: "Currently in a meeting or scheduled call."
-      },
-      away: {
-        label: "away",
-        subtitle: "Not in the lab; check later or send a message."
-      }
+    const COLORS = {
+      default: "radial-gradient(circle at top, rgba(255,255,255,0.2), transparent 55%), conic-gradient(from 0deg, #ff0080, #ff8c00, #ffe600, #22c55e, #0ea5e9, #a855f7, #ff0080)",
+      lab:     "radial-gradient(circle at top, rgba(255,255,255,0.24), transparent 55%), linear-gradient(135deg, #fed7aa, #fb923c, #ea580c)",
+      busy:    "radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 55%), linear-gradient(135deg, #fecaca, #f97373, #b91c1c)",
+      free:    "radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 55%), linear-gradient(135deg, #bbf7d0, #22c55e, #15803d)",
+      away:    "radial-gradient(circle at top, rgba(255,255,255,0.3), transparent 55%), linear-gradient(135deg, #ffffff, #e5e7eb, #d4d4d8)",
+      x:       "radial-gradient(circle at top, rgba(255,255,255,0.2), transparent 55%), linear-gradient(135deg, #e9d5ff, #a855f7, #6b21a8)"
     };
 
-    let adminUnlocked = false;
+    const LABELS = {
+      default: "default (full fade)",
+      lab:     "lab (orange fade)",
+      busy:    "busy (red)",
+      free:    "free (green)",
+      away:    "away (white)",
+      x:       "status X (violet)"
+    };
 
-    function setControlsEnabled(enabled) {
-      statusSelectEl.disabled  = !enabled;
-      statusSaveBtnEl.disabled = !enabled;
-      newTaskInputEl.disabled  = !enabled;
-      addTaskBtnEl.disabled    = !enabled;
+    function applyStatusVisual(state) {
+      const s = state && COLORS[state] ? state : "default";
+      statusDisplay.style.backgroundImage = COLORS[s];
+      statusLabel.textContent = "Status: " + (LABELS[s] || s);
+      statusDisplay.textContent = (s || "?").toUpperCase();
+      buttons.forEach(b => {
+        const st = b.getAttribute("data-state");
+        b.classList.toggle("active", st === s);
+      });
     }
 
-    setControlsEnabled(false);
-
-    // === 4. UI helpers =======================================================
     function formatTimestamp(ts) {
-      if (!ts) return "–";
-      const d = new Date(ts);
-      if (Number.isNaN(d.getTime())) return "–";
-      return d.toLocaleString(undefined, {
-        year: "numeric",
-        month: "short",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit"
-      });
-    }
-
-    function applyStatusToUI(status) {
-      const key = STATUS_INFO[status] ? status : "available";
-      const info = STATUS_INFO[key];
-
-      statusIndicatorEl.dataset.status = key;
-      statusLabelEl.textContent = info.label;
-      statusSubtitleEl.textContent = info.subtitle;
-
-      // sincronia anche sul select
-      statusSelectEl.value = key;
-    }
-
-    function renderTasks(tasksObj) {
-      tasksListEl.innerHTML = "";
-
-      if (!tasksObj) {
-        tasksEmptyEl.style.display = "block";
-        return;
-      }
-
-      const entries = Object.entries(tasksObj);
-      if (!entries.length) {
-        tasksEmptyEl.style.display = "block";
-        return;
-      }
-
-      tasksEmptyEl.style.display = "none";
-
-      entries.forEach(([id, task]) => {
-        const li = document.createElement("li");
-        li.className = "task-item";
-        li.dataset.id = id;
-
-        const textSpan = document.createElement("span");
-        textSpan.className = "task-text";
-        textSpan.textContent = task.text || "";
-        if (task.done) {
-          textSpan.classList.add("done");
-        }
-
-        const rightDiv = document.createElement("div");
-        rightDiv.className = "task-badges";
-
-        const stateBadge = document.createElement("span");
-        stateBadge.className = "badge " + (task.done ? "done" : "pending");
-        stateBadge.textContent = task.done ? "Done" : "Pending";
-        rightDiv.appendChild(stateBadge);
-
-        // Admin-only action buttons
-        if (adminUnlocked) {
-          const actions = document.createElement("div");
-          actions.className = "task-actions";
-
-          const toggleBtn = document.createElement("button");
-          toggleBtn.className = "small secondary";
-          toggleBtn.textContent = task.done ? "Mark pending" : "Mark done";
-          toggleBtn.addEventListener("click", async () => {
-            await update(ref(db, "tasks/" + id), { done: !task.done });
-          });
-
-          const deleteBtn = document.createElement("button");
-          deleteBtn.className = "small secondary";
-          deleteBtn.textContent = "Remove";
-          deleteBtn.addEventListener("click", async () => {
-            await remove(ref(db, "tasks/" + id));
-          });
-
-          actions.appendChild(toggleBtn);
-          actions.appendChild(deleteBtn);
-          rightDiv.appendChild(actions);
-        }
-
-        li.appendChild(textSpan);
-        li.appendChild(rightDiv);
-        tasksListEl.appendChild(li);
-      });
-    }
-
-    // === 5. Realtime listeners ===============================================
-    // Status string (critical for the clock)
-    onValue(ref(db, "status"), (snapshot) => {
-      const status = snapshot.val() || "available";
-      applyStatusToUI(status);
-    });
-
-    // Last update timestamp
-    onValue(ref(db, "lastUpdate"), (snapshot) => {
-      const ts = snapshot.val();
-      lastUpdateEl.textContent = formatTimestamp(ts);
-    });
-
-    // Tasks
-    onValue(ref(db, "tasks"), (snapshot) => {
-      renderTasks(snapshot.val());
-    });
-
-    // === 6. Lock / unlock controls ===========================================
-    unlockBtnEl.addEventListener("click", () => {
-      const entered = adminPasswordEl.value;
-      if (!entered) {
-        lockStatusEl.textContent = "Please enter a password.";
-        lockStatusEl.className = "control-status err";
-        return;
-      }
-
-      if (entered === ADMIN_PASSWORD) {
-        adminUnlocked = true;
-        lockStatusEl.textContent = "Controls unlocked.";
-        lockStatusEl.className = "control-status ok";
-        setControlsEnabled(true);
-        // Forza il rerender delle task con i bottoni
-        onValue(ref(db, "tasks"), (snapshot) => {
-          renderTasks(snapshot.val());
-        }, { onlyOnce: true });
+      if (!ts) return "Last update: —";
+      let d;
+      if (typeof ts === "number") {
+        d = new Date(ts);
       } else {
-        adminUnlocked = false;
-        lockStatusEl.textContent = "Invalid password.";
-        lockStatusEl.className = "control-status err";
-        setControlsEnabled(false);
+        const num = Number(ts);
+        d = isNaN(num) ? new Date(ts) : new Date(num);
+      }
+      if (isNaN(d.getTime())) return "Last update: —";
+      return "Last update: " + d.toLocaleString(undefined, {
+        dateStyle: "short",
+        timeStyle: "short"
+      });
+    }
+
+    function updateTasksView(text) {
+      const value = (text || "").trim();
+      if (!value) {
+        tasksView.textContent = "No tasks defined.";
+        tasksView.classList.add("tasks-view-empty");
+      } else {
+        tasksView.textContent = value;
+        tasksView.classList.remove("tasks-view-empty");
+      }
+    }
+
+    // Listen to indicator data
+    onValue(indicatorRef, (snapshot) => {
+      const data = snapshot.val() || {};
+      applyStatusVisual(data.status);
+      lastUpdateEl.textContent = formatTimestamp(data.last_update);
+
+      if (typeof data.weekly_tasks_text === "string") {
+        tasksTextarea.value = data.weekly_tasks_text;
+        updateTasksView(data.weekly_tasks_text);
+      } else {
+        tasksTextarea.value = "";
+        updateTasksView("");
+      }
+    }, (error) => {
+      console.error(error);
+      statusDisplay.textContent = "error";
+      lastUpdateEl.textContent = "Last update: error";
+    });
+
+    // Unlock with local password
+    pwBtn.addEventListener("click", () => {
+      const val = pwInput.value || "";
+      if (val === LOCAL_PASSWORD) {
+        authInfo.textContent = "Unlocked";
+        controlPanel.classList.remove("hidden");
+        controlLocked.classList.add("hidden");
+        tasksEdit.classList.remove("hidden");
+      } else {
+        authInfo.textContent = "Wrong password";
+        controlPanel.classList.add("hidden");
+        controlLocked.classList.remove("hidden");
+        tasksEdit.classList.add("hidden");
       }
     });
 
-    // === 7. Status update ====================================================
-    statusSaveBtnEl.addEventListener("click", async () => {
-      if (!adminUnlocked) return;
-
-      const newStatus = statusSelectEl.value || "available";
-      try {
-        const now = Date.now();
-        await set(ref(db, "status"), newStatus);      // <--- QUI: stringa pura
-        await set(ref(db, "lastUpdate"), now);
-        lockStatusEl.textContent = "Status updated.";
-        lockStatusEl.className = "control-status ok";
-      } catch (err) {
-        console.error(err);
-        lockStatusEl.textContent = "Error updating status.";
-        lockStatusEl.className = "control-status err";
-      }
+    // Write status + last_update
+    buttons.forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const state = btn.getAttribute("data-state");
+        try {
+          await update(indicatorRef, {
+            status: state,
+            last_update: Date.now()
+          });
+        } catch (err) {
+          console.error("Write error", err);
+          alert("Cannot update status (rules or network).");
+        }
+      });
     });
 
-    // === 8. Tasks: add =======================================================
-    addTaskBtnEl.addEventListener("click", async () => {
-      if (!adminUnlocked) return;
-
-      const text = newTaskInputEl.value.trim();
-      if (!text) return;
-
+    // Save weekly tasks
+    tasksSaveBtn.addEventListener("click", async () => {
+      const text = tasksTextarea.value || "";
+      tasksStatus.textContent = "Saving…";
       try {
-        await push(ref(db, "tasks"), {
-          text,
-          done: false
+        await update(indicatorRef, {
+          weekly_tasks_text: text
         });
-        newTaskInputEl.value = "";
+        updateTasksView(text);
+        tasksStatus.textContent = "Saved";
+        setTimeout(() => { tasksStatus.textContent = ""; }, 2000);
       } catch (err) {
-        console.error(err);
-        lockStatusEl.textContent = "Error adding task.";
-        lockStatusEl.className = "control-status err";
+        console.error("Tasks write error", err);
+        tasksStatus.textContent = "Error saving";
       }
     });
   </script>
