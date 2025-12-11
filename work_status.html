@@ -468,6 +468,107 @@
       color: var(--fg);
       opacity: 0.9;
     }
+        /* GUEST NOTE ("post-it") */
+
+    .note-section {
+      margin-top: 1rem;
+      border-top: 1px solid rgba(148,163,184,0.3);
+      padding-top: 0.8rem;
+    }
+
+    .note-section h3 {
+      margin: 0 0 0.4rem 0;
+      font-size: 0.98rem;
+    }
+
+    .note-helper {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .note-input {
+      width: 100%;
+      min-height: 70px;
+      resize: vertical;
+      border-radius: 12px;
+      border: 1px solid rgba(250,204,21,0.7);
+      padding: 0.5rem 0.7rem;
+      font-size: 0.84rem;
+      background: #fef9c3;
+      color: #1f2933;
+      font-family: inherit;
+      box-shadow:
+        0 6px 14px rgba(0,0,0,0.25),
+        inset 0 0 0 1px rgba(250,204,21,0.4);
+    }
+
+    .note-input::placeholder {
+      color: rgba(15,23,42,0.55);
+    }
+
+    .note-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.45rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .note-name {
+      flex: 1 1 120px;
+      padding: 0.35rem 0.6rem;
+      border-radius: var(--btn-radius);
+      border: 1px solid var(--border);
+      background: rgba(10,15,25,0.9);
+      color: var(--fg);
+      font-size: 0.8rem;
+    }
+
+    .note-btn {
+      border-radius: var(--btn-radius);
+      padding: 0.4rem 0.9rem;
+      border: 1px solid rgba(148,163,184,0.5);
+      background: rgba(15,23,42,0.95);
+      color: var(--fg);
+      cursor: pointer;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .note-btn:hover {
+      border-color: var(--accent);
+      background: rgba(22,30,53,1);
+    }
+
+    .note-status {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    .note-last {
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .note-last strong {
+      color: var(--fg);
+      font-weight: 500;
+    }
+
+    .note-last-text {
+      margin-top: 0.15rem;
+      border-radius: 10px;
+      border: 1px dashed rgba(148,163,184,0.5);
+      padding: 0.4rem 0.55rem;
+      font-size: 0.8rem;
+      background: rgba(15,23,42,0.85);
+      white-space: pre-wrap;
+    }
 
     .hidden {
       display: none !important;
@@ -700,6 +801,25 @@
             </div>
           </div>
         </div>
+            <div class="note-section">
+          <h3>Leave a note</h3>
+          <p class="note-helper">
+            Short messages for Fabio. Visible to everyone visiting this page.
+          </p>
+          <textarea id="note-input" class="note-input" maxlength="300"
+            placeholder="Write a quick note… (max 300 characters)"></textarea>
+          <div class="note-row">
+            <input id="note-name" class="note-name" type="text" maxlength="40" placeholder="Name (optional)" />
+            <button id="note-send-btn" class="note-btn">Send</button>
+          </div>
+          <div id="note-status" class="note-status"></div>
+
+          <div id="note-last" class="note-last hidden">
+            <div><strong>Last note received</strong></div>
+            <div id="note-last-meta" class="note-status"></div>
+            <div id="note-last-text" class="note-last-text"></div>
+          </div>
+        </div>
 
         <div class="locked-note">
           <div class="locked-dot"></div>
@@ -790,6 +910,14 @@
     away:    "Away",
     x:       "Lab MRI"
   };
+  // guest note elements
+  const noteInput    = document.getElementById("note-input");
+  const noteName     = document.getElementById("note-name");
+  const noteSendBtn  = document.getElementById("note-send-btn");
+  const noteStatus   = document.getElementById("note-status");
+  const noteLastBox  = document.getElementById("note-last");
+  const noteLastMeta = document.getElementById("note-last-meta");
+  const noteLastText = document.getElementById("note-last-text");
 
   // Per compatibilità con i valori vecchi che potresti avere già nel DB
   function normalizeState(raw) {
@@ -917,6 +1045,27 @@
     statusDisplay.textContent = "error";
     lastUpdateEl.textContent = "Last update: error";
   });
+      // Guest last note (optional)
+    if (data.guest_last_note && typeof data.guest_last_note.text === "string") {
+      const n = data.guest_last_note;
+      noteLastText.textContent = n.text;
+
+      const who = n.name ? n.name : "anonymous";
+      let meta = `from ${who}`;
+      if (n.ts) {
+        const d = new Date(n.ts);
+        if (!isNaN(d.getTime())) {
+          meta += " · " + d.toLocaleString(undefined, {
+            dateStyle: "short",
+            timeStyle: "short"
+          });
+        }
+      }
+      noteLastMeta.textContent = meta;
+      noteLastBox.classList.remove("hidden");
+    } else {
+      noteLastBox.classList.add("hidden");
+    }
 
   // Unlock with local password
   pwBtn.addEventListener("click", async () => {
@@ -1013,6 +1162,60 @@
       tasksStatus.textContent = "Error saving";
     }
   });
+    // Guest note send handler
+  if (noteSendBtn) {
+    noteSendBtn.addEventListener("click", async () => {
+      const text = (noteInput?.value || "").trim();
+      const name = (noteName?.value || "").trim();
+
+      if (!text) {
+        noteStatus.textContent = "Message is empty.";
+        return;
+      }
+      if (text.length > 300) {
+        noteStatus.textContent = "Message is too long.";
+        return;
+      }
+
+      noteStatus.textContent = "Sending…";
+
+      try {
+        const payload = {
+          text,
+          name: name || null,
+          ts: Date.now()
+        };
+
+        await update(indicatorRef, {
+          guest_last_note: payload
+        });
+
+        // reset UI
+        noteInput.value = "";
+        noteStatus.textContent = "Sent";
+
+        // update local preview immediately
+        noteLastText.textContent = payload.text;
+        const who = payload.name ? payload.name : "anonymous";
+        let meta = `from ${who}`;
+        const d = new Date(payload.ts);
+        if (!isNaN(d.getTime())) {
+          meta += " · " + d.toLocaleString(undefined, {
+            dateStyle: "short",
+            timeStyle: "short"
+          });
+        }
+        noteLastMeta.textContent = meta;
+        noteLastBox.classList.remove("hidden");
+
+        setTimeout(() => { noteStatus.textContent = ""; }, 2000);
+      } catch (err) {
+        console.error("Guest note write error", err);
+        noteStatus.textContent = "Error sending message.";
+      }
+    });
+  }
+
 </script>
 
 </body>
