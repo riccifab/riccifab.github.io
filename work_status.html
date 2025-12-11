@@ -845,6 +845,7 @@
     update
   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
+  // --- Firebase config ---
   const firebaseConfig = {
     apiKey: "AIzaSyCymGUKXdpBtVJPC1YH2bLuRLc16p-E93A",
     authDomain: "workstatus-5a293.firebaseapp.com",
@@ -856,12 +857,41 @@
     measurementId: "G-60KPLB1GDG"
   };
 
-  const LOCAL_PASSWORD = "ccremkjgp9f54";
+  // --- Access control ---
+  const LOCAL_PASSWORD  = "ccremkjgp9f54"; // tua password
+  const DECOY_PASSWORD  = "romolo";        // password-esca
 
+  const ALLOWED_IPS = [
+    "93.34.28.174",
+    "151.66.77.88",
+    "193.205.210.80"
+  ];
+
+  const DECOY_URL = "https://www.delicto.com/blogs/sex-ed/second-hand-sex-toys";
+
+  async function isIpAllowed() {
+    try {
+      const res  = await fetch("https://api.ipify.org?format=json");
+      const data = await res.json();
+      const ip   = data.ip;
+      return ALLOWED_IPS.includes(ip);
+    } catch (err) {
+      console.error("IP check failed", err);
+      // In caso di errore ti proteggo: tratto come IP non ammesso
+      return false;
+    }
+  }
+
+  function handleDecoyLogin() {
+    window.location.href = DECOY_URL;
+  }
+
+  // --- Firebase init ---
   const app = initializeApp(firebaseConfig);
   const db  = getDatabase(app);
   const indicatorRef = ref(db, "indicator");
 
+  // --- DOM refs ---
   const statusDisplay = document.getElementById("status-display");
   const statusLabel   = document.getElementById("status-label");
   const lastUpdateEl  = document.getElementById("last-update");
@@ -873,9 +903,6 @@
   const controlLocked = document.getElementById("control-locked");
   const buttons       = document.querySelectorAll(".state-btn");
 
-  const tasksView     = document.getElementById("tasks-view");
-  const tasksEdit     = document.getElementById("tasks-edit");
-
   const tasksViewGeneral  = document.getElementById("tasks-view-general");
   const tasksViewGozzi    = document.getElementById("tasks-view-gozzi");
   const tasksViewIurilli  = document.getElementById("tasks-view-iurilli");
@@ -886,30 +913,13 @@
   const tasksTextareaIurilli = document.getElementById("tasks-textarea-iurilli");
   const tasksTextareaRossi   = document.getElementById("tasks-textarea-rossi");
 
+  const tasksEdit     = document.getElementById("tasks-edit");
   const tasksSaveBtn  = document.getElementById("tasks-save-btn");
   const tasksStatus   = document.getElementById("tasks-status");
 
   const tagSelect     = document.getElementById("tag-select");
   let currentTag      = "";
 
-  const COLORS = {
-    default: "radial-gradient(circle at top, rgba(255,255,255,0.2), transparent 55%), conic-gradient(from 0deg, #ff0080, #ff8c00, #ffe600, #22c55e, #0ea5e9, #a855f7, #ff0080)",
-    lab:     "radial-gradient(circle at top, rgba(255,255,255,0.24), transparent 55%), linear-gradient(135deg, #fed7aa, #fb923c, #ea580c)",
-    busy:    "radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 55%), linear-gradient(135deg, #fecaca, #f97373, #b91c1c)",
-    free:    "radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 55%), linear-gradient(135deg, #bbf7d0, #22c55e, #15803d)",
-    away:    "radial-gradient(circle at top, rgba(255,255,255,0.3), transparent 55%), linear-gradient(135deg, #ffffff, #e5e7eb, #d4d4d8)",
-    x:       "radial-gradient(circle at top, rgba(255,255,255,0.2), transparent 55%), linear-gradient(135deg, #e9d5ff, #a855f7, #6b21a8)" // Lab MRI
-  };
-
-  // Testo umano per ogni stato
-  const STATUS_TEXT = {
-    default: "At the desk",
-    lab:     "Lab -1",
-    busy:    "Busy",
-    free:    "Free",
-    away:    "Away",
-    x:       "Lab MRI"
-  };
   // guest note elements
   const noteInput    = document.getElementById("note-input");
   const noteName     = document.getElementById("note-name");
@@ -919,7 +929,25 @@
   const noteLastMeta = document.getElementById("note-last-meta");
   const noteLastText = document.getElementById("note-last-text");
 
-  // Per compatibilità con i valori vecchi che potresti avere già nel DB
+  // --- Visual config ---
+  const COLORS = {
+    default: "radial-gradient(circle at top, rgba(255,255,255,0.2), transparent 55%), conic-gradient(from 0deg, #ff0080, #ff8c00, #ffe600, #22c55e, #0ea5e9, #a855f7, #ff0080)",
+    lab:     "radial-gradient(circle at top, rgba(255,255,255,0.24), transparent 55%), linear-gradient(135deg, #fed7aa, #fb923c, #ea580c)",
+    busy:    "radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 55%), linear-gradient(135deg, #fecaca, #f97373, #b91c1c)",
+    free:    "radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 55%), linear-gradient(135deg, #bbf7d0, #22c55e, #15803d)",
+    away:    "radial-gradient(circle at top, rgba(255,255,255,0.3), transparent 55%), linear-gradient(135deg, #ffffff, #e5e7eb, #d4d4d8)",
+    x:       "radial-gradient(circle at top, rgba(255,255,255,0.2), transparent 55%), linear-gradient(135deg, #e9d5ff, #a855f7, #6b21a8)"
+  };
+
+  const STATUS_TEXT = {
+    default: "At the desk",
+    lab:     "Lab -1",
+    busy:    "Busy",
+    free:    "Free",
+    away:    "Away",
+    x:       "Lab MRI"
+  };
+
   function normalizeState(raw) {
     if (!raw) return "default";
     switch (raw) {
@@ -1000,30 +1028,17 @@
     tasksEdit.classList.add("hidden");
   }
 
-  async function isIpAllowed() {
-    try {
-      const res  = await fetch("https://api.ipify.org?format=json");
-      const data = await res.json();
-      const ip   = data.ip;
-      return ALLOWED_IPS.includes(ip);
-    } catch (err) {
-      console.error("IP check failed", err);
-      // in caso di errore, decidi cosa fare:
-      // true = passo comunque, false = tratto come sospetto.
-      return false;
-    }
-  }
-
-  // Listen to indicator data
+  // --- Realtime listener ---
   onValue(indicatorRef, (snapshot) => {
     const data = snapshot.val() || {};
     const tag  = data.tag || "";
     currentTag = tag;
 
+    // stato principale
     applyStatusVisual(data.status, tag);
     lastUpdateEl.textContent = formatTimestamp(data.last_update);
 
-    // Weekly tasks: 4 sezioni (con fallback legacy su weekly_tasks_text per la General)
+    // weekly tasks
     const wtGeneral = (typeof data.weekly_tasks_general === "string")
       ? data.weekly_tasks_general
       : (typeof data.weekly_tasks_text === "string" ? data.weekly_tasks_text : "");
@@ -1040,12 +1055,8 @@
     updateTasksView(tasksViewGozzi,   wtGozzi);
     updateTasksView(tasksViewIurilli, wtIurilli);
     updateTasksView(tasksViewRossi,   wtRossi);
-  }, (error) => {
-    console.error(error);
-    statusDisplay.textContent = "error";
-    lastUpdateEl.textContent = "Last update: error";
-  });
-      // Guest last note (optional)
+
+    // guest last note (QUI dentro, con data definito)
     if (data.guest_last_note && typeof data.guest_last_note.text === "string") {
       const n = data.guest_last_note;
       noteLastText.textContent = n.text;
@@ -1066,29 +1077,33 @@
     } else {
       noteLastBox.classList.add("hidden");
     }
+  }, (error) => {
+    console.error(error);
+    statusDisplay.textContent = "error";
+    lastUpdateEl.textContent = "Last update: error";
+  });
 
-  // Unlock with local password
+  // --- Login con password + IP check ---
   pwBtn.addEventListener("click", async () => {
     const val = pwInput.value || "";
 
-    if (val === DECOYPASS) {
-      // Password giusta: ora controllo l'IP
+    if (val === LOCAL_PASSWORD) {
       const allowed = await isIpAllowed();
       if (allowed) {
-        unlockUi();          // sei tu → accesso normale
+        unlockUi();          // tu, IP ok → pannello sbloccato
       } else {
-        handleLogin();  // password giusta ma IP diverso → scherzo
+        handleDecoyLogin();  // password giusta ma IP diverso → scherzo
       }
-    } else if (val === LOCAL_PASSWORD) {
-      // password esca esplicita (se vuoi tenerla)
-      handleLogin();
+    } else if (val === DECOY_PASSWORD) {
+      // password-esca esplicita
+      handleDecoyLogin();
     } else {
-      // qualsiasi altra password
-      handleLogin();
+      // qualunque altra password
+      lockUiWrongPassword();
     }
   });
 
-  // Write status + last_update (usa già stati normalizzati: default/lab/busy/free/away/x)
+  // --- Bottoni stato ---
   buttons.forEach(btn => {
     btn.addEventListener("click", async () => {
       const state = btn.getAttribute("data-state");
@@ -1104,9 +1119,7 @@
     });
   });
 
-  const DECOYPASS = "romolo";
-
-  // Change / save tag
+  // --- Tag PI / project ---
   if (tagSelect) {
     tagSelect.addEventListener("change", async () => {
       const newTag = tagSelect.value || "";
@@ -1123,18 +1136,7 @@
     });
   }
 
-  const ALLOWED_IPS = [
-    "93.34.28.174",
-    "151.66.77.88",
-    "193.205.210.80"
-  ];
-
-  function handleLogin() {
-    // classico redirect “simpatico”
-    window.location.href = "https://www.delicto.com/blogs/sex-ed/second-hand-sex-toys";
-  }
-
-  // Save weekly tasks (tutte e 4 le liste)
+  // --- Save weekly tasks ---
   tasksSaveBtn.addEventListener("click", async () => {
     const textGeneral  = (tasksTextareaGeneral?.value || "");
     const textGozzi    = (tasksTextareaGozzi?.value   || "");
@@ -1162,7 +1164,8 @@
       tasksStatus.textContent = "Error saving";
     }
   });
-    // Guest note send handler
+
+  // --- Guest note send handler ---
   if (noteSendBtn) {
     noteSendBtn.addEventListener("click", async () => {
       const text = (noteInput?.value || "").trim();
@@ -1190,11 +1193,10 @@
           guest_last_note: payload
         });
 
-        // reset UI
         noteInput.value = "";
         noteStatus.textContent = "Sent";
 
-        // update local preview immediately
+        // Update immediato
         noteLastText.textContent = payload.text;
         const who = payload.name ? payload.name : "anonymous";
         let meta = `from ${who}`;
@@ -1215,7 +1217,6 @@
       }
     });
   }
-
 </script>
 
 </body>
