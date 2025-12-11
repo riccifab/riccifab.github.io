@@ -457,18 +457,7 @@
       color: var(--muted);
     }
 
-    .tasks-subsection {
-      margin-bottom: 0.7rem;
-    }
-
-    .tasks-subheader {
-      font-size: 0.82rem;
-      font-weight: 500;
-      margin: 0 0 0.25rem 0;
-      color: var(--fg);
-      opacity: 0.9;
-    }
-        /* GUEST NOTE ("post-it") */
+    /* GUEST NOTE ("post-it") */
 
     .note-section {
       margin-top: 1rem;
@@ -648,7 +637,7 @@
         </div>
       </section>
 
-      <!-- RIGHT: control + weekly tasks -->
+      <!-- RIGHT: control + weekly tasks + notes -->
       <section class="card">
         <h2>
           Control
@@ -735,73 +724,24 @@
         <div class="tasks-section">
           <h3>Weekly tasks</h3>
           <p class="helper-text">
-            The current lists are visible to all visitors. Editing is password-protected.
+            The current list is visible to all visitors. Editing is password-protected.
           </p>
 
-          <!-- VIEW (public) -->
-          <div id="tasks-view">
-            <div class="tasks-subsection">
-              <div class="tasks-subheader">General</div>
-              <div id="tasks-view-general" class="tasks-view-box tasks-view-empty">
-                No tasks defined.
-              </div>
-            </div>
-
-            <div class="tasks-subsection">
-              <div class="tasks-subheader">Gozzi weekly tasks</div>
-              <div id="tasks-view-gozzi" class="tasks-view-box tasks-view-empty">
-                No tasks defined.
-              </div>
-            </div>
-
-            <div class="tasks-subsection">
-              <div class="tasks-subheader">Iurilli weekly tasks</div>
-              <div id="tasks-view-iurilli" class="tasks-view-box tasks-view-empty">
-                No tasks defined.
-              </div>
-            </div>
-
-            <div class="tasks-subsection">
-              <div class="tasks-subheader">Rossi weekly tasks</div>
-              <div id="tasks-view-rossi" class="tasks-view-box tasks-view-empty">
-                No tasks defined.
-              </div>
-            </div>
+          <div id="tasks-view" class="tasks-view-box tasks-view-empty">
+            No tasks defined.
           </div>
 
-          <!-- EDIT (owner) -->
           <div id="tasks-edit" class="hidden">
-            <div class="tasks-subsection">
-              <div class="tasks-subheader">General</div>
-              <textarea id="tasks-textarea-general" class="tasks-textarea" placeholder="- Task 1
+            <textarea id="tasks-textarea" class="tasks-textarea" placeholder="- Task 1
 - Task 2"></textarea>
-            </div>
-
-            <div class="tasks-subsection">
-              <div class="tasks-subheader">Gozzi weekly tasks</div>
-              <textarea id="tasks-textarea-gozzi" class="tasks-textarea" placeholder="- Task 1
-- Task 2"></textarea>
-            </div>
-
-            <div class="tasks-subsection">
-              <div class="tasks-subheader">Iurilli weekly tasks</div>
-              <textarea id="tasks-textarea-iurilli" class="tasks-textarea" placeholder="- Task 1
-- Task 2"></textarea>
-            </div>
-
-            <div class="tasks-subsection">
-              <div class="tasks-subheader">Rossi weekly tasks</div>
-              <textarea id="tasks-textarea-rossi" class="tasks-textarea" placeholder="- Task 1
-- Task 2"></textarea>
-            </div>
-
             <div class="tasks-actions">
               <button id="tasks-save-btn" class="auth-btn">Save tasks</button>
               <span id="tasks-status" class="tasks-status"></span>
             </div>
           </div>
         </div>
-            <div class="note-section">
+
+        <div class="note-section">
           <h3>Leave a note</h3>
           <p class="note-helper">
             Short messages for Fabio. Visible to everyone visiting this page.
@@ -836,387 +776,349 @@
   </div>
 
   <!-- SCRIPT: Firebase + logic -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import {
-    getDatabase,
-    ref,
-    onValue,
-    update
-  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getDatabase,
+      ref,
+      onValue,
+      update
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCymGUKXdpBtVJPC1YH2bLuRLc16p-E93A",
-    authDomain: "workstatus-5a293.firebaseapp.com",
-    databaseURL: "https://workstatus-5a293-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "workstatus-5a293",
-    storageBucket: "workstatus-5a293.firebasestorage.app",
-    messagingSenderId: "737892892698",
-    appId: "1:737892892698:web:6f7112f9f5e724625451a3",
-    measurementId: "G-60KPLB1GDG"
-  };
+    const firebaseConfig = {
+      apiKey: "AIzaSyCymGUKXdpBtVJPC1YH2bLuRLc16p-E93A",
+      authDomain: "workstatus-5a293.firebaseapp.com",
+      databaseURL: "https://workstatus-5a293-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "workstatus-5a293",
+      storageBucket: "workstatus-5a293.firebasestorage.app",
+      messagingSenderId: "737892892698",
+      appId: "1:737892892698:web:6f7112f9f5e724625451a3",
+      measurementId: "G-60KPLB1GDG"
+    };
 
-  const LOCAL_PASSWORD = "ccremkjgp9f54";
+    // === ACCESS CONTROL ===
+    const OWNER_PASSWORD  = "ccremkjgp9f54"; // tua password vera
+    const DECOY_PASSWORD  = "romolo";        // password esca
 
-  const app = initializeApp(firebaseConfig);
-  const db  = getDatabase(app);
-  const indicatorRef = ref(db, "indicator");
-
-  const statusDisplay = document.getElementById("status-display");
-  const statusLabel   = document.getElementById("status-label");
-  const lastUpdateEl  = document.getElementById("last-update");
-
-  const pwInput       = document.getElementById("pw-input");
-  const pwBtn         = document.getElementById("pw-btn");
-  const authInfo      = document.getElementById("auth-info");
-  const controlPanel  = document.getElementById("control-panel");
-  const controlLocked = document.getElementById("control-locked");
-  const buttons       = document.querySelectorAll(".state-btn");
-
-  const tasksView     = document.getElementById("tasks-view");
-  const tasksEdit     = document.getElementById("tasks-edit");
-
-  const tasksViewGeneral  = document.getElementById("tasks-view-general");
-  const tasksViewGozzi    = document.getElementById("tasks-view-gozzi");
-  const tasksViewIurilli  = document.getElementById("tasks-view-iurilli");
-  const tasksViewRossi    = document.getElementById("tasks-view-rossi");
-
-  const tasksTextareaGeneral = document.getElementById("tasks-textarea-general");
-  const tasksTextareaGozzi   = document.getElementById("tasks-textarea-gozzi");
-  const tasksTextareaIurilli = document.getElementById("tasks-textarea-iurilli");
-  const tasksTextareaRossi   = document.getElementById("tasks-textarea-rossi");
-
-  const tasksSaveBtn  = document.getElementById("tasks-save-btn");
-  const tasksStatus   = document.getElementById("tasks-status");
-
-  const tagSelect     = document.getElementById("tag-select");
-  let currentTag      = "";
-
-  const COLORS = {
-    default: "radial-gradient(circle at top, rgba(255,255,255,0.2), transparent 55%), conic-gradient(from 0deg, #ff0080, #ff8c00, #ffe600, #22c55e, #0ea5e9, #a855f7, #ff0080)",
-    lab:     "radial-gradient(circle at top, rgba(255,255,255,0.24), transparent 55%), linear-gradient(135deg, #fed7aa, #fb923c, #ea580c)",
-    busy:    "radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 55%), linear-gradient(135deg, #fecaca, #f97373, #b91c1c)",
-    free:    "radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 55%), linear-gradient(135deg, #bbf7d0, #22c55e, #15803d)",
-    away:    "radial-gradient(circle at top, rgba(255,255,255,0.3), transparent 55%), linear-gradient(135deg, #ffffff, #e5e7eb, #d4d4d8)",
-    x:       "radial-gradient(circle at top, rgba(255,255,255,0.2), transparent 55%), linear-gradient(135deg, #e9d5ff, #a855f7, #6b21a8)" // Lab MRI
-  };
-
-  // Testo umano per ogni stato
-  const STATUS_TEXT = {
-    default: "At the desk",
-    lab:     "Lab -1",
-    busy:    "Busy",
-    free:    "Free",
-    away:    "Away",
-    x:       "Lab MRI"
-  };
-  // guest note elements
-  const noteInput    = document.getElementById("note-input");
-  const noteName     = document.getElementById("note-name");
-  const noteSendBtn  = document.getElementById("note-send-btn");
-  const noteStatus   = document.getElementById("note-status");
-  const noteLastBox  = document.getElementById("note-last");
-  const noteLastMeta = document.getElementById("note-last-meta");
-  const noteLastText = document.getElementById("note-last-text");
-
-  // Per compatibilità con i valori vecchi che potresti avere già nel DB
-  function normalizeState(raw) {
-    if (!raw) return "default";
-    switch (raw) {
-      case "At the desk": return "default";
-      case "Lab -1":      return "lab";
-      case "Lab MRI":     return "x";
-      default:            return raw;
-    }
-  }
-
-  function applyStatusVisual(state, tag) {
-    const s = normalizeState(state);
-    const colorKey = COLORS[s] ? s : "default";
-
-    statusDisplay.style.backgroundImage = COLORS[colorKey];
-
-    const text = STATUS_TEXT[colorKey] || colorKey;
-    statusLabel.textContent = "Status: " + (tag ? `${text} – ${tag}` : text);
-    statusDisplay.textContent = (text || "?").toUpperCase();
-
-    buttons.forEach(b => {
-      const st = b.getAttribute("data-state");
-      b.classList.toggle("active", st === colorKey);
-
-      const labelEl = b.querySelector(".state-label");
-      if (labelEl) {
-        const tagLine = labelEl.querySelector(".state-tag-line");
-        if (tagLine) {
-          tagLine.textContent = tag ? tag : "";
-        }
-      }
-    });
-
-    if (tagSelect) {
-      tagSelect.value = tag || "";
-    }
-  }
-
-  function formatTimestamp(ts) {
-    if (!ts) return "Last update: —";
-    let d;
-    if (typeof ts === "number") {
-      d = new Date(ts);
-    } else {
-      const num = Number(ts);
-      d = isNaN(num) ? new Date(ts) : new Date(num);
-    }
-    if (isNaN(d.getTime())) return "Last update: —";
-    return "Last update: " + d.toLocaleString(undefined, {
-      dateStyle: "short",
-      timeStyle: "short"
-    });
-  }
-
-  function updateTasksView(el, text) {
-    if (!el) return;
-    const value = (text || "").trim();
-    if (!value) {
-      el.textContent = "No tasks defined.";
-      el.classList.add("tasks-view-empty");
-    } else {
-      el.textContent = value;
-      el.classList.remove("tasks-view-empty");
-    }
-  }
-
-  function unlockUi() {
-    authInfo.textContent = "Unlocked";
-    controlPanel.classList.remove("hidden");
-    controlLocked.classList.add("hidden");
-    tasksEdit.classList.remove("hidden");
-  }
-
-  function lockUiWrongPassword() {
-    authInfo.textContent = "Wrong password";
-    controlPanel.classList.add("hidden");
-    controlLocked.classList.remove("hidden");
-    tasksEdit.classList.add("hidden");
-  }
-
-  async function isIpAllowed() {
-    try {
-      const res  = await fetch("https://api.ipify.org?format=json");
-      const data = await res.json();
-      const ip   = data.ip;
-      return ALLOWED_IPS.includes(ip);
-    } catch (err) {
-      console.error("IP check failed", err);
-      // in caso di errore, decidi cosa fare:
-      // true = passo comunque, false = tratto come sospetto.
-      return false;
-    }
-  }
-
-  // Listen to indicator data
-  onValue(indicatorRef, (snapshot) => {
-    const data = snapshot.val() || {};
-    const tag  = data.tag || "";
-    currentTag = tag;
-
-    applyStatusVisual(data.status, tag);
-    lastUpdateEl.textContent = formatTimestamp(data.last_update);
-
-    // Weekly tasks: 4 sezioni (con fallback legacy su weekly_tasks_text per la General)
-    const wtGeneral = (typeof data.weekly_tasks_general === "string")
-      ? data.weekly_tasks_general
-      : (typeof data.weekly_tasks_text === "string" ? data.weekly_tasks_text : "");
-    const wtGozzi   = (typeof data.weekly_tasks_gozzi === "string")   ? data.weekly_tasks_gozzi   : "";
-    const wtIurilli = (typeof data.weekly_tasks_iurilli === "string") ? data.weekly_tasks_iurilli : "";
-    const wtRossi   = (typeof data.weekly_tasks_rossi === "string")   ? data.weekly_tasks_rossi   : "";
-
-    if (tasksTextareaGeneral) tasksTextareaGeneral.value = wtGeneral;
-    if (tasksTextareaGozzi)   tasksTextareaGozzi.value   = wtGozzi;
-    if (tasksTextareaIurilli) tasksTextareaIurilli.value = wtIurilli;
-    if (tasksTextareaRossi)   tasksTextareaRossi.value   = wtRossi;
-
-    updateTasksView(tasksViewGeneral, wtGeneral);
-    updateTasksView(tasksViewGozzi,   wtGozzi);
-    updateTasksView(tasksViewIurilli, wtIurilli);
-    updateTasksView(tasksViewRossi,   wtRossi);
-  }, (error) => {
-    console.error(error);
-    statusDisplay.textContent = "error";
-    lastUpdateEl.textContent = "Last update: error";
-  });
-      // Guest last note (optional)
-    if (data.guest_last_note && typeof data.guest_last_note.text === "string") {
-      const n = data.guest_last_note;
-      noteLastText.textContent = n.text;
-
-      const who = n.name ? n.name : "anonymous";
-      let meta = `from ${who}`;
-      if (n.ts) {
-        const d = new Date(n.ts);
-        if (!isNaN(d.getTime())) {
-          meta += " · " + d.toLocaleString(undefined, {
-            dateStyle: "short",
-            timeStyle: "short"
-          });
-        }
-      }
-      noteLastMeta.textContent = meta;
-      noteLastBox.classList.remove("hidden");
-    } else {
-      noteLastBox.classList.add("hidden");
-    }
-
-  // Unlock with local password
-  pwBtn.addEventListener("click", async () => {
-    const val = pwInput.value || "";
-
-    if (val === DECOYPASS) {
-      // Password giusta: ora controllo l'IP
-      const allowed = await isIpAllowed();
-      if (allowed) {
-        unlockUi();          // sei tu → accesso normale
-      } else {
-        handleLogin();  // password giusta ma IP diverso → scherzo
-      }
-    } else if (val === LOCAL_PASSWORD) {
-      // password esca esplicita (se vuoi tenerla)
-      handleLogin();
-    } else {
-      // qualsiasi altra password
-      handleLogin();
-    }
-  });
-
-  // Write status + last_update (usa già stati normalizzati: default/lab/busy/free/away/x)
-  buttons.forEach(btn => {
-    btn.addEventListener("click", async () => {
-      const state = btn.getAttribute("data-state");
-      try {
-        await update(indicatorRef, {
-          status: state,
-          last_update: Date.now()
-        });
-      } catch (err) {
-        console.error("Write error", err);
-        alert("Cannot update status (rules or network).");
-      }
-    });
-  });
-
-  const DECOYPASS = "romolo";
-
-  // Change / save tag
-  if (tagSelect) {
-    tagSelect.addEventListener("change", async () => {
-      const newTag = tagSelect.value || "";
-      currentTag = newTag;
-      try {
-        await update(indicatorRef, {
-          tag: newTag,
-          last_update: Date.now()
-        });
-      } catch (err) {
-        console.error("Tag write error", err);
-        alert("Cannot update tag (rules or network).");
-      }
-    });
-  }
-
+    // IP pubblici ammessi (modifica con i tuoi)
   const ALLOWED_IPS = [
     "93.34.28.174",
     "151.66.77.88",
     "193.205.210.80"
   ];
 
-  function handleLogin() {
-    // classico redirect “simpatico”
-    window.location.href = "https://www.delicto.com/blogs/sex-ed/second-hand-sex-toys";
-  }
+    const DECOY_URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
 
-  // Save weekly tasks (tutte e 4 le liste)
-  tasksSaveBtn.addEventListener("click", async () => {
-    const textGeneral  = (tasksTextareaGeneral?.value || "");
-    const textGozzi    = (tasksTextareaGozzi?.value   || "");
-    const textIurilli  = (tasksTextareaIurilli?.value || "");
-    const textRossi    = (tasksTextareaRossi?.value   || "");
+    async function isIpAllowed() {
+      try {
+        const res  = await fetch("https://api.ipify.org?format=json");
+        const data = await res.json();
+        const ip   = data.ip;
+        return ALLOWED_IPS.includes(ip);
+      } catch (err) {
+        console.error("IP check failed", err);
+        // In caso di errore, trattiamo come non ammesso
+        return false;
+      }
+    }
 
-    tasksStatus.textContent = "Saving…";
-    try {
-      await update(indicatorRef, {
-        weekly_tasks_general:  textGeneral,
-        weekly_tasks_gozzi:    textGozzi,
-        weekly_tasks_iurilli:  textIurilli,
-        weekly_tasks_rossi:    textRossi
+    function handleDecoyLogin() {
+      window.location.href = DECOY_URL;
+    }
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getDatabase(app);
+    const indicatorRef = ref(db, "indicator");
+
+    const statusDisplay = document.getElementById("status-display");
+    const statusLabel   = document.getElementById("status-label");
+    const lastUpdateEl  = document.getElementById("last-update");
+
+    const pwInput       = document.getElementById("pw-input");
+    const pwBtn         = document.getElementById("pw-btn");
+    const authInfo      = document.getElementById("auth-info");
+    const controlPanel  = document.getElementById("control-panel");
+    const controlLocked = document.getElementById("control-locked");
+    const buttons       = document.querySelectorAll(".state-btn");
+
+    const tasksView     = document.getElementById("tasks-view");
+    const tasksEdit     = document.getElementById("tasks-edit");
+    const tasksTextarea = document.getElementById("tasks-textarea");
+    const tasksSaveBtn  = document.getElementById("tasks-save-btn");
+    const tasksStatus   = document.getElementById("tasks-status");
+
+    const tagSelect     = document.getElementById("tag-select");
+    let currentTag      = "";
+
+    // guest note elements
+    const noteInput    = document.getElementById("note-input");
+    const noteName     = document.getElementById("note-name");
+    const noteSendBtn  = document.getElementById("note-send-btn");
+    const noteStatus   = document.getElementById("note-status");
+    const noteLastBox  = document.getElementById("note-last");
+    const noteLastMeta = document.getElementById("note-last-meta");
+    const noteLastText = document.getElementById("note-last-text");
+
+    const COLORS = {
+      default: "radial-gradient(circle at top, rgba(255,255,255,0.2), transparent 55%), conic-gradient(from 0deg, #ff0080, #ff8c00, #ffe600, #22c55e, #0ea5e9, #a855f7, #ff0080)",
+      lab:     "radial-gradient(circle at top, rgba(255,255,255,0.24), transparent 55%), linear-gradient(135deg, #fed7aa, #fb923c, #ea580c)",
+      busy:    "radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 55%), linear-gradient(135deg, #fecaca, #f97373, #b91c1c)",
+      free:    "radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 55%), linear-gradient(135deg, #bbf7d0, #22c55e, #15803d)",
+      away:    "radial-gradient(circle at top, rgba(255,255,255,0.3), transparent 55%), linear-gradient(135deg, #ffffff, #e5e7eb, #d4d4d8)",
+      x:       "radial-gradient(circle at top, rgba(255,255,255,0.2), transparent 55%), linear-gradient(135deg, #e9d5ff, #a855f7, #6b21a8)" // Lab MRI
+    };
+
+    const STATUS_TEXT = {
+      default: "At the desk",
+      lab:     "Lab -1",
+      busy:    "Busy",
+      free:    "Free",
+      away:    "Away",
+      x:       "Lab MRI"
+    };
+
+    function normalizeState(raw) {
+      if (!raw) return "default";
+      switch (raw) {
+        case "At the desk": return "default";
+        case "Lab -1":      return "lab";
+        case "Lab MRI":     return "x";
+        default:            return raw;
+      }
+    }
+
+    function applyStatusVisual(state, tag) {
+      const s = normalizeState(state);
+      const colorKey = COLORS[s] ? s : "default";
+
+      statusDisplay.style.backgroundImage = COLORS[colorKey];
+
+      const text = STATUS_TEXT[colorKey] || colorKey;
+      statusLabel.textContent = "Status: " + (tag ? `${text} – ${tag}` : text);
+      statusDisplay.textContent = (text || "?").toUpperCase();
+
+      buttons.forEach(b => {
+        const st = b.getAttribute("data-state");
+        b.classList.toggle("active", st === colorKey);
+
+        const labelEl = b.querySelector(".state-label");
+        if (labelEl) {
+          const tagLine = labelEl.querySelector(".state-tag-line");
+          if (tagLine) {
+            tagLine.textContent = tag ? tag : "";
+          }
+        }
       });
 
-      updateTasksView(tasksViewGeneral, textGeneral);
-      updateTasksView(tasksViewGozzi,   textGozzi);
-      updateTasksView(tasksViewIurilli, textIurilli);
-      updateTasksView(tasksViewRossi,   textRossi);
-
-      tasksStatus.textContent = "Saved";
-      setTimeout(() => { tasksStatus.textContent = ""; }, 2000);
-    } catch (err) {
-      console.error("Tasks write error", err);
-      tasksStatus.textContent = "Error saving";
+      if (tagSelect) {
+        tagSelect.value = tag || "";
+      }
     }
-  });
-    // Guest note send handler
-  if (noteSendBtn) {
-    noteSendBtn.addEventListener("click", async () => {
-      const text = (noteInput?.value || "").trim();
-      const name = (noteName?.value || "").trim();
 
-      if (!text) {
-        noteStatus.textContent = "Message is empty.";
-        return;
+    function formatTimestamp(ts) {
+      if (!ts) return "Last update: —";
+      let d;
+      if (typeof ts === "number") {
+        d = new Date(ts);
+      } else {
+        const num = Number(ts);
+        d = isNaN(num) ? new Date(ts) : new Date(num);
       }
-      if (text.length > 300) {
-        noteStatus.textContent = "Message is too long.";
-        return;
+      if (isNaN(d.getTime())) return "Last update: —";
+      return "Last update: " + d.toLocaleString(undefined, {
+        dateStyle: "short",
+        timeStyle: "short"
+      });
+    }
+
+    function updateTasksView(text) {
+      const value = (text || "").trim();
+      if (!value) {
+        tasksView.textContent = "No tasks defined.";
+        tasksView.classList.add("tasks-view-empty");
+      } else {
+        tasksView.textContent = value;
+        tasksView.classList.remove("tasks-view-empty");
+      }
+    }
+
+    function unlockUi() {
+      authInfo.textContent = "Unlocked";
+      controlPanel.classList.remove("hidden");
+      controlLocked.classList.add("hidden");
+      tasksEdit.classList.remove("hidden");
+    }
+
+    function lockUiWrongPassword() {
+      authInfo.textContent = "Wrong password";
+      controlPanel.classList.add("hidden");
+      controlLocked.classList.remove("hidden");
+      tasksEdit.classList.add("hidden");
+    }
+
+    // Listen to indicator data
+    onValue(indicatorRef, (snapshot) => {
+      const data = snapshot.val() || {};
+      const tag  = data.tag || "";
+      currentTag = tag;
+
+      applyStatusVisual(data.status, tag);
+      lastUpdateEl.textContent = formatTimestamp(data.last_update);
+
+      if (typeof data.weekly_tasks_text === "string") {
+        tasksTextarea.value = data.weekly_tasks_text;
+        updateTasksView(data.weekly_tasks_text);
+      } else {
+        tasksTextarea.value = "";
+        updateTasksView("");
       }
 
-      noteStatus.textContent = "Sending…";
+      // Guest last note (optional)
+      if (data.guest_last_note && typeof data.guest_last_note.text === "string") {
+        const n = data.guest_last_note;
+        noteLastText.textContent = n.text;
 
-      try {
-        const payload = {
-          text,
-          name: name || null,
-          ts: Date.now()
-        };
-
-        await update(indicatorRef, {
-          guest_last_note: payload
-        });
-
-        // reset UI
-        noteInput.value = "";
-        noteStatus.textContent = "Sent";
-
-        // update local preview immediately
-        noteLastText.textContent = payload.text;
-        const who = payload.name ? payload.name : "anonymous";
+        const who = n.name ? n.name : "anonymous";
         let meta = `from ${who}`;
-        const d = new Date(payload.ts);
-        if (!isNaN(d.getTime())) {
-          meta += " · " + d.toLocaleString(undefined, {
-            dateStyle: "short",
-            timeStyle: "short"
-          });
+        if (n.ts) {
+          const d = new Date(n.ts);
+          if (!isNaN(d.getTime())) {
+            meta += " · " + d.toLocaleString(undefined, {
+              dateStyle: "short",
+              timeStyle: "short"
+            });
+          }
         }
         noteLastMeta.textContent = meta;
         noteLastBox.classList.remove("hidden");
+      } else {
+        noteLastBox.classList.add("hidden");
+      }
+    }, (error) => {
+      console.error(error);
+      statusDisplay.textContent = "error";
+      lastUpdateEl.textContent = "Last update: error";
+    });
 
-        setTimeout(() => { noteStatus.textContent = ""; }, 2000);
-      } catch (err) {
-        console.error("Guest note write error", err);
-        noteStatus.textContent = "Error sending message.";
+    // Unlock with owner password + IP check, or decoy password
+    pwBtn.addEventListener("click", async () => {
+      const val = pwInput.value || "";
+
+      if (val === OWNER_PASSWORD) {
+        const allowed = await isIpAllowed();
+        if (allowed) {
+          unlockUi();
+        } else {
+          handleDecoyLogin();
+        }
+      } else if (val === DECOY_PASSWORD) {
+        handleDecoyLogin();
+      } else {
+        lockUiWrongPassword();
       }
     });
-  }
 
-</script>
+    // Write status + last_update
+    buttons.forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const state = btn.getAttribute("data-state");
+        try {
+          await update(indicatorRef, {
+            status: state,
+            last_update: Date.now()
+          });
+        } catch (err) {
+          console.error("Write error", err);
+          alert("Cannot update status (rules or network).");
+        }
+      });
+    });
 
+    // Change / save tag
+    if (tagSelect) {
+      tagSelect.addEventListener("change", async () => {
+        const newTag = tagSelect.value || "";
+        currentTag = newTag;
+        try {
+          await update(indicatorRef, {
+            tag: newTag,
+            last_update: Date.now()
+          });
+        } catch (err) {
+          console.error("Tag write error", err);
+          alert("Cannot update tag (rules or network).");
+        }
+      });
+    }
+
+    // Save weekly tasks
+    tasksSaveBtn.addEventListener("click", async () => {
+      const text = tasksTextarea.value || "";
+      tasksStatus.textContent = "Saving…";
+      try {
+        await update(indicatorRef, {
+          weekly_tasks_text: text
+        });
+        updateTasksView(text);
+        tasksStatus.textContent = "Saved";
+        setTimeout(() => { tasksStatus.textContent = ""; }, 2000);
+      } catch (err) {
+        console.error("Tasks write error", err);
+        tasksStatus.textContent = "Error saving";
+      }
+    });
+
+    // Guest note send handler
+    if (noteSendBtn) {
+      noteSendBtn.addEventListener("click", async () => {
+        const text = (noteInput?.value || "").trim();
+        const name = (noteName?.value || "").trim();
+
+        if (!text) {
+          noteStatus.textContent = "Message is empty.";
+          return;
+        }
+        if (text.length > 300) {
+          noteStatus.textContent = "Message is too long.";
+          return;
+        }
+
+        noteStatus.textContent = "Sending…";
+
+        try {
+          const payload = {
+            text,
+            name: name || null,
+            ts: Date.now()
+          };
+
+          await update(indicatorRef, {
+            guest_last_note: payload
+          });
+
+          noteInput.value = "";
+          noteStatus.textContent = "Sent";
+
+          noteLastText.textContent = payload.text;
+          const who = payload.name ? payload.name : "anonymous";
+          let meta = `from ${who}`;
+          const d = new Date(payload.ts);
+          if (!isNaN(d.getTime())) {
+            meta += " · " + d.toLocaleString(undefined, {
+              dateStyle: "short",
+              timeStyle: "short"
+            });
+          }
+          noteLastMeta.textContent = meta;
+          noteLastBox.classList.remove("hidden");
+
+          setTimeout(() => { noteStatus.textContent = ""; }, 2000);
+        } catch (err) {
+          console.error("Guest note write error", err);
+          noteStatus.textContent = "Error sending message.";
+        }
+      });
+    }
+  </script>
 </body>
 </html>
