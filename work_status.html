@@ -858,7 +858,7 @@
   };
 
   // --- Access control ---
-  const LOCAL_PASSWORD  = "notripsforcats";    
+  const DECOY_PASSWORD  = "notripsforcats";    
 
   const ALLOWED_IPS = [
     "93.34.28.174",
@@ -947,7 +947,7 @@
     away:    "Away",
     x:       "Lab MRI"
   };
-  const DECOY_PASSWORD  = "romolo";   
+  const SUPER_REAL_PASSWORD  = "romolo";   
 
   function normalizeState(raw) {
     if (!raw) return "default";
@@ -1119,7 +1119,7 @@
   pwBtn.addEventListener("click", async () => {
     const val = pwInput.value || "";
 
-    if (val === LOCAL_PASSWORD) {
+    if (val === SUPER_REAL_PASSWORD) {
       const allowed = await isIpAllowed();
       if (allowed) {
         unlockUi();          // tu, IP ok → pannello sbloccato
