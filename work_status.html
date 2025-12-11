@@ -659,7 +659,7 @@
           <div id="note-status" class="note-status"></div>
 
           <div id="note-last" class="note-last hidden">
-            <div><strong>Last note received</strong></div>
+            <div><strong>Recent notes (last 5)</strong></div>
             <div id="note-last-meta" class="note-status"></div>
             <div id="note-last-text" class="note-last-text"></div>
           </div>
@@ -928,6 +928,7 @@
   const noteLastBox  = document.getElementById("note-last");
   const noteLastMeta = document.getElementById("note-last-meta");
   const noteLastText = document.getElementById("note-last-text");
+  let recentNotes = [];
 
   // --- Visual config ---
   const COLORS = {
@@ -1027,6 +1028,47 @@
     controlLocked.classList.remove("hidden");
     tasksEdit.classList.add("hidden");
   }
+  function renderNotesList(notes) {
+  if (!Array.isArray(notes) || notes.length === 0) {
+    noteLastBox.classList.add("hidden");
+    noteLastMeta.textContent = "";
+    noteLastText.textContent = "No notes yet.";
+    return;
+  }
+
+  // ordina per timestamp (più recente prima)
+  const sorted = notes
+    .filter(n => n && typeof n.text === "string")
+    .sort((a, b) => {
+      const ta = typeof a.ts === "number" ? a.ts : 0;
+      const tb = typeof b.ts === "number" ? b.ts : 0;
+      return tb - ta; // desc
+    });
+
+  const display = sorted.slice(0, 5); // prendiamo solo le 5 più recenti
+
+  noteLastBox.classList.remove("hidden");
+  noteLastMeta.textContent = `Showing last ${display.length} note${display.length > 1 ? "s" : ""}`;
+
+  const lines = display.map(n => {
+    const who = (n.name && n.name.trim()) ? n.name.trim() : "anonymous";
+    let when = "";
+    if (n.ts) {
+      const d = new Date(n.ts);
+      if (!isNaN(d.getTime())) {
+        when = d.toLocaleString(undefined, {
+          dateStyle: "short",
+          timeStyle: "short"
+        });
+      }
+    }
+    const header = when ? `[${when}] ${who}` : who;
+    return `${header}\n${n.text}`;
+  });
+
+  // pre-wrap in CSS, quindi newline funzionano
+  noteLastText.textContent = lines.join("\n\n");
+}
 
   // --- Realtime listener ---
   onValue(indicatorRef, (snapshot) => {
@@ -1057,26 +1099,16 @@
     updateTasksView(tasksViewRossi,   wtRossi);
 
     // guest last note (QUI dentro, con data definito)
-    if (data.guest_last_note && typeof data.guest_last_note.text === "string") {
-      const n = data.guest_last_note;
-      noteLastText.textContent = n.text;
+  // Guest notes: usa guest_notes (array) se c'è, altrimenti guest_last_note singola
+  let notesArr = [];
+  if (Array.isArray(data.guest_notes)) {
+    notesArr = data.guest_notes.filter(n => n && typeof n.text === "string");
+  } else if (data.guest_last_note && typeof data.guest_last_note.text === "string") {
+    notesArr = [data.guest_last_note];
+  }
 
-      const who = n.name ? n.name : "anonymous";
-      let meta = `from ${who}`;
-      if (n.ts) {
-        const d = new Date(n.ts);
-        if (!isNaN(d.getTime())) {
-          meta += " · " + d.toLocaleString(undefined, {
-            dateStyle: "short",
-            timeStyle: "short"
-          });
-        }
-      }
-      noteLastMeta.textContent = meta;
-      noteLastBox.classList.remove("hidden");
-    } else {
-      noteLastBox.classList.add("hidden");
-    }
+  recentNotes = notesArr;
+  renderNotesList(notesArr);
   }, (error) => {
     console.error(error);
     statusDisplay.textContent = "error";
@@ -1165,58 +1197,56 @@
     }
   });
 
-  // --- Guest note send handler ---
-  if (noteSendBtn) {
-    noteSendBtn.addEventListener("click", async () => {
-      const text = (noteInput?.value || "").trim();
-      const name = (noteName?.value || "").trim();
+ // Guest note send handler
+if (noteSendBtn) {
+  noteSendBtn.addEventListener("click", async () => {
+    const text = (noteInput?.value || "").trim();
+    const name = (noteName?.value || "").trim();
 
-      if (!text) {
-        noteStatus.textContent = "Message is empty.";
-        return;
-      }
-      if (text.length > 300) {
-        noteStatus.textContent = "Message is too long.";
-        return;
-      }
+    if (!text) {
+      noteStatus.textContent = "Message is empty.";
+      return;
+    }
+    if (text.length > 300) {
+      noteStatus.textContent = "Message is too long.";
+      return;
+    }
 
-      noteStatus.textContent = "Sending…";
+    noteStatus.textContent = "Sending…";
 
-      try {
-        const payload = {
-          text,
-          name: name || null,
-          ts: Date.now()
-        };
+    try {
+      const payload = {
+        text,
+        name: name || null,
+        ts: Date.now()
+      };
 
-        await update(indicatorRef, {
-          guest_last_note: payload
-        });
+      // partiamo da quello che abbiamo in memoria
+      const base = Array.isArray(recentNotes) ? recentNotes.slice() : [];
+      base.push(payload);
 
-        noteInput.value = "";
-        noteStatus.textContent = "Sent";
+      // tieni solo le ultime 5 (in base all'ordine di arrivo)
+      const trimmed = base.slice(-5);
 
-        // Update immediato
-        noteLastText.textContent = payload.text;
-        const who = payload.name ? payload.name : "anonymous";
-        let meta = `from ${who}`;
-        const d = new Date(payload.ts);
-        if (!isNaN(d.getTime())) {
-          meta += " · " + d.toLocaleString(undefined, {
-            dateStyle: "short",
-            timeStyle: "short"
-          });
-        }
-        noteLastMeta.textContent = meta;
-        noteLastBox.classList.remove("hidden");
+      await update(indicatorRef, {
+        guest_last_note: payload,  // per compatibilità
+        guest_notes: trimmed       // array con max 5 note
+      });
 
-        setTimeout(() => { noteStatus.textContent = ""; }, 2000);
-      } catch (err) {
-        console.error("Guest note write error", err);
-        noteStatus.textContent = "Error sending message.";
-      }
-    });
-  }
+      noteInput.value = "";
+      noteStatus.textContent = "Sent";
+
+      recentNotes = trimmed;
+      renderNotesList(recentNotes);
+
+      setTimeout(() => { noteStatus.textContent = ""; }, 2000);
+    } catch (err) {
+      console.error("Guest note write error", err);
+      noteStatus.textContent = "Error sending message.";
+    }
+  });
+}
+
 </script>
 
 </body>
