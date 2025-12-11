@@ -645,7 +645,26 @@
               <span>Lab MRI · violet</span>
             </div>
           </div>
+                  <div class="note-section">
+          <h3>Leave a note</h3>
+          <p class="note-helper">
+            Short messages for Fabio. Visible to everyone visiting this page.
+          </p>
+          <textarea id="note-input" class="note-input" maxlength="300"
+            placeholder="Write a quick note… (max 300 characters)"></textarea>
+          <div class="note-row">
+            <input id="note-name" class="note-name" type="text" maxlength="40" placeholder="Name (optional)" />
+            <button id="note-send-btn" class="note-btn">Send</button>
+          </div>
+          <div id="note-status" class="note-status"></div>
+
+          <div id="note-last" class="note-last hidden">
+            <div><strong>Last note received</strong></div>
+            <div id="note-last-meta" class="note-status"></div>
+            <div id="note-last-text" class="note-last-text"></div>
+          </div>
         </div>
+       </div>
       </section>
 
       <!-- RIGHT: control + weekly tasks -->
@@ -801,27 +820,8 @@
             </div>
           </div>
         </div>
-            <div class="note-section">
-          <h3>Leave a note</h3>
-          <p class="note-helper">
-            Short messages for Fabio. Visible to everyone visiting this page.
-          </p>
-          <textarea id="note-input" class="note-input" maxlength="300"
-            placeholder="Write a quick note… (max 300 characters)"></textarea>
-          <div class="note-row">
-            <input id="note-name" class="note-name" type="text" maxlength="40" placeholder="Name (optional)" />
-            <button id="note-send-btn" class="note-btn">Send</button>
-          </div>
-          <div id="note-status" class="note-status"></div>
 
-          <div id="note-last" class="note-last hidden">
-            <div><strong>Last note received</strong></div>
-            <div id="note-last-meta" class="note-status"></div>
-            <div id="note-last-text" class="note-last-text"></div>
-          </div>
-        </div>
-
-        <div class="locked-note">
+           <div class="locked-note">
           <div class="locked-dot"></div>
           <div>
             Backend: Firebase Realtime Database.
