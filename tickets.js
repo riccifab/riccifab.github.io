@@ -1,3 +1,5 @@
+
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getAuth,
@@ -11,7 +13,6 @@ import {
   getFirestore,
   doc,
   getDoc,
-  setDoc,
   collection,
   addDoc,
   getDocs,
@@ -23,10 +24,8 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* =========================
-   Firebase config (PASTE YOURS)
-   ========================= */
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+/* ========= Firebase config (PASTE YOURS) ========= */
+
 const firebaseConfig = {
   apiKey: "AIzaSyCymGUKXdpBtVJPC1YH2bLuRLc16p-E93A",
   authDomain: "workstatus-5a293.firebaseapp.com",
@@ -37,13 +36,14 @@ const firebaseConfig = {
   appId: "1:737892892698:web:6f7112f9f5e724625451a3",
   measurementId: "G-60KPLB1GDG"
 };
+  
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
 const $ = (id) => document.getElementById(id);
 
-const sessionPill = $("sessionPill");
+/* ========= UI ========= */
 const pillDot = $("pillDot");
 const pillText = $("pillText");
 
@@ -85,6 +85,7 @@ const btnCloseModal = $("btnCloseModal");
 const ticketForm = $("ticketForm");
 const formMsg = $("formMsg");
 
+/* ========= State ========= */
 let currentUser = null;
 let currentRole = null; // "admin" | "pi"
 let currentLab = null;
@@ -95,9 +96,10 @@ let selectedTicketId = null;
 const STATUS = ["NEW","TRIAGE","APPROVED","REJECTED","IN_PROGRESS","WAITING_ON_PI","WAITING_ON_PROCUREMENT","BLOCKED","DONE","CLOSED"];
 const PRIORITY = ["P0","P1","P2","P3"];
 
-function setPill(state, text) {
+/* ========= Helpers ========= */
+function setPill(signedIn, text) {
   pillText.textContent = text;
-  if (state === "in") {
+  if (signedIn) {
     pillDot.style.background = "#22c55e";
     pillDot.style.boxShadow = "0 0 10px rgba(34,197,94,0.8)";
   } else {
@@ -105,23 +107,18 @@ function setPill(state, text) {
     pillDot.style.boxShadow = "0 0 10px rgba(100,116,139,0.35)";
   }
 }
-
 function setMsg(el, text, type = "") {
   el.textContent = text || "";
   el.classList.remove("ok", "err");
   if (type) el.classList.add(type);
 }
-
-function safeText(s) {
-  return (s ?? "").toString().replace(/[<>]/g, "");
-}
-
+function safeText(s) { return (s ?? "").toString().replace(/[<>]/g, ""); }
 function fmtDateTime(ts) {
   if (!ts) return "-";
   try {
     if (typeof ts.toDate === "function") {
       const d = ts.toDate();
-      return d.toISOString().replace("T", " ").slice(0, 16);
+      return d.toISOString().replace("T"," ").slice(0,16);
     }
   } catch {}
   return "-";
@@ -139,17 +136,17 @@ function closeModal() {
   setMsg(formMsg, "");
 }
 
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) closeModal();
-});
+/* ========= Modal wiring ========= */
+modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
 btnCloseModal.addEventListener("click", closeModal);
+btnNewTicket.addEventListener("click", openModal);
 
+/* ========= Allowlist ========= */
 async function ensureAllowedOrThrow(user) {
   const email = user?.email;
   if (!email) throw new Error("No email in auth user.");
 
-  // allowlist/{email}
-  const ref = doc(db, "allowlist", email);
+  const ref = doc(db, "allowlist", email); // allowlist/{email}
   const snap = await getDoc(ref);
   if (!snap.exists()) throw new Error("Email not in allowlist.");
 
@@ -161,9 +158,7 @@ async function ensureAllowedOrThrow(user) {
   return { role, lab: currentLab };
 }
 
-/* =========================
-   Auth actions
-   ========================= */
+/* ========= Auth ========= */
 btnSignIn.onclick = async () => {
   setMsg(authMsg, "Signing in...");
   try {
@@ -193,13 +188,12 @@ btnReset.onclick = async () => {
   }
 };
 
-btnSignOut.onclick = async () => {
-  await signOut(auth);
-};
+btnSignOut.onclick = async () => { await signOut(auth); };
 
 onAuthStateChanged(auth, async (user) => {
   currentUser = user;
 
+  // reset UI
   selectedTicketId = null;
   ticketsCache = [];
   renderTicketsTable([]);
@@ -212,7 +206,7 @@ onAuthStateChanged(auth, async (user) => {
     btnSignOut.classList.add("hidden");
     btnSignIn.classList.remove("hidden");
     btnReset.classList.remove("hidden");
-    setPill("out", "Signed out");
+    setPill(false, "Signed out");
     setMsg(authMsg, "");
     return;
   }
@@ -221,17 +215,6 @@ onAuthStateChanged(auth, async (user) => {
   try {
     const { role, lab } = await ensureAllowedOrThrow(user);
 
-    // optional users/{uid} doc (admin-only in rules, but merge write can fail if rules block: ignore)
-    try {
-      await setDoc(doc(db, "users", user.uid), {
-        email: user.email,
-        displayName: user.displayName || "",
-        role,
-        lab,
-        lastLoginAt: serverTimestamp()
-      }, { merge: true });
-    } catch {}
-
     authCard.classList.add("hidden");
     appSection.classList.remove("hidden");
 
@@ -239,7 +222,7 @@ onAuthStateChanged(auth, async (user) => {
     btnSignIn.classList.add("hidden");
     btnReset.classList.add("hidden");
 
-    setPill("in", `${user.email} • ${role}`);
+    setPill(true, `${user.email} • ${role}`);
     roleInfo.textContent = `Role: ${role}${lab ? " • Lab: " + lab : ""}`;
 
     await refreshTickets();
@@ -249,11 +232,8 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-/* =========================
-   Ticket list + filters
-   ========================= */
+/* ========= Tickets list ========= */
 btnRefresh.onclick = refreshTickets;
-
 [fSearch, fStatus, fPriority, fLab, fCategory].forEach(el => {
   el.addEventListener("input", applyFiltersAndRender);
   el.addEventListener("change", applyFiltersAndRender);
@@ -268,26 +248,23 @@ async function refreshTickets() {
   renderComments(null);
 
   const tcol = collection(db, "tickets");
-
   let snap;
+
   if (currentRole === "admin") {
-    // admin: can sort server-side
     snap = await getDocs(query(tcol, orderBy("updatedAt", "desc"), limit(300)));
   } else {
-    // PI: avoid composite indexes. Fetch own tickets and sort client-side.
     snap = await getDocs(query(tcol, where("createdByUid", "==", currentUser.uid), limit(300)));
   }
 
   ticketsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-  // client-side sort by updatedAt desc (fallback to createdAt)
-  ticketsCache.sort((a, b) => {
+  // client sort for PI (and safe fallback)
+  ticketsCache.sort((a,b) => {
     const ta = a.updatedAt?.toMillis?.() ?? a.createdAt?.toMillis?.() ?? 0;
     const tb = b.updatedAt?.toMillis?.() ?? b.createdAt?.toMillis?.() ?? 0;
     return tb - ta;
   });
 
-  // populate lab filter options
   const labs = Array.from(new Set(ticketsCache.map(t => (t.lab || "").trim()).filter(Boolean))).sort();
   fLab.innerHTML = `<option value="">(all)</option>` + labs.map(l => `<option>${safeText(l)}</option>`).join("");
 
@@ -302,7 +279,6 @@ function applyFiltersAndRender() {
   const cat = fCategory.value || "";
 
   let list = [...ticketsCache];
-
   if (st) list = list.filter(t => t.status === st);
   if (pr) list = list.filter(t => t.priority === pr);
   if (lb) list = list.filter(t => (t.lab || "") === lb);
@@ -310,10 +286,7 @@ function applyFiltersAndRender() {
 
   if (s) {
     list = list.filter(t => {
-      const hay = [
-        t.title, t.description, t.lab, t.category,
-        ...(Array.isArray(t.tags) ? t.tags : [])
-      ].join(" ").toLowerCase();
+      const hay = [t.title, t.description, t.lab, t.category, ...(Array.isArray(t.tags)?t.tags:[])].join(" ").toLowerCase();
       return hay.includes(s);
     });
   }
@@ -349,9 +322,7 @@ function renderTicketsTable(list) {
   }
 }
 
-/* =========================
-   Ticket details + admin controls
-   ========================= */
+/* ========= Details + Admin ========= */
 async function selectTicket(ticketId) {
   selectedTicketId = ticketId;
   selectedIdPill.textContent = `#${ticketId.slice(0,8)}`;
@@ -398,54 +369,20 @@ function renderDetails(t) {
     <hr class="sep"/>
 
     <div class="grid2">
-      <div>
-        <div class="muted small">Expected delivery</div>
-        <div class="code">${safeText(t.expectedDeliveryDate || "-")}</div>
-      </div>
-      <div>
-        <div class="muted small">Hard deadline</div>
-        <div class="code">${t.hardDeadline ? "yes" : "no"}${t.hardDeadlineDate ? " • " + safeText(t.hardDeadlineDate) : ""}</div>
-      </div>
-
-      <div>
-        <div class="muted small">Commercially available</div>
-        <div class="code">${safeText(t.commerciallyAvailable || "unknown")}</div>
-      </div>
-      <div>
-        <div class="muted small">Commercial link</div>
-        <div class="code">${t.commercialLink ? `<a href="${safeText(t.commercialLink)}" target="_blank" rel="noreferrer">${safeText(t.commercialLink)}</a>` : "-"}</div>
-      </div>
-
-      <div>
-        <div class="muted small">Can be deferred</div>
-        <div class="code">${safeText(t.canBeDeferred || "-")}${t.deferTo ? " • " + safeText(t.deferTo) : ""}</div>
-      </div>
-      <div>
-        <div class="muted small">If not, why</div>
-        <div class="code">${safeText(t.whyNotDeferredCode || "-")}${t.whyNotDeferredText ? " • " + safeText(t.whyNotDeferredText) : ""}</div>
-      </div>
-
-      <div>
-        <div class="muted small">Impact / Effort</div>
-        <div class="code">${safeText(t.impact || "-")} • ${safeText(t.effortGuess || "-")}</div>
-      </div>
-      <div>
-        <div class="muted small">Tags</div>
-        <div class="code">${safeText(tags || "-")}</div>
-      </div>
+      <div><div class="muted small">Expected</div><div class="code">${safeText(t.expectedDeliveryDate || "-")}</div></div>
+      <div><div class="muted small">Hard deadline</div><div class="code">${t.hardDeadline?"yes":"no"}${t.hardDeadlineDate? " • "+safeText(t.hardDeadlineDate):""}</div></div>
+      <div><div class="muted small">Commercially available</div><div class="code">${safeText(t.commerciallyAvailable || "unknown")}</div></div>
+      <div><div class="muted small">Commercial link</div><div class="code">${t.commercialLink ? `<a href="${safeText(t.commercialLink)}" target="_blank" rel="noreferrer">${safeText(t.commercialLink)}</a>` : "-"}</div></div>
+      <div><div class="muted small">Deferred</div><div class="code">${safeText(t.canBeDeferred || "-")}${t.deferTo ? " • "+safeText(t.deferTo):""}</div></div>
+      <div><div class="muted small">Why not deferred</div><div class="code">${safeText(t.whyNotDeferredCode || "-")}${t.whyNotDeferredText ? " • "+safeText(t.whyNotDeferredText):""}</div></div>
+      <div><div class="muted small">Impact / Effort</div><div class="code">${safeText(t.impact || "-")} • ${safeText(t.effortGuess || "-")}</div></div>
+      <div><div class="muted small">Tags</div><div class="code">${safeText(tags || "-")}</div></div>
     </div>
 
     <hr class="sep"/>
 
-    <div>
-      <div class="muted small">Description</div>
-      <div style="white-space:pre-wrap; margin-top:0.35rem;">${safeText(t.description || "")}</div>
-    </div>
-
-    <div style="margin-top:0.9rem;">
-      <div class="muted small">Definition of done</div>
-      <div style="white-space:pre-wrap; margin-top:0.35rem;">${safeText(t.definitionOfDone || "")}</div>
-    </div>
+    <div><div class="muted small">Description</div><div style="white-space:pre-wrap; margin-top:0.35rem;">${safeText(t.description || "")}</div></div>
+    <div style="margin-top:0.9rem;"><div class="muted small">DoD</div><div style="white-space:pre-wrap; margin-top:0.35rem;">${safeText(t.definitionOfDone || "")}</div></div>
 
     ${isAdmin ? adminControlsHtml(t) : ""}
   `;
@@ -465,28 +402,11 @@ function adminControlsHtml(t) {
     </div>
 
     <div class="grid2">
-      <label>
-        Status
-        <select id="aStatus">${statusOptions}</select>
-      </label>
-
-      <label>
-        Priority
-        <select id="aPriority">${prioOptions}</select>
-      </label>
-
-      <label>
-        Assignee email
-        <input id="aAssigneeEmail" type="text" placeholder="fabio@..." value="${safeText(t.assigneeEmail || "")}" />
-      </label>
-
-      <label>
-        Admin ETA date
-        <input id="aAdminEta" type="date" value="${safeText(t.adminEtaDate || "")}" />
-      </label>
-
-      <label>
-        Effort (admin)
+      <label>Status<select id="aStatus">${statusOptions}</select></label>
+      <label>Priority<select id="aPriority">${prioOptions}</select></label>
+      <label>Assignee email<input id="aAssigneeEmail" type="text" value="${safeText(t.assigneeEmail || "")}" /></label>
+      <label>Admin ETA<input id="aAdminEta" type="date" value="${safeText(t.adminEtaDate || "")}" /></label>
+      <label>Effort (admin)
         <select id="aEffort">
           <option value="" ${!t.effortAdmin?"selected":""}>(none)</option>
           <option value="S" ${t.effortAdmin==="S"?"selected":""}>S</option>
@@ -495,11 +415,7 @@ function adminControlsHtml(t) {
           <option value="XL" ${t.effortAdmin==="XL"?"selected":""}>XL</option>
         </select>
       </label>
-
-      <label>
-        Internal notes
-        <input id="aNotes" type="text" placeholder="one-liner" value="${safeText(t.adminNotes || "")}" />
-      </label>
+      <label>Internal notes<input id="aNotes" type="text" value="${safeText(t.adminNotes || "")}" /></label>
     </div>
 
     <div class="row mt">
@@ -523,8 +439,7 @@ function wireAdminControls(t) {
 
   async function save(partial = {}) {
     try {
-      const tref = doc(db, "tickets", t.id);
-      await updateDoc(tref, {
+      await updateDoc(doc(db, "tickets", t.id), {
         status: aStatus.value,
         priority: aPriority.value,
         assigneeEmail: (aAssigneeEmail.value || "").trim(),
@@ -553,11 +468,7 @@ function wireAdminControls(t) {
   $("btnSetClosed").onclick = () => { aStatus.value = "CLOSED"; save({ status: "CLOSED" }); };
 }
 
-/* =========================
-   New ticket creation
-   ========================= */
-btnNewTicket.onclick = () => openModal();
-
+/* ========= New ticket ========= */
 function bindNewTicketDynamicLogic() {
   const tHardDeadline = $("tHardDeadline");
   const tHardDeadlineDate = $("tHardDeadlineDate");
@@ -569,23 +480,12 @@ function bindNewTicketDynamicLogic() {
   const tWhyNotText = $("tWhyNotText");
 
   function apply() {
-    // hard deadline
-    if (tHardDeadline.value === "yes") {
-      tHardDeadlineDate.disabled = false;
-    } else {
-      tHardDeadlineDate.value = "";
-      tHardDeadlineDate.disabled = true;
-    }
+    if (tHardDeadline.value === "yes") tHardDeadlineDate.disabled = false;
+    else { tHardDeadlineDate.value = ""; tHardDeadlineDate.disabled = true; }
 
-    // commercially available
-    if (tCommercially.value === "yes") {
-      tCommercialLink.disabled = false;
-    } else {
-      tCommercialLink.value = "";
-      tCommercialLink.disabled = true;
-    }
+    if (tCommercially.value === "yes") tCommercialLink.disabled = false;
+    else { tCommercialLink.value = ""; tCommercialLink.disabled = true; }
 
-    // deferred logic
     if (tDeferred.value === "yes") {
       tDeferTo.disabled = false;
       tWhyNotCode.disabled = true;
@@ -636,72 +536,41 @@ ticketForm.addEventListener("submit", async (e) => {
   const impact = $("tImpact").value;
   const effortGuess = $("tEffort").value;
 
-  const tags = ($("tTags").value || "")
-    .split(",")
-    .map(x => x.trim())
-    .filter(Boolean)
-    .slice(0, 12);
+  const tags = ($("tTags").value || "").split(",").map(x => x.trim()).filter(Boolean).slice(0, 12);
 
-  // validations
-  if (!lab || !title || !description || !definitionOfDone || !expectedDeliveryDate) {
-    setMsg(formMsg, "Fill required fields.", "err");
-    return;
-  }
-  if (hardDeadline && !hardDeadlineDate) {
-    setMsg(formMsg, "Hard deadline date required.", "err");
-    return;
-  }
-  if (commerciallyAvailable === "yes" && !commercialLink) {
-    setMsg(formMsg, "Commercial link required if commercially available = yes.", "err");
-    return;
-  }
-  if (canBeDeferred === "yes" && !deferTo) {
-    setMsg(formMsg, "If deferred = yes, specify who.", "err");
-    return;
-  }
-  if (canBeDeferred === "no" && !whyNotDeferredText) {
-    setMsg(formMsg, "If deferred = no, specify why (details).", "err");
-    return;
-  }
-  if (priority === "P0" && description.length < 40) {
-    setMsg(formMsg, "P0 needs a specific description (>= 40 chars).", "err");
-    return;
-  }
+  if (!lab || !title || !description || !definitionOfDone || !expectedDeliveryDate) { setMsg(formMsg, "Fill required fields.", "err"); return; }
+  if (hardDeadline && !hardDeadlineDate) { setMsg(formMsg, "Hard deadline date required.", "err"); return; }
+  if (commerciallyAvailable === "yes" && !commercialLink) { setMsg(formMsg, "Commercial link required.", "err"); return; }
+  if (canBeDeferred === "yes" && !deferTo) { setMsg(formMsg, "If deferred=yes specify who.", "err"); return; }
+  if (canBeDeferred === "no" && !whyNotDeferredText) { setMsg(formMsg, "If deferred=no specify why.", "err"); return; }
+  if (priority === "P0" && description.length < 40) { setMsg(formMsg, "P0 needs a specific description (>= 40 chars).", "err"); return; }
 
   try {
-    const tcol = collection(db, "tickets");
-    await addDoc(tcol, {
+    await addDoc(collection(db, "tickets"), {
       title,
       description,
       definitionOfDone,
-
       lab,
       category,
       priority,
       status: "NEW",
-
       expectedDeliveryDate,
       hardDeadline,
       hardDeadlineDate: hardDeadline ? hardDeadlineDate : "",
-
       commerciallyAvailable,
       commercialLink: commerciallyAvailable === "yes" ? commercialLink : "",
       estimatedCostEUR,
       procurementNeeded,
-
       canBeDeferred,
       deferTo: canBeDeferred === "yes" ? deferTo : "",
       whyNotDeferredCode: canBeDeferred === "no" ? whyNotDeferredCode : "",
       whyNotDeferredText: canBeDeferred === "no" ? whyNotDeferredText : "",
-
       impact,
       effortGuess,
       tags,
-
       createdByUid: currentUser.uid,
       createdByEmail: currentUser.email,
       assigneeEmail: "",
-
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
@@ -714,31 +583,23 @@ ticketForm.addEventListener("submit", async (e) => {
   }
 });
 
-/* =========================
-   Comments
-   ========================= */
+/* ========= Comments ========= */
 btnAddComment.onclick = async () => {
   const text = (commentInput.value || "").trim();
-  if (!text) return;
-  if (!selectedTicketId) return;
+  if (!text || !selectedTicketId) return;
 
   setMsg(commentMsg, "");
   commentInput.value = "";
 
   try {
-    const ccol = collection(db, "tickets", selectedTicketId, "comments");
-    await addDoc(ccol, {
+    await addDoc(collection(db, "tickets", selectedTicketId, "comments"), {
       text,
       authorUid: currentUser.uid,
       authorEmail: currentUser.email,
       createdAt: serverTimestamp()
     });
 
-    // try bump ticket updatedAt (admin allowed; PI will fail silently)
-    try {
-      await updateDoc(doc(db, "tickets", selectedTicketId), { updatedAt: serverTimestamp() });
-    } catch {}
-
+    try { await updateDoc(doc(db, "tickets", selectedTicketId), { updatedAt: serverTimestamp() }); } catch {}
     await loadComments(selectedTicketId);
   } catch (e) {
     setMsg(commentMsg, `Comment error: ${e?.message || e}`, "err");
@@ -747,10 +608,7 @@ btnAddComment.onclick = async () => {
 
 async function loadComments(ticketId) {
   commentsBox.innerHTML = `<div class="muted">Loading comments...</div>`;
-
-  const ccol = collection(db, "tickets", ticketId, "comments");
-  const snap = await getDocs(query(ccol, orderBy("createdAt", "asc"), limit(300)));
-
+  const snap = await getDocs(query(collection(db, "tickets", ticketId, "comments"), orderBy("createdAt", "asc"), limit(300)));
   const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   commentsInfo.textContent = `${items.length} comments`;
   renderComments(items);
@@ -777,10 +635,3 @@ function renderComments(items) {
   `).join("");
   commentsBox.scrollTop = commentsBox.scrollHeight;
 }
-
-/* =========================
-   Init UI defaults
-   ========================= */
-function renderComments(_) { /* overwritten above */ }
-function renderDetails(_) { /* overwritten above */ }
-// (keep placeholders removed by function hoisting – JS uses latest definitions)
