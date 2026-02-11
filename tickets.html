@@ -199,3 +199,149 @@
               <select id="tPriority" required>
                 <option value="P2">P2 (normal)</option>
                 <option value="P1">P1 (high)</option>
+                <option value="P3">P3 (nice-to-have)</option>
+                <option value="P0">P0 (emergency)</option>
+              </select>
+            </label>
+
+            <label>
+              Expected delivery date
+              <input id="tExpected" type="date" required />
+            </label>
+          </div>
+
+          <label>
+            Title
+            <input id="tTitle" type="text" placeholder="Short, concrete" required />
+          </label>
+
+          <label>
+            Description
+            <textarea id="tDescription" rows="5" placeholder="Context + what you need + constraints" required></textarea>
+          </label>
+
+          <label>
+            Definition of done (2–5 bullets)
+            <textarea id="tDoD" rows="3" placeholder="- Works when...\n- Tested on...\n- Deliverable: file/part/commit" required></textarea>
+          </label>
+
+          <div class="grid2">
+            <label>
+              Hard deadline?
+              <select id="tHardDeadline" required>
+                <option value="no">no</option>
+                <option value="yes">yes</option>
+              </select>
+            </label>
+
+            <label>
+              Hard deadline date
+              <input id="tHardDeadlineDate" type="date" />
+            </label>
+          </div>
+
+          <hr class="sep"/>
+
+          <div class="grid2">
+            <label>
+              Commercially available?
+              <select id="tCommercially" required>
+                <option value="unknown">unknown</option>
+                <option value="yes">yes</option>
+                <option value="no">no</option>
+              </select>
+            </label>
+
+            <label>
+              Commercial link (if yes)
+              <input id="tCommercialLink" type="url" placeholder="https://..." />
+            </label>
+
+            <label>
+              Estimated cost (EUR)
+              <input id="tCost" type="number" min="0" step="1" placeholder="e.g. 250" />
+            </label>
+
+            <label>
+              Procurement needed?
+              <select id="tProcurement" required>
+                <option value="unknown">unknown</option>
+                <option value="yes">yes</option>
+                <option value="no">no</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="grid2">
+            <label>
+              Can be deferred to someone in the lab?
+              <select id="tDeferred" required>
+                <option value="no">no</option>
+                <option value="yes">yes</option>
+              </select>
+            </label>
+
+            <label>
+              If yes: to whom?
+              <input id="tDeferTo" type="text" placeholder="Name / role" />
+            </label>
+          </div>
+
+          <div class="grid2">
+            <label>
+              If no: why not? (reason)
+              <select id="tWhyNotCode" required>
+                <option value="skills">Requires specific skills</option>
+                <option value="tools">Requires access to tools/lab</option>
+                <option value="safety">Safety / MRI constraints / authorizations</option>
+                <option value="integration">Needs integration with existing system</option>
+                <option value="other">Other</option>
+              </select>
+            </label>
+
+            <label>
+              If no: why not? (details)
+              <input id="tWhyNotText" type="text" placeholder="One concrete line" required />
+            </label>
+          </div>
+
+          <div class="grid2">
+            <label>
+              Impact
+              <select id="tImpact" required>
+                <option value="not_blocking">not_blocking</option>
+                <option value="blocks_week">blocks_week</option>
+                <option value="blocks_today">blocks_today</option>
+              </select>
+            </label>
+
+            <label>
+              Effort guess
+              <select id="tEffort" required>
+                <option value="S">S</option>
+                <option value="M" selected>M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            Tags (comma separated)
+            <input id="tTags" type="text" placeholder="ttl, camera, pcb" />
+          </label>
+
+          <div class="row space mt">
+            <div id="formMsg" class="msg"></div>
+            <button class="btn primary" type="submit">Create ticket</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <footer class="footer">IIT Neurotech.</footer>
+  </div>
+
+  <script type="module" src="tickets.js"></script>
+</body>
+</html>
