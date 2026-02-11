@@ -1,8 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
   signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -14,18 +14,19 @@ import {
   setDoc,
   collection,
   addDoc,
+  getDocs,
   query,
   where,
   orderBy,
   limit,
-  getDocs,
   updateDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* =========================
-   1) Firebase config (FILL ME)
+   Firebase config (PASTE YOURS)
    ========================= */
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCymGUKXdpBtVJPC1YH2bLuRLc16p-E93A",
   authDomain: "workstatus-5a293.firebaseapp.com",
@@ -36,31 +37,29 @@ const firebaseConfig = {
   appId: "1:737892892698:web:6f7112f9f5e724625451a3",
   measurementId: "G-60KPLB1GDG"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const provider = new GoogleAuthProvider();
-provider.setCustomParameters({ prompt: "select_account" });
-
-/* =========================
-   2) UI refs
-   ========================= */
 const $ = (id) => document.getElementById(id);
 
-const authGate = $("authGate");
+const sessionPill = $("sessionPill");
+const pillDot = $("pillDot");
+const pillText = $("pillText");
+
+const authCard = $("authCard");
 const authMsg = $("authMsg");
-const appSection = $("app");
 
+const loginEmail = $("loginEmail");
+const loginPass = $("loginPass");
 const btnSignIn = $("btnSignIn");
-const btnSignIn2 = $("btnSignIn2");
+const btnReset = $("btnReset");
 const btnSignOut = $("btnSignOut");
-const btnNew = $("btnNew");
-const userPill = $("userPill");
 
+const appSection = $("app");
 const roleInfo = $("roleInfo");
-const lastRefresh = $("lastRefresh");
+
+const btnNewTicket = $("btnNewTicket");
 const btnRefresh = $("btnRefresh");
 
 const fSearch = $("fSearch");
@@ -72,51 +71,49 @@ const fCategory = $("fCategory");
 const ticketsTbody = $("ticketsTbody");
 const ticketsCount = $("ticketsCount");
 
+const selectedIdPill = $("selectedIdPill");
 const ticketDetails = $("ticketDetails");
-const commentsBox = $("comments");
+
+const commentsBox = $("commentsBox");
+const commentsInfo = $("commentsInfo");
 const commentInput = $("commentInput");
 const btnAddComment = $("btnAddComment");
+const commentMsg = $("commentMsg");
 
 const modal = $("modal");
 const btnCloseModal = $("btnCloseModal");
 const ticketForm = $("ticketForm");
 const formMsg = $("formMsg");
 
-/* =========================
-   3) State
-   ========================= */
 let currentUser = null;
 let currentRole = null; // "admin" | "pi"
 let currentLab = null;
+
 let ticketsCache = [];
 let selectedTicketId = null;
 
 const STATUS = ["NEW","TRIAGE","APPROVED","REJECTED","IN_PROGRESS","WAITING_ON_PI","WAITING_ON_PROCUREMENT","BLOCKED","DONE","CLOSED"];
 const PRIORITY = ["P0","P1","P2","P3"];
 
-/* =========================
-   4) Helpers
-   ========================= */
+function setPill(state, text) {
+  pillText.textContent = text;
+  if (state === "in") {
+    pillDot.style.background = "#22c55e";
+    pillDot.style.boxShadow = "0 0 10px rgba(34,197,94,0.8)";
+  } else {
+    pillDot.style.background = "#64748b";
+    pillDot.style.boxShadow = "0 0 10px rgba(100,116,139,0.35)";
+  }
+}
+
 function setMsg(el, text, type = "") {
   el.textContent = text || "";
   el.classList.remove("ok", "err");
   if (type) el.classList.add(type);
 }
 
-function fmtDate(tsOrDate) {
-  if (!tsOrDate) return "-";
-  try {
-    // Firestore Timestamp
-    if (typeof tsOrDate.toDate === "function") {
-      const d = tsOrDate.toDate();
-      return d.toISOString().slice(0, 10);
-    }
-    // JS Date
-    if (tsOrDate instanceof Date) return tsOrDate.toISOString().slice(0, 10);
-    // string
-    if (typeof tsOrDate === "string") return tsOrDate;
-  } catch {}
-  return "-";
+function safeText(s) {
+  return (s ?? "").toString().replace(/[<>]/g, "");
 }
 
 function fmtDateTime(ts) {
@@ -130,13 +127,10 @@ function fmtDateTime(ts) {
   return "-";
 }
 
-function safeText(s) {
-  return (s ?? "").toString().replace(/[<>]/g, "");
-}
-
 function openModal() {
   modal.classList.remove("hidden");
   modal.setAttribute("aria-hidden", "false");
+  setMsg(formMsg, "");
 }
 function closeModal() {
   modal.classList.add("hidden");
@@ -145,97 +139,126 @@ function closeModal() {
   setMsg(formMsg, "");
 }
 
-/* =========================
-   5) Auth + allowlist
-   ========================= */
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) closeModal();
+});
+btnCloseModal.addEventListener("click", closeModal);
+
 async function ensureAllowedOrThrow(user) {
   const email = user?.email;
-  if (!email) throw new Error("No email.");
+  if (!email) throw new Error("No email in auth user.");
 
-  // allowlist doc id = email
+  // allowlist/{email}
   const ref = doc(db, "allowlist", email);
   const snap = await getDoc(ref);
-  if (!snap.exists()) throw new Error("Not in allowlist.");
+  if (!snap.exists()) throw new Error("Email not in allowlist.");
 
   const data = snap.data();
   const role = data.role || "pi";
   if (role !== "admin" && role !== "pi") throw new Error("Invalid role in allowlist.");
-
   currentRole = role;
   currentLab = data.lab || "";
   return { role, lab: currentLab };
 }
 
-async function doSignIn() {
-  setMsg(authMsg, "Login in corso...");
+/* =========================
+   Auth actions
+   ========================= */
+btnSignIn.onclick = async () => {
+  setMsg(authMsg, "Signing in...");
   try {
-    await signInWithPopup(auth, provider);
+    const email = (loginEmail.value || "").trim();
+    const pass = (loginPass.value || "").trim();
+    if (!email || !pass) {
+      setMsg(authMsg, "Insert email + password.", "err");
+      return;
+    }
+    await signInWithEmailAndPassword(auth, email, pass);
   } catch (e) {
-    setMsg(authMsg, `Errore login: ${e?.message || e}`, "err");
+    setMsg(authMsg, `Login error: ${e?.message || e}`, "err");
   }
-}
+};
 
-async function doSignOut() {
+btnReset.onclick = async () => {
+  try {
+    const email = (loginEmail.value || "").trim();
+    if (!email) {
+      setMsg(authMsg, "Insert email for reset.", "err");
+      return;
+    }
+    await sendPasswordResetEmail(auth, email);
+    setMsg(authMsg, "Reset email sent (check inbox/spam).", "ok");
+  } catch (e) {
+    setMsg(authMsg, `Reset error: ${e?.message || e}`, "err");
+  }
+};
+
+btnSignOut.onclick = async () => {
   await signOut(auth);
-}
-
-btnSignIn.onclick = doSignIn;
-btnSignIn2.onclick = doSignIn;
-btnSignOut.onclick = doSignOut;
+};
 
 onAuthStateChanged(auth, async (user) => {
   currentUser = user;
 
+  selectedTicketId = null;
+  ticketsCache = [];
+  renderTicketsTable([]);
+  renderDetails(null);
+  renderComments(null);
+
   if (!user) {
-    // logged out
-    authGate.classList.remove("hidden");
+    authCard.classList.remove("hidden");
     appSection.classList.add("hidden");
-    btnSignIn.classList.remove("hidden");
     btnSignOut.classList.add("hidden");
-    btnNew.classList.add("hidden");
-    userPill.classList.add("hidden");
+    btnSignIn.classList.remove("hidden");
+    btnReset.classList.remove("hidden");
+    setPill("out", "Signed out");
     setMsg(authMsg, "");
     return;
   }
 
-  setMsg(authMsg, "Verifica allowlist...");
+  setMsg(authMsg, "Checking allowlist...");
   try {
     const { role, lab } = await ensureAllowedOrThrow(user);
 
-    // Create/update users doc (optional, useful)
-    const uref = doc(db, "users", user.uid);
-    await setDoc(uref, {
-      email: user.email,
-      displayName: user.displayName || "",
-      role,
-      lab,
-      lastLoginAt: serverTimestamp()
-    }, { merge: true });
+    // optional users/{uid} doc (admin-only in rules, but merge write can fail if rules block: ignore)
+    try {
+      await setDoc(doc(db, "users", user.uid), {
+        email: user.email,
+        displayName: user.displayName || "",
+        role,
+        lab,
+        lastLoginAt: serverTimestamp()
+      }, { merge: true });
+    } catch {}
 
-    // show app
-    authGate.classList.add("hidden");
+    authCard.classList.add("hidden");
     appSection.classList.remove("hidden");
 
-    btnSignIn.classList.add("hidden");
     btnSignOut.classList.remove("hidden");
-    btnNew.classList.remove("hidden");
+    btnSignIn.classList.add("hidden");
+    btnReset.classList.add("hidden");
 
-    userPill.classList.remove("hidden");
-    userPill.textContent = `${user.email} • ${role}`;
+    setPill("in", `${user.email} • ${role}`);
     roleInfo.textContent = `Role: ${role}${lab ? " • Lab: " + lab : ""}`;
 
-    // load tickets
     await refreshTickets();
   } catch (e) {
-    setMsg(authMsg, `Accesso negato: ${e?.message || e}`, "err");
-    // hard sign out
+    setMsg(authMsg, `Access denied: ${e?.message || e}`, "err");
     await signOut(auth);
   }
 });
 
 /* =========================
-   6) Tickets CRUD
+   Ticket list + filters
    ========================= */
+btnRefresh.onclick = refreshTickets;
+
+[fSearch, fStatus, fPriority, fLab, fCategory].forEach(el => {
+  el.addEventListener("input", applyFiltersAndRender);
+  el.addEventListener("change", applyFiltersAndRender);
+});
+
 async function refreshTickets() {
   if (!currentUser) return;
 
@@ -244,30 +267,32 @@ async function refreshTickets() {
   renderDetails(null);
   renderComments(null);
 
-  // Base query (keep it simple to avoid indexes): last 200 tickets by updatedAt
-  // For PI: only own tickets
   const tcol = collection(db, "tickets");
 
-  let q;
+  let snap;
   if (currentRole === "admin") {
-    q = query(tcol, orderBy("updatedAt", "desc"), limit(200));
+    // admin: can sort server-side
+    snap = await getDocs(query(tcol, orderBy("updatedAt", "desc"), limit(300)));
   } else {
-    q = query(tcol, where("createdByUid", "==", currentUser.uid), orderBy("updatedAt", "desc"), limit(200));
+    // PI: avoid composite indexes. Fetch own tickets and sort client-side.
+    snap = await getDocs(query(tcol, where("createdByUid", "==", currentUser.uid), limit(300)));
   }
 
-  const snap = await getDocs(q);
   ticketsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-  // Populate lab filter options
+  // client-side sort by updatedAt desc (fallback to createdAt)
+  ticketsCache.sort((a, b) => {
+    const ta = a.updatedAt?.toMillis?.() ?? a.createdAt?.toMillis?.() ?? 0;
+    const tb = b.updatedAt?.toMillis?.() ?? b.createdAt?.toMillis?.() ?? 0;
+    return tb - ta;
+  });
+
+  // populate lab filter options
   const labs = Array.from(new Set(ticketsCache.map(t => (t.lab || "").trim()).filter(Boolean))).sort();
   fLab.innerHTML = `<option value="">(all)</option>` + labs.map(l => `<option>${safeText(l)}</option>`).join("");
 
   applyFiltersAndRender();
-
-  lastRefresh.textContent = new Date().toISOString().replace("T", " ").slice(0, 19);
 }
-
-btnRefresh.onclick = refreshTickets;
 
 function applyFiltersAndRender() {
   const s = (fSearch.value || "").trim().toLowerCase();
@@ -297,27 +322,22 @@ function applyFiltersAndRender() {
   ticketsCount.textContent = `Showing ${list.length} / ${ticketsCache.length}`;
 }
 
-[fSearch, fStatus, fPriority, fLab, fCategory].forEach(el => {
-  el.addEventListener("input", applyFiltersAndRender);
-  el.addEventListener("change", applyFiltersAndRender);
-});
-
-function badgeForPriority(p) {
-  if (p === "P0") return "P0";
-  if (p === "P1") return "P1";
-  if (p === "P2") return "P2";
-  return p || "-";
-}
-
 function renderTicketsTable(list) {
   ticketsTbody.innerHTML = "";
+
+  if (list.length === 0) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="8" class="muted">No tickets.</td>`;
+    ticketsTbody.appendChild(tr);
+    return;
+  }
 
   for (const t of list) {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td class="code">${safeText(t.id.slice(0,6))}</td>
       <td>${safeText(t.title || "-")}</td>
-      <td class="code">${badgeForPriority(t.priority)}</td>
+      <td class="code">${safeText(t.priority || "-")}</td>
       <td class="code">${safeText(t.status || "-")}</td>
       <td>${safeText(t.lab || "-")}</td>
       <td class="code">${safeText(t.expectedDeliveryDate || "-")}</td>
@@ -327,32 +347,31 @@ function renderTicketsTable(list) {
     tr.onclick = () => selectTicket(t.id);
     ticketsTbody.appendChild(tr);
   }
-
-  if (list.length === 0) {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="8" class="muted">Nessun ticket.</td>`;
-    ticketsTbody.appendChild(tr);
-  }
 }
 
+/* =========================
+   Ticket details + admin controls
+   ========================= */
 async function selectTicket(ticketId) {
   selectedTicketId = ticketId;
+  selectedIdPill.textContent = `#${ticketId.slice(0,8)}`;
 
   const t = ticketsCache.find(x => x.id === ticketId);
   renderDetails(t);
 
-  // enable comments UI
   commentInput.disabled = false;
   btnAddComment.disabled = false;
-
+  commentsInfo.textContent = "Loading...";
   await loadComments(ticketId);
 }
 
 function renderDetails(t) {
   if (!t) {
-    ticketDetails.innerHTML = `<div class="muted">Seleziona un ticket dalla tabella.</div>`;
+    selectedIdPill.textContent = "—";
+    ticketDetails.innerHTML = `<div class="muted">Select a ticket.</div>`;
     commentInput.disabled = true;
     btnAddComment.disabled = true;
+    commentsInfo.textContent = "—";
     return;
   }
 
@@ -363,8 +382,8 @@ function renderDetails(t) {
     <div class="row space">
       <div>
         <div class="code">#${safeText(t.id)}</div>
-        <div style="font-size:18px; font-weight:700; margin-top:6px;">${safeText(t.title || "")}</div>
-        <div class="muted small" style="margin-top:6px;">
+        <div style="font-size:1.15rem; font-weight:650; margin-top:0.35rem;">${safeText(t.title || "")}</div>
+        <div class="muted small" style="margin-top:0.4rem;">
           Created by <span class="code">${safeText(t.createdByEmail || "-")}</span>
           • Category <span class="code">${safeText(t.category || "-")}</span>
           • Lab <span class="code">${safeText(t.lab || "-")}</span>
@@ -385,7 +404,7 @@ function renderDetails(t) {
       </div>
       <div>
         <div class="muted small">Hard deadline</div>
-        <div class="code">${t.hardDeadline ? "yes" : "no"} ${t.hardDeadlineDate ? " • " + safeText(t.hardDeadlineDate) : ""}</div>
+        <div class="code">${t.hardDeadline ? "yes" : "no"}${t.hardDeadlineDate ? " • " + safeText(t.hardDeadlineDate) : ""}</div>
       </div>
 
       <div>
@@ -399,11 +418,11 @@ function renderDetails(t) {
 
       <div>
         <div class="muted small">Can be deferred</div>
-        <div class="code">${safeText(t.canBeDeferred || "-")} ${t.deferTo ? " • " + safeText(t.deferTo) : ""}</div>
+        <div class="code">${safeText(t.canBeDeferred || "-")}${t.deferTo ? " • " + safeText(t.deferTo) : ""}</div>
       </div>
       <div>
         <div class="muted small">If not, why</div>
-        <div class="code">${safeText(t.whyNotDeferredCode || "-")} ${t.whyNotDeferredText ? " • " + safeText(t.whyNotDeferredText) : ""}</div>
+        <div class="code">${safeText(t.whyNotDeferredCode || "-")}${t.whyNotDeferredText ? " • " + safeText(t.whyNotDeferredText) : ""}</div>
       </div>
 
       <div>
@@ -420,18 +439,17 @@ function renderDetails(t) {
 
     <div>
       <div class="muted small">Description</div>
-      <div style="white-space:pre-wrap; margin-top:6px;">${safeText(t.description || "")}</div>
+      <div style="white-space:pre-wrap; margin-top:0.35rem;">${safeText(t.description || "")}</div>
     </div>
 
-    <div style="margin-top:12px;">
+    <div style="margin-top:0.9rem;">
       <div class="muted small">Definition of done</div>
-      <div style="white-space:pre-wrap; margin-top:6px;">${safeText(t.definitionOfDone || "")}</div>
+      <div style="white-space:pre-wrap; margin-top:0.35rem;">${safeText(t.definitionOfDone || "")}</div>
     </div>
 
     ${isAdmin ? adminControlsHtml(t) : ""}
   `;
 
-  // Wire admin controls
   if (isAdmin) wireAdminControls(t);
 }
 
@@ -442,8 +460,8 @@ function adminControlsHtml(t) {
   return `
     <hr class="sep"/>
     <div class="row space">
-      <h4 style="margin:0;">Admin controls</h4>
-      <div id="adminSaveMsg" class="msg"></div>
+      <div class="muted small">Admin controls</div>
+      <div id="adminSaveMsg" class="msg" style="margin:0;"></div>
     </div>
 
     <div class="grid2">
@@ -458,7 +476,7 @@ function adminControlsHtml(t) {
       </label>
 
       <label>
-        Assignee (email)
+        Assignee email
         <input id="aAssigneeEmail" type="text" placeholder="fabio@..." value="${safeText(t.assigneeEmail || "")}" />
       </label>
 
@@ -470,6 +488,7 @@ function adminControlsHtml(t) {
       <label>
         Effort (admin)
         <select id="aEffort">
+          <option value="" ${!t.effortAdmin?"selected":""}>(none)</option>
           <option value="S" ${t.effortAdmin==="S"?"selected":""}>S</option>
           <option value="M" ${t.effortAdmin==="M"?"selected":""}>M</option>
           <option value="L" ${t.effortAdmin==="L"?"selected":""}>L</option>
@@ -479,7 +498,7 @@ function adminControlsHtml(t) {
 
       <label>
         Internal notes
-        <input id="aNotes" type="text" placeholder="1 riga" value="${safeText(t.adminNotes || "")}" />
+        <input id="aNotes" type="text" placeholder="one-liner" value="${safeText(t.adminNotes || "")}" />
       </label>
     </div>
 
@@ -517,10 +536,8 @@ function wireAdminControls(t) {
       });
       setMsg(adminSaveMsg, "Saved.", "ok");
       await refreshTickets();
-      // keep selected if still present
       const still = ticketsCache.find(x => x.id === t.id);
       if (still) {
-        selectedTicketId = t.id;
         renderDetails(still);
         await loadComments(t.id);
       }
@@ -537,25 +554,62 @@ function wireAdminControls(t) {
 }
 
 /* =========================
-   7) Create ticket (modal)
+   New ticket creation
    ========================= */
-btnNew.onclick = () => {
-  setMsg(formMsg, "");
-  openModal();
-};
-btnCloseModal.onclick = closeModal;
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) closeModal();
-});
+btnNewTicket.onclick = () => openModal();
+
+function bindNewTicketDynamicLogic() {
+  const tHardDeadline = $("tHardDeadline");
+  const tHardDeadlineDate = $("tHardDeadlineDate");
+  const tCommercially = $("tCommercially");
+  const tCommercialLink = $("tCommercialLink");
+  const tDeferred = $("tDeferred");
+  const tDeferTo = $("tDeferTo");
+  const tWhyNotCode = $("tWhyNotCode");
+  const tWhyNotText = $("tWhyNotText");
+
+  function apply() {
+    // hard deadline
+    if (tHardDeadline.value === "yes") {
+      tHardDeadlineDate.disabled = false;
+    } else {
+      tHardDeadlineDate.value = "";
+      tHardDeadlineDate.disabled = true;
+    }
+
+    // commercially available
+    if (tCommercially.value === "yes") {
+      tCommercialLink.disabled = false;
+    } else {
+      tCommercialLink.value = "";
+      tCommercialLink.disabled = true;
+    }
+
+    // deferred logic
+    if (tDeferred.value === "yes") {
+      tDeferTo.disabled = false;
+      tWhyNotCode.disabled = true;
+      tWhyNotText.disabled = true;
+      tWhyNotText.value = "";
+    } else {
+      tDeferTo.value = "";
+      tDeferTo.disabled = true;
+      tWhyNotCode.disabled = false;
+      tWhyNotText.disabled = false;
+    }
+  }
+
+  [tHardDeadline, tCommercially, tDeferred].forEach(el => el.addEventListener("change", apply));
+  apply();
+}
+bindNewTicketDynamicLogic();
 
 ticketForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   setMsg(formMsg, "Creating...");
 
-  const user = currentUser;
-  if (!user) return;
+  if (!currentUser) return;
 
-  // Gather form
   const lab = ($("tLab").value || "").trim();
   const category = $("tCategory").value;
   const priority = $("tPriority").value;
@@ -588,34 +642,35 @@ ticketForm.addEventListener("submit", async (e) => {
     .filter(Boolean)
     .slice(0, 12);
 
-  // Minimal validation
+  // validations
   if (!lab || !title || !description || !definitionOfDone || !expectedDeliveryDate) {
-    setMsg(formMsg, "Compila i campi obbligatori.", "err");
+    setMsg(formMsg, "Fill required fields.", "err");
     return;
   }
-  if (priority === "P0") {
-    // force a decent reason in description (basic check)
-    if (description.length < 30) {
-      setMsg(formMsg, "P0 richiede descrizione più specifica (min 30 char).", "err");
-      return;
-    }
-  }
   if (hardDeadline && !hardDeadlineDate) {
-    setMsg(formMsg, "Se hard deadline = yes, inserisci la data.", "err");
+    setMsg(formMsg, "Hard deadline date required.", "err");
+    return;
+  }
+  if (commerciallyAvailable === "yes" && !commercialLink) {
+    setMsg(formMsg, "Commercial link required if commercially available = yes.", "err");
     return;
   }
   if (canBeDeferred === "yes" && !deferTo) {
-    setMsg(formMsg, "Se deferred = yes, inserisci a chi.", "err");
+    setMsg(formMsg, "If deferred = yes, specify who.", "err");
     return;
   }
   if (canBeDeferred === "no" && !whyNotDeferredText) {
-    setMsg(formMsg, "Se deferred = no, inserisci il perché (details).", "err");
+    setMsg(formMsg, "If deferred = no, specify why (details).", "err");
+    return;
+  }
+  if (priority === "P0" && description.length < 40) {
+    setMsg(formMsg, "P0 needs a specific description (>= 40 chars).", "err");
     return;
   }
 
   try {
     const tcol = collection(db, "tickets");
-    const docRef = await addDoc(tcol, {
+    await addDoc(tcol, {
       title,
       description,
       definitionOfDone,
@@ -630,7 +685,7 @@ ticketForm.addEventListener("submit", async (e) => {
       hardDeadlineDate: hardDeadline ? hardDeadlineDate : "",
 
       commerciallyAvailable,
-      commercialLink,
+      commercialLink: commerciallyAvailable === "yes" ? commercialLink : "",
       estimatedCostEUR,
       procurementNeeded,
 
@@ -643,39 +698,68 @@ ticketForm.addEventListener("submit", async (e) => {
       effortGuess,
       tags,
 
-      createdByUid: user.uid,
-      createdByEmail: user.email,
+      createdByUid: currentUser.uid,
+      createdByEmail: currentUser.email,
       assigneeEmail: "",
 
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
 
-    setMsg(formMsg, `Created: ${docRef.id}`, "ok");
-    await refreshTickets();
+    setMsg(formMsg, "Ticket created.", "ok");
     closeModal();
+    await refreshTickets();
   } catch (e2) {
     setMsg(formMsg, `Create error: ${e2?.message || e2}`, "err");
   }
 });
 
 /* =========================
-   8) Comments
+   Comments
    ========================= */
+btnAddComment.onclick = async () => {
+  const text = (commentInput.value || "").trim();
+  if (!text) return;
+  if (!selectedTicketId) return;
+
+  setMsg(commentMsg, "");
+  commentInput.value = "";
+
+  try {
+    const ccol = collection(db, "tickets", selectedTicketId, "comments");
+    await addDoc(ccol, {
+      text,
+      authorUid: currentUser.uid,
+      authorEmail: currentUser.email,
+      createdAt: serverTimestamp()
+    });
+
+    // try bump ticket updatedAt (admin allowed; PI will fail silently)
+    try {
+      await updateDoc(doc(db, "tickets", selectedTicketId), { updatedAt: serverTimestamp() });
+    } catch {}
+
+    await loadComments(selectedTicketId);
+  } catch (e) {
+    setMsg(commentMsg, `Comment error: ${e?.message || e}`, "err");
+  }
+};
+
 async function loadComments(ticketId) {
   commentsBox.innerHTML = `<div class="muted">Loading comments...</div>`;
 
   const ccol = collection(db, "tickets", ticketId, "comments");
-  const q = query(ccol, orderBy("createdAt", "asc"), limit(200));
-  const snap = await getDocs(q);
+  const snap = await getDocs(query(ccol, orderBy("createdAt", "asc"), limit(300)));
 
   const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  commentsInfo.textContent = `${items.length} comments`;
   renderComments(items);
 }
 
 function renderComments(items) {
   if (!items) {
-    commentsBox.textContent = "Seleziona un ticket.";
+    commentsBox.textContent = "Select a ticket.";
+    commentsInfo.textContent = "—";
     return;
   }
   if (items.length === 0) {
@@ -694,30 +778,9 @@ function renderComments(items) {
   commentsBox.scrollTop = commentsBox.scrollHeight;
 }
 
-btnAddComment.onclick = async () => {
-  const text = (commentInput.value || "").trim();
-  if (!text) return;
-  if (!selectedTicketId) return;
-
-  commentInput.value = "";
-  try {
-    const ccol = collection(db, "tickets", selectedTicketId, "comments");
-    await addDoc(ccol, {
-      text,
-      authorUid: currentUser.uid,
-      authorEmail: currentUser.email,
-      createdAt: serverTimestamp()
-    });
-
-    // also bump updatedAt (admin-only in rules, so best-effort)
-    try {
-      const tref = doc(db, "tickets", selectedTicketId);
-      await updateDoc(tref, { updatedAt: serverTimestamp() });
-    } catch {}
-
-    await loadComments(selectedTicketId);
-  } catch (e) {
-    // If rules forbid comments you'll see it here
-    alert(`Comment error: ${e?.message || e}`);
-  }
-};
+/* =========================
+   Init UI defaults
+   ========================= */
+function renderComments(_) { /* overwritten above */ }
+function renderDetails(_) { /* overwritten above */ }
+// (keep placeholders removed by function hoisting – JS uses latest definitions)
