@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ticketing</title>
+  <link rel="stylesheet" href="tickets.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="dot"></div>
+      <div>
+        <div class="title">Lab Ticketing</div>
+        <div class="subtitle">Richieste PI → triage → delivery</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <div id="userPill" class="pill hidden"></div>
+      <button id="btnNew" class="btn primary hidden">+ New ticket</button>
+      <button id="btnSignIn" class="btn">Sign in</button>
+      <button id="btnSignOut" class="btn hidden">Sign out</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="authGate" class="card">
+      <h2>Accesso</h2>
+      <p>
+        Serve login Google e l’email deve essere in <code>allowlist</code>.
+      </p>
+      <div class="row">
+        <button id="btnSignIn2" class="btn primary">Sign in con Google</button>
+      </div>
+      <div id="authMsg" class="msg"></div>
+    </section>
+
+    <section id="app" class="hidden">
+      <section class="card">
+        <div class="row space">
+          <div>
+            <h2>Tickets</h2>
+            <div class="muted" id="roleInfo"></div>
+          </div>
+          <div class="row">
+            <span class="muted">Aggiornamento:</span>
+            <span id="lastRefresh" class="pill"></span>
+          </div>
+        </div>
+
+        <div class="filters">
+          <label>
+            Search
+            <input id="fSearch" type="text" placeholder="titolo, tag, lab..." />
+          </label>
+
+          <label>
+            Status
+            <select id="fStatus">
+              <option value="">(all)</option>
+              <option>NEW</option>
+              <option>TRIAGE</option>
+              <option>APPROVED</option>
+              <option>REJECTED</option>
+              <option>IN_PROGRESS</option>
+              <option>WAITING_ON_PI</option>
+              <option>WAITING_ON_PROCUREMENT</option>
+              <option>BLOCKED</option>
+              <option>DONE</option>
+              <option>CLOSED</option>
+            </select>
+          </label>
+
+          <label>
+            Priority
+            <select id="fPriority">
+              <option value="">(all)</option>
+              <option>P0</option>
+              <option>P1</option>
+              <option>P2</option>
+              <option>P3</option>
+            </select>
+          </label>
+
+          <label>
+            Lab
+            <select id="fLab">
+              <option value="">(all)</option>
+            </select>
+          </label>
+
+          <label>
+            Category
+            <select id="fCategory">
+              <option value="">(all)</option>
+              <option>electronics</option>
+              <option>mechanics</option>
+              <option>optics</option>
+              <option>software</option>
+              <option>procurement</option>
+              <option>other</option>
+            </select>
+          </label>
+
+          <button id="btnRefresh" class="btn">Refresh</button>
+        </div>
+
+        <div class="tableWrap">
+          <table class="table" id="ticketsTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Prio</th>
+                <th>Status</th>
+                <th>Lab</th>
+                <th>Expected</th>
+                <th>Created</th>
+                <th>Updated</th>
+              </tr>
+            </thead>
+            <tbody id="ticketsTbody"></tbody>
+          </table>
+        </div>
+
+        <div class="muted small" id="ticketsCount"></div>
+      </section>
+
+      <section class="grid2">
+        <section class="card">
+          <h3>Ticket details</h3>
+          <div id="ticketDetails" class="muted">Seleziona un ticket dalla tabella.</div>
+        </section>
+
+        <section class="card">
+          <h3>Comments</h3>
+          <div id="comments" class="comments muted">Seleziona un ticket.</div>
+
+          <div class="row mt">
+            <input id="commentInput" type="text" placeholder="Scrivi un commento..." disabled />
+            <button id="btnAddComment" class="btn primary" disabled>Send</button>
+          </div>
+        </section>
+      </section>
+    </section>
+
+    <!-- Modal New Ticket -->
+    <div id="modal" class="modal hidden" aria-hidden="true">
+      <div class="modalCard">
+        <div class="row space">
+          <h3>New ticket</h3>
+          <button id="btnCloseModal" class="btn">✕</button>
+        </div>
+
+        <form id="ticketForm">
+          <div class="grid2">
+            <label>
+              Lab (gruppo)
+              <input id="tLab" type="text" placeholder="Iurilli / Rossi / Gozzi..." required />
+            </label>
+
+            <label>
+              Category
+              <select id="tCategory" required>
+                <option value="electronics">electronics</option>
+                <option value="mechanics">mechanics</option>
+                <option value="optics">optics</option>
+                <option value="software">software</option>
+                <option value="procurement">procurement</option>
+                <option value="other">other</option>
+              </select>
+            </label>
+
+            <label>
+              Priority
+              <select id="tPriority" required>
+                <option value="P2">P2 (normal)</option>
+                <option value="P1">P1 (high)</option>
+                <option value="P3">P3 (nice-to-have)</option>
+                <option value="P0">P0 (emergency)</option>
+              </select>
+            </label>
+
+            <label>
+              Expected delivery date
+              <input id="tExpected" type="date" required />
+            </label>
+          </div>
+
+          <label>
+            Title
+            <input id="tTitle" type="text" placeholder="Sintesi secca" required />
+          </label>
+
+          <label>
+            Description (contesto + cosa serve)
+            <textarea id="tDescription" rows="5" placeholder="Spiega cosa serve, dove va integrato, vincoli, ecc." required></textarea>
+          </label>
+
+          <label>
+            Definition of done (2–5 bullet)
+            <textarea id="tDoD" rows="3" placeholder="- Funziona quando...\n- Testato su...\n- Consegna: file / pezzo / commit" required></textarea>
+          </label>
+
+          <div class="grid2">
+            <label>
+              Hard deadline?
+              <select id="tHardDeadline" required>
+                <option value="no">no</option>
+                <option value="yes">yes</option>
+              </select>
+            </label>
+
+            <label>
+              Hard deadline date (se yes)
+              <input id="tHardDeadlineDate" type="date" />
+            </label>
+          </div>
+
+          <hr class="sep"/>
+
+          <div class="grid2">
+            <label>
+              Is commercially available?
+              <select id="tCommercially" required>
+                <option value="unknown">unknown</option>
+                <option value="yes">yes</option>
+                <option value="no">no</option>
+              </select>
+            </label>
+
+            <label>
+              Commercial link (se yes)
+              <input id="tCommercialLink" type="url" placeholder="https://..." />
+            </label>
+
+            <label>
+              Estimated cost (EUR, se noto)
+              <input id="tCost" type="number" min="0" step="1" placeholder="e.g. 250" />
+            </label>
+
+            <label>
+              Procurement needed?
+              <select id="tProcurement" required>
+                <option value="unknown">unknown</option>
+                <option value="yes">yes</option>
+                <option value="no">no</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="grid2">
+            <label>
+              Can it be deferred to someone in the lab?
+              <select id="tDeferred" required>
+                <option value="no">no</option>
+                <option value="yes">yes</option>
+              </select>
+            </label>
+
+            <label>
+              If yes: to whom?
+              <input id="tDeferTo" type="text" placeholder="Nome / ruolo" />
+            </label>
+          </div>
+
+          <div class="grid2">
+            <label>
+              If no: why not? (reason)
+              <select id="tWhyNotCode" required>
+                <option value="skills">Richiede competenze specifiche</option>
+                <option value="tools">Richiede accesso a strumenti/lab</option>
+                <option value="safety">Richiede autorizzazioni / safety / MRI</option>
+                <option value="integration">Richiede integrazione con sistema esistente</option>
+                <option value="other">Altro</option>
+              </select>
+            </label>
+
+            <label>
+              If no: why not? (details)
+              <input id="tWhyNotText" type="text" placeholder="1 riga concreta (non romanzo)" required />
+            </label>
+          </div>
+
+          <div class="grid2">
+            <label>
+              Impact
+              <select id="tImpact" required>
+                <option value="not_blocking">not_blocking</option>
+                <option value="blocks_week">blocks_week</option>
+                <option value="blocks_today">blocks_today</option>
+              </select>
+            </label>
+
+            <label>
+              Effort guess
+              <select id="tEffort" required>
+                <option value="S">S</option>
+                <option value="M" selected>M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            Tags (comma separated)
+            <input id="tTags" type="text" placeholder="ttl, camera, pcb" />
+          </label>
+
+          <div class="row space mt">
+            <div id="formMsg" class="msg"></div>
+            <button class="btn primary" type="submit">Create ticket</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </main>
+
+  <script type="module" src="tickets.js"></script>
+</body>
+</html>
