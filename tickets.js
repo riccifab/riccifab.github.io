@@ -27,12 +27,14 @@ import {
    1) Firebase config (FILL ME)
    ========================= */
 const firebaseConfig = {
-  apiKey: "PASTE_HERE",
-  authDomain: "PASTE_HERE",
-  projectId: "PASTE_HERE",
-  storageBucket: "PASTE_HERE",
-  messagingSenderId: "PASTE_HERE",
-  appId: "PASTE_HERE"
+  apiKey: "AIzaSyCymGUKXdpBtVJPC1YH2bLuRLc16p-E93A",
+  authDomain: "workstatus-5a293.firebaseapp.com",
+  databaseURL: "https://workstatus-5a293-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "workstatus-5a293",
+  storageBucket: "workstatus-5a293.firebasestorage.app",
+  messagingSenderId: "737892892698",
+  appId: "1:737892892698:web:6f7112f9f5e724625451a3",
+  measurementId: "G-60KPLB1GDG"
 };
 
 const app = initializeApp(firebaseConfig);
