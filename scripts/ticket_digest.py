@@ -45,7 +45,7 @@ def get_open_tickets(db, limit_n=500):
 def by_lab_counts(tickets):
     m = {}
     for t in tickets:
-        lab = (t.get("labKey") or t.get("lab") or "-").strip().lower()
+        lab = (t.get("lab") or "-").strip()
         m[lab] = m.get(lab, 0) + 1
     return sorted(m.items(), key=lambda kv: kv[1], reverse=True)
 
