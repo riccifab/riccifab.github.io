@@ -1,0 +1,63 @@
+name: Notify PI on new tickets
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code (main)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Checkout state (bot-state)
+        uses: actions/checkout@v4
+        with:
+          ref: bot-state
+          path: bot-state
+          fetch-depth: 1
+
+      - name: Copy state into workspace
+        run: |
+          mkdir -p state
+          cp bot-state/state/last_run.json state/last_run.json
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scripts/requirements.txt
+
+      - name: Run notifier
+        env:
+          FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+          SITE_URL: ${{ vars.SITE_URL }}
+          LAB_PI_MAP: ${{ vars.LAB_PI_MAP }}
+
+          GCP_SA_KEY_B64: ${{ secrets.GCP_SA_KEY_B64 }}
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          MAIL_FROM: ${{ secrets.MAIL_FROM }}
+        run: |
+          python scripts/ticket_notify_pi.py
+
+      - name: Write back state to bot-state
+        run: |
+          cp state/last_run.json bot-state/state/last_run.json
+          cd bot-state
+          git config user.name "ticket-bot"
+          git config user.email "ticket-bot@users.noreply.github.com"
+          git add state/last_run.json
+          git commit -m "Update last_run" || echo "No changes"
+          git push origin bot-state
