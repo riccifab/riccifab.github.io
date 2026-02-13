@@ -253,6 +253,9 @@ async function refreshTickets() {
 
   if (currentRole === "admin" || currentRole === "pi") {
     snap = await getDocs(query(tcol, orderBy("updatedAt", "desc"), limit(300)));
+  } else if (currentRole === "postdoc" || currentRole === "phd") {
+  // prendi tutti i ticket del lab, senza orderBy (eviti index), poi sort client-side
+    snap = await getDocs(query(tcol, where("lab", "==", currentLab), limit(300)));
   } else {
     snap = await getDocs(query(tcol, where("createdByUid", "==", currentUser.uid), limit(300)));
   }
