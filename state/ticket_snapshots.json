@@ -132,7 +132,7 @@
   "ticket_snapshots_iso": "2026-02-13T18:25:12Z",
   "tyQ3pZ04j5zdEzRnpqld": {
     "adminEtaDate": "",
-    "adminNotes": "Lunedì Colazione ?",
+    "adminNotes": "Lunedì Colazione ??",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "procurement",
@@ -144,7 +144,7 @@
     "deferTo": "",
     "definitionOfDone": "I get high",
     "description": "tanta",
-    "effortAdmin": "XL",
+    "effortAdmin": "L",
     "effortGuess": "M",
     "estimatedCostEUR": 500,
     "expectedDeliveryDate": "2026-02-16",
@@ -157,7 +157,7 @@
     "status": "IN_PROGRESS",
     "tags": [],
     "title": "coca",
-    "updatedAt": "2026-02-13T21:49:32.786000+00:00",
+    "updatedAt": "2026-02-13T21:52:03.206000+00:00",
     "whyNotDeferredCode": "tools",
     "whyNotDeferredText": "boh"
   }
