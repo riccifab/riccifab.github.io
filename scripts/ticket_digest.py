@@ -73,7 +73,7 @@ def build_body(tickets):
     lines.append("")
 
     if SITE_URL:
-        lines.append(f"Site: {SITE_URL}/tickets.html")
+        lines.append(f"Site: {SITE_URL}")
         lines.append("")
 
     lines.append("Tickets (first 200):")
