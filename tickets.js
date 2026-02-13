@@ -151,11 +151,11 @@ async function ensureAllowedOrThrow(user) {
   if (!snap.exists()) throw new Error("Email not in allowlist.");
 
   const data = snap.data();
-  const role = data.role || "phd";
+  const role = (data.role || "phd").toString().trim().toLowerCase();
   const allowedRoles = ["admin", "pi", "postdoc", "phd"];
   if (!allowedRoles.includes(role)) throw new Error("Invalid role in allowlist.");
   currentRole = role;
-  currentLab = data.lab || "";
+  currentLab = (data.lab || "").toString().trim();
   return { role, lab: currentLab };
 }
 
