@@ -8,8 +8,6 @@
 
 A lightweight, GitHub Pages–hosted ticketing website used to track lab/tech requests and keep stakeholders in the loop via automated email notifications.
 
-> **Images:** the `docs/img/*.png` paths are placeholders. Drop your screenshots there (or change paths) and the README will render them.
-
 ---
 
 ## What this is
