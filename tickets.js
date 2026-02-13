@@ -143,17 +143,20 @@ btnNewTicket.addEventListener("click", openModal);
 
 /* ========= Allowlist ========= */
 async function ensureAllowedOrThrow(user) {
-  const email = user?.email;
-  if (!email) throw new Error("No email in auth user.");
+  const rawEmail = user?.email;
+  if (!rawEmail) throw new Error("No email in auth user.");
 
-  const ref = doc(db, "allowlist", email); // allowlist/{email}
+  const email = rawEmail.toString().trim().toLowerCase();
+
+  const ref = doc(db, "allowlist", email);
   const snap = await getDoc(ref);
-  if (!snap.exists()) throw new Error("Email not in allowlist.");
+  if (!snap.exists()) throw new Error(`Email not in allowlist: ${email}`);
 
   const data = snap.data();
   const role = (data.role || "phd").toString().trim().toLowerCase();
-  const allowedRoles = ["admin", "pi", "postdoc", "phd"];
-  if (!allowedRoles.includes(role)) throw new Error("Invalid role in allowlist.");
+  const allowedRoles = ["admin","pi","postdoc","phd"];
+  if (!allowedRoles.includes(role)) throw new Error(`Invalid role in allowlist: "${role}"`);
+
   currentRole = role;
   currentLab = (data.lab || "").toString().trim();
   return { role, lab: currentLab };
