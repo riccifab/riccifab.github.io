@@ -402,6 +402,10 @@ function adminControlsHtml(t) {
     </div>
 
     <div class="grid2">
+      <label>
+        Expected delivery (update)
+        <input id="aExpected" type="date" value="${safeText(t.expectedDeliveryDate || "")}" />
+      </label>
       <label>Status<select id="aStatus">${statusOptions}</select></label>
       <label>Priority<select id="aPriority">${prioOptions}</select></label>
       <label>Assignee email<input id="aAssigneeEmail" type="text" value="${safeText(t.assigneeEmail || "")}" /></label>
@@ -436,6 +440,7 @@ function wireAdminControls(t) {
   const aAdminEta = $("aAdminEta");
   const aEffort = $("aEffort");
   const aNotes = $("aNotes");
+  const aExpected = $("aExpected");
 
   async function save(partial = {}) {
     try {
@@ -447,7 +452,8 @@ function wireAdminControls(t) {
         effortAdmin: aEffort.value || "",
         adminNotes: (aNotes.value || "").trim(),
         ...partial,
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
+        expectedDeliveryDate: aExpected.value || "",
       });
       setMsg(adminSaveMsg, "Saved.", "ok");
       await refreshTickets();
