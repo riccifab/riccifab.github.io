@@ -151,8 +151,9 @@ async function ensureAllowedOrThrow(user) {
   if (!snap.exists()) throw new Error("Email not in allowlist.");
 
   const data = snap.data();
-  const role = data.role || "pi";
-  if (role !== "admin" && role !== "pi") throw new Error("Invalid role in allowlist.");
+  const role = data.role || "phd";
+  const allowedRoles = ["admin", "pi", "postdoc", "phd"];
+  if (!allowedRoles.includes(role)) throw new Error("Invalid role in allowlist.");
   currentRole = role;
   currentLab = data.lab || "";
   return { role, lab: currentLab };
@@ -250,7 +251,7 @@ async function refreshTickets() {
   const tcol = collection(db, "tickets");
   let snap;
 
-  if (currentRole === "admin") {
+  if (currentRole === "admin" || currentRole === "pi") {
     snap = await getDocs(query(tcol, orderBy("updatedAt", "desc"), limit(300)));
   } else {
     snap = await getDocs(query(tcol, where("createdByUid", "==", currentUser.uid), limit(300)));
