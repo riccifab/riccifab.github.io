@@ -1,5 +1,3 @@
-
-
 #!/usr/bin/env python3
 """Notify ticket creators when their ticket is updated.
 
@@ -20,6 +18,7 @@ Optional env vars:
 - TICKETS_COLLECTION (default: 'tickets')
 - STATE_DIR       (default: 'state')
 - DEBUG           ('1' enables verbose logs)
+- MAIL_CC        (comma-separated CC recipients; optional)
 """
 
 from __future__ import annotations
@@ -47,6 +46,7 @@ class Config:
     sa_key_b64: str
     sendgrid_api_key: str
     mail_from: str
+    mail_cc: str
     site_url: str
     tickets_collection: str
     state_dir: str
@@ -66,6 +66,7 @@ def load_config() -> Config:
         sa_key_b64=_env("GCP_SA_KEY_B64", required=True),
         sendgrid_api_key=_env("SENDGRID_API_KEY", required=True),
         mail_from=_env("MAIL_FROM", required=True),
+        mail_cc=_env("MAIL_CC", default=""),
         site_url=_env("SITE_URL", default="").rstrip("/") + ("/" if _env("SITE_URL", default="").strip() else ""),
         tickets_collection=_env("TICKETS_COLLECTION", default="tickets"),
         state_dir=_env("STATE_DIR", default="state"),
@@ -299,9 +300,41 @@ def init_firestore(cfg: Config) -> firestore.Client:
     return firestore.Client(project=cfg.project_id, credentials=creds)
 
 
+def parse_recipients(value: str) -> List[str]:
+    """Parse a comma/semicolon/space separated list of emails."""
+    if not value:
+        return []
+    parts = re.split(r"[;,\s]+", value.strip())
+    out: List[str] = []
+    for p in parts:
+        p = p.strip()
+        if not p:
+            continue
+        if "@" not in p:
+            continue
+        out.append(p)
+    # Deduplicate while preserving order
+    seen = set()
+    uniq: List[str] = []
+    for e in out:
+        if e in seen:
+            continue
+        seen.add(e)
+        uniq.append(e)
+    return uniq
+
+
 def send_email(cfg: Config, to_email: str, subject: str, text_body: str) -> None:
+    personalization: Dict[str, Any] = {"to": [{"email": to_email}]}
+
+    cc_list = parse_recipients(cfg.mail_cc)
+    # Avoid duplicating the primary recipient in CC
+    cc_list = [e for e in cc_list if e.lower() != to_email.lower()]
+    if cc_list:
+        personalization["cc"] = [{"email": e} for e in cc_list]
+
     payload = {
-        "personalizations": [{"to": [{"email": to_email}]}],
+        "personalizations": [personalization],
         "from": {"email": cfg.mail_from},
         "subject": subject,
         "content": [{"type": "text/plain", "value": text_body}],
