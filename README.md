@@ -1,0 +1,1 @@
+[![Notify PI on new tickets](https://github.com/riccifab/riccifab.github.io/actions/workflows/ticket_notify_pi.yml/badge.svg)](https://github.com/riccifab/riccifab.github.io/actions/workflows/ticket_notify_pi.yml)
