@@ -1,5 +1,7 @@
 {
   "77oUBnze1qc7YxFTJrQ9": {
+    "adminEtaDate": "2026-02-16",
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "electronics",
@@ -11,6 +13,7 @@
     "deferTo": "",
     "definitionOfDone": "- Semi-regular technician presence to keep the people happy",
     "description": "The local technician has been missing from the lab for some time now, for understandable reasons, but workplace morale is declining in his absence. Please come back when possible.",
+    "effortAdmin": "",
     "effortGuess": "S",
     "estimatedCostEUR": null,
     "expectedDeliveryDate": "2026-02-16",
@@ -23,7 +26,7 @@
     "status": "NEW",
     "tags": [],
     "title": "Technician return to work",
-    "updatedAt": "2026-02-13T12:17:58.397000+00:00",
+    "updatedAt": "2026-02-13T19:57:41.707000+00:00",
     "whyNotDeferredCode": "other",
     "whyNotDeferredText": "There is only one Fabio"
   },
