@@ -51,6 +51,77 @@ def split_emails(x: Any) -> list[str]:
     return [e.strip() for e in str(x).split(",") if e.strip()]
 
 
+def parse_created_dt(doc: firestore.DocumentSnapshot, t: dict[str, Any]) -> datetime | None:
+    """Best-effort parsing of createdAt from different representations."""
+
+    # Prefer snapshot get() (sometimes safer than to_dict for special types)
+    v: Any = None
+    try:
+        v = doc.get("createdAt")
+    except Exception:
+        v = t.get("createdAt")
+
+    # Already a python datetime
+    if isinstance(v, datetime):
+        dt = v
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(timezone.utc)
+
+    # Firestore Timestamp-like objects
+    if hasattr(v, "to_datetime"):
+        try:
+            return v.to_datetime().replace(tzinfo=timezone.utc)
+        except Exception:
+            pass
+
+    # Some SDKs serialize timestamps as dicts
+    if isinstance(v, dict):
+        # Common shapes: {"seconds":..., "nanoseconds":...} or {"_seconds":..., "_nanoseconds":...}
+        sec = v.get("seconds", v.get("_seconds"))
+        nsec = v.get("nanoseconds", v.get("_nanoseconds", 0))
+        try:
+            if sec is not None:
+                sec_f = float(sec)
+                nsec_f = float(nsec or 0)
+                return datetime.fromtimestamp(sec_f + nsec_f * 1e-9, tz=timezone.utc)
+        except Exception:
+            pass
+
+    # ISO string
+    if isinstance(v, str) and v.strip():
+        s = v.strip()
+        try:
+            if s.endswith("Z"):
+                s = s[:-1] + "+00:00"
+            dt = datetime.fromisoformat(s)
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            return dt.astimezone(timezone.utc)
+        except Exception:
+            pass
+
+    # epoch seconds / ms
+    if isinstance(v, (int, float)):
+        try:
+            vv = float(v)
+            # heuristic: too large => milliseconds
+            if vv > 10_000_000_000:
+                vv = vv / 1000.0
+            return datetime.fromtimestamp(vv, tz=timezone.utc)
+        except Exception:
+            pass
+
+    # Fallback: Firestore document create_time
+    try:
+        if hasattr(doc, "create_time") and hasattr(doc.create_time, "to_datetime"):
+            return doc.create_time.to_datetime().replace(tzinfo=timezone.utc)
+    except Exception:
+        pass
+
+    return None
+
+
 # ----------------------------
 # Firestore + state
 # ----------------------------
@@ -140,7 +211,7 @@ def main() -> None:
 
     q = (
         db.collection("tickets")
-        .where("createdAt", ">=", since)
+        .where(filter=firestore.FieldFilter("createdAt", ">=", since))
         .order_by("createdAt", direction=firestore.Query.ASCENDING)
         .limit(MAX_SCAN)
     )
@@ -160,49 +231,10 @@ def main() -> None:
         seen_ids.add(tid)
 
         t = doc.to_dict() or {}
-        def parse_created_dt(doc, t) -> datetime | None:
-            v = t.get("createdAt")
 
-            # Firestore Timestamp
-            if hasattr(v, "to_datetime"):
-                return v.to_datetime().replace(tzinfo=timezone.utc)
-
-            # ISO string
-            if isinstance(v, str) and v.strip():
-                s = v.strip()
-                try:
-                    if s.endswith("Z"):
-                        s = s[:-1] + "+00:00"
-                    dt = datetime.fromisoformat(s)
-                    if dt.tzinfo is None:
-                        dt = dt.replace(tzinfo=timezone.utc)
-                    return dt.astimezone(timezone.utc)
-                except Exception:
-                    pass
-
-            # epoch seconds / ms
-            if isinstance(v, (int, float)):
-                try:
-                    vv = float(v)
-                    # heuristica: se è troppo grande è probabilmente ms
-                    if vv > 10_000_000_000:  # ~2286 in seconds, quindi qui è ms
-                        vv = vv / 1000.0
-                    return datetime.fromtimestamp(vv, tz=timezone.utc)
-                except Exception:
-                    pass
-
-            # fallback: doc create_time (Timestamp)
-            try:
-                if hasattr(doc, "create_time") and hasattr(doc.create_time, "to_datetime"):
-                    return doc.create_time.to_datetime().replace(tzinfo=timezone.utc)
-            except Exception:
-                pass
-
-            return None
-        
         created_dt = parse_created_dt(doc, t)
         if not created_dt:
-            print(f"SKIP: ticket={tid} missing/invalid createdAt")
+            print(f"SKIP: ticket={tid} missing/invalid createdAt (keys={sorted(list(t.keys()))})")
             continue
         # Evita doppi invii (LOOKBACK)
         if created_dt <= last_run:
