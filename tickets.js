@@ -281,7 +281,7 @@ function applyFiltersAndRender() {
 
   let list = [...ticketsCache];
   if (st === "__OPEN__") {
-    list = list.filter(t => t.status !== "CLOSED");
+     list = list.filter(t => t.status !== "CLOSED" && t.status !== "DONE");
   } else if (st) {
     list = list.filter(t => t.status === st);
   }
