@@ -154,10 +154,10 @@
     "lab": "Iurillozzifancy",
     "priority": "P2",
     "procurementNeeded": "yes",
-    "status": "NEW",
+    "status": "IN_PROGRESS",
     "tags": [],
     "title": "coca",
-    "updatedAt": "2026-02-13T21:43:13.247000+00:00",
+    "updatedAt": "2026-02-13T21:48:22.382000+00:00",
     "whyNotDeferredCode": "tools",
     "whyNotDeferredText": "boh"
   }
