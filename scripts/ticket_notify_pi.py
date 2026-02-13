@@ -1,28 +1,65 @@
-import os, base64, json
+import os
+import base64
+import json
+import re
 from datetime import datetime, timezone, timedelta
+from typing import Any
 
 import requests
 from google.cloud import firestore
 from google.oauth2 import service_account
 
-PROJECT_ID = os.environ["FIREBASE_PROJECT_ID"]
-SITE_URL = os.environ.get("SITE_URL", "").rstrip("/")
 
-SENDGRID_API_KEY = os.environ["SENDGRID_API_KEY"]
-MAIL_FROM = os.environ["MAIL_FROM"]
-LAB_PI_MAP_JSON = os.environ.get("LAB_PI_MAP", "{}")
-
+# ----------------------------
+# Config
+# ----------------------------
 STATE_PATH = "state/last_run.json"
-LOOKBACK_MINUTES = 3   # per evitare buchi tra run
+LOOKBACK_MINUTES = 3         # evita buchi tra run
+MAX_SCAN = 300               # limite sicurezza per run
 ALWAYS_CC = ["fabio.ricci@iit.it"]
-def norm(s: str) -> str:
-    return " ".join((s or "").split()).strip().lower()
 
-def db_client():
+
+# ----------------------------
+# Normalization helpers
+# ----------------------------
+def norm_lab(x: Any) -> str:
+    """
+    Normalize lab strings to a stable key:
+    - lower
+    - trim
+    - collapse spaces
+    - remove punctuation
+    - remove optional trailing 'lab'
+    - remove spaces
+    Examples:
+      "Gozzi Lab" -> "gozzi"
+      "ROSSI-lab" -> "rossi"
+    """
+    if x is None:
+        return ""
+    s = str(x).strip().lower()
+    s = re.sub(r"\s+", " ", s)
+    s = re.sub(r"[^a-z0-9 ]+", "", s)
+    s = s.replace(" lab", "")
+    s = s.replace(" ", "")
+    return s
+
+
+def split_emails(x: Any) -> list[str]:
+    if not x:
+        return []
+    return [e.strip() for e in str(x).split(",") if e.strip()]
+
+
+# ----------------------------
+# Firestore + state
+# ----------------------------
+def db_client(project_id: str) -> firestore.Client:
     sa_b64 = os.environ["GCP_SA_KEY_B64"]
     info = json.loads(base64.b64decode(sa_b64).decode("utf-8"))
     creds = service_account.Credentials.from_service_account_info(info)
-    return firestore.Client(project=PROJECT_ID, credentials=creds)
+    return firestore.Client(project=project_id, credentials=creds)
+
 
 def load_state() -> datetime:
     try:
@@ -34,89 +71,126 @@ def load_state() -> datetime:
         return datetime.fromisoformat(iso).astimezone(timezone.utc)
     except FileNotFoundError:
         return datetime(1970, 1, 1, tzinfo=timezone.utc)
+    except Exception as e:
+        # se il file è corrotto non bloccare il workflow
+        print(f"WARNING: cannot read state ({STATE_PATH}): {e}")
+        return datetime(1970, 1, 1, tzinfo=timezone.utc)
 
-def save_state(dt: datetime):
+
+def save_state(dt: datetime) -> None:
     dt = dt.astimezone(timezone.utc).replace(microsecond=0)
     obj = {"last_run_iso": dt.isoformat().replace("+00:00", "Z")}
     os.makedirs(os.path.dirname(STATE_PATH), exist_ok=True)
     with open(STATE_PATH, "w", encoding="utf-8") as f:
         json.dump(obj, f)
 
-def send_sendgrid(to_list, subject, body):
+
+# ----------------------------
+# SendGrid
+# ----------------------------
+def send_sendgrid(sendgrid_api_key: str, mail_from: str, to_list: list[str], subject: str, body: str) -> None:
     url = "https://api.sendgrid.com/v3/mail/send"
     headers = {
-        "Authorization": f"Bearer {SENDGRID_API_KEY}",
+        "Authorization": f"Bearer {sendgrid_api_key}",
         "Content-Type": "application/json",
     }
 
-    personalization = {"to": [{"email": e} for e in to_list]}
+    personalization: dict[str, Any] = {"to": [{"email": e} for e in to_list]}
     if ALWAYS_CC:
         personalization["cc"] = [{"email": e} for e in ALWAYS_CC]
 
     payload = {
         "personalizations": [personalization],
-        "from": {"email": MAIL_FROM},
+        "from": {"email": mail_from},
         "subject": subject,
         "content": [{"type": "text/plain", "value": body}],
-        "tracking_settings": {
-            "click_tracking": {"enable": False, "enable_text": False}
-        },
+        "tracking_settings": {"click_tracking": {"enable": False, "enable_text": False}},
     }
 
     r = requests.post(url, headers=headers, json=payload, timeout=30)
     if r.status_code >= 300:
         raise RuntimeError(f"SendGrid error {r.status_code}: {r.text}")
 
-def main():
-    raw = json.loads(LAB_PI_MAP_JSON) if LAB_PI_MAP_JSON.strip() else {}
-    lab_map = {norm(k): v for k, v in raw.items()}
+
+# ----------------------------
+# Main
+# ----------------------------
+def main() -> None:
+    project_id = os.environ["FIREBASE_PROJECT_ID"]
+    site_url = os.environ.get("SITE_URL", "").rstrip("/")
+
+    sendgrid_api_key = os.environ["SENDGRID_API_KEY"]
+    mail_from = os.environ["MAIL_FROM"]
+
+    lab_pi_map_json = os.environ.get("LAB_PI_MAP", "{}").strip()
+    try:
+        raw_map = json.loads(lab_pi_map_json) if lab_pi_map_json else {}
+        if not isinstance(raw_map, dict):
+            raise ValueError("LAB_PI_MAP must be a JSON object (dict).")
+    except Exception as e:
+        raise RuntimeError(f"Invalid LAB_PI_MAP JSON: {e}")
+
+    # Normalize map keys ONCE (case-insensitive, punctuation-insensitive)
+    lab_map: dict[str, str] = {norm_lab(k): str(v).strip() for k, v in raw_map.items()}
 
     last_run = load_state()
     since = (last_run - timedelta(minutes=LOOKBACK_MINUTES)).astimezone(timezone.utc)
 
-    db = db_client()
+    db = db_client(project_id)
 
     q = (
         db.collection("tickets")
         .where("createdAt", ">=", since)
         .order_by("createdAt", direction=firestore.Query.ASCENDING)
-        .limit(300)
+        .limit(MAX_SCAN)
     )
 
     docs = list(q.stream())
     print(f"DEBUG: last_run={last_run.isoformat()} since={since.isoformat()} docs={len(docs)}")
-    print(f"DEBUG: lab_map_keys={sorted(list(lab_map.keys()))[:50]}")
+    print(f"DEBUG: lab_map_keys={sorted(lab_map.keys())}")
+
     sent = 0
-    newest = last_run
-    seen = set()
+    newest_seen = last_run
+    seen_ids: set[str] = set()
 
     for doc in docs:
         tid = doc.id
-        if tid in seen:
+        if tid in seen_ids:
             continue
-        seen.add(tid)
+        seen_ids.add(tid)
 
         t = doc.to_dict() or {}
+
         created_at = t.get("createdAt")
         if not hasattr(created_at, "to_datetime"):
+            print(f"SKIP: ticket={tid} missing/invalid createdAt")
             continue
+
         created_dt = created_at.to_datetime().replace(tzinfo=timezone.utc)
 
-        # evita doppi invii (lookback)
+        # Evita doppi invii (LOOKBACK)
         if created_dt <= last_run:
             continue
 
+        # Prendi lab in modo robusto
         lab_disp = (t.get("lab") or "").strip()
-        lab_key = norm(t.get("labKey") or lab_disp)
-        pi_value = lab_map.get(lab_key)
+        lab_key = norm_lab(t.get("labKey") or lab_disp)
 
-        if not pi_value:
-            print(f"SKIP: ticket={tid} lab='{lab_disp}' labKey='{t.get('labKey')}' computed_key='{lab_key}' (not in LAB_PI_MAP)")
+        if not lab_key:
+            print(f"SKIP: ticket={tid} lab empty (lab='{lab_disp}' labKey='{t.get('labKey')}')")
             continue
 
-        # supporta più destinatari separati da virgola
-        to_list = [x.strip() for x in str(pi_value).split(",") if x.strip()]
+        pi_value = lab_map.get(lab_key)
+        if not pi_value:
+            print(
+                f"SKIP: ticket={tid} lab='{lab_disp}' labKey='{t.get('labKey')}' "
+                f"computed_key='{lab_key}' (not in LAB_PI_MAP)"
+            )
+            continue
+
+        to_list = split_emails(pi_value)
         if not to_list:
+            print(f"SKIP: ticket={tid} mapped PI list empty for lab_key='{lab_key}' value='{pi_value}'")
             continue
 
         title = " ".join((t.get("title") or "").split())
@@ -125,35 +199,41 @@ def main():
         exp = t.get("expectedDeliveryDate", "-")
         by = t.get("createdByEmail", "-")
 
-        subject = f"[Ticket] New ({lab_disp or lab_key}) — {title}"
-        link = f"{SITE_URL}/tickets.html" if SITE_URL else "(SITE_URL not set)"
+        subject = f"[Ticket] New ({lab_disp or lab_key}) — {title}".strip()
+        link = f"{site_url}/tickets.html" if site_url else "(SITE_URL not set)"
 
-        body = "\n".join([
-            "A new ticket has been created.",
-            "",
-            f"Lab: {lab_disp or lab_key}",
-            f"Ticket ID: {tid}",
-            f"Title: {title}",
-            f"Priority: {pr}",
-            f"Status: {st}",
-            f"Expected: {exp}",
-            f"Created by: {by}",
-            "",
-            f"Tickets page: {link}",
-        ])
+        body = "\n".join(
+            [
+                "A new ticket has been created.",
+                "",
+                f"Lab: {lab_disp or lab_key}",
+                f"Ticket ID: {tid}",
+                f"Title: {title}",
+                f"Priority: {pr}",
+                f"Status: {st}",
+                f"Expected: {exp}",
+                f"Created by: {by}",
+                "",
+                f"Tickets page: {link}",
+            ]
+        )
 
-        send_sendgrid(to_list, subject, body)
+        send_sendgrid(sendgrid_api_key, mail_from, to_list, subject, body)
         sent += 1
-        print(f"SENT: ticket={tid} to={to_list} lab_key={lab_key}")
+        print(f"SENT: ticket={tid} to={to_list} lab_key={lab_key} createdAt={created_dt.isoformat()}")
 
-        if created_dt > newest:
-            newest = created_dt
+        if created_dt > newest_seen:
+            newest_seen = created_dt
 
-    # avanza lo stato (se non ho inviato nulla, avanzalo comunque a now per non ristare “indietro”)
+    # Avanza stato: se non ho trovato nulla, porto avanti comunque a "now"
     now = datetime.now(timezone.utc)
-    save_state(max(newest, now))
+    save_state(max(newest_seen, now))
 
-    print(f"OK: scanned={len(docs)} sent={sent} since={since.isoformat()} last_run={last_run.isoformat()}")
+    print(
+        f"OK: scanned={len(docs)} sent={sent} "
+        f"since={since.isoformat()} last_run={last_run.isoformat()}"
+    )
+
 
 if __name__ == "__main__":
     main()
