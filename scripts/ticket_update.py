@@ -448,7 +448,6 @@ def main() -> int:
             continue
 
         title = str(doc.get("title") or doc.get("name") or f"Ticket {ticket_id}")
-        link = build_ticket_link(cfg, ticket_id)
 
         subject = f"Ticket update: {title}"
         body_lines = [
@@ -459,7 +458,7 @@ def main() -> int:
             f"Updated at (UTC): {_to_iso(updated_at)}",
         ]
         if cfg.site_url:
-            body_lines.append(f"Link: {link}")
+            body_lines.append(f"Site URL: {cfg.site_url}")
         body_lines.extend([
             "",
             "Changes:",
