@@ -84,6 +84,8 @@ def main():
     )
 
     docs = list(q.stream())
+    print(f"DEBUG: last_run={last_run.isoformat()} since={since.isoformat()} docs={len(docs)}")
+    print(f"DEBUG: lab_map_keys={sorted(list(lab_map.keys()))[:50]}")
     sent = 0
     newest = last_run
     seen = set()
@@ -109,7 +111,7 @@ def main():
         pi_value = lab_map.get(lab_key)
 
         if not pi_value:
-            # nessun PI configurato per questo lab -> skip
+            print(f"SKIP: ticket={tid} lab='{lab_disp}' labKey='{t.get('labKey')}' computed_key='{lab_key}' (not in LAB_PI_MAP)")
             continue
 
         # supporta più destinatari separati da virgola
@@ -142,6 +144,7 @@ def main():
 
         send_sendgrid(to_list, subject, body)
         sent += 1
+        print(f"SENT: ticket={tid} to={to_list} lab_key={lab_key}")
 
         if created_dt > newest:
             newest = created_dt
