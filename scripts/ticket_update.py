@@ -233,17 +233,34 @@ def compute_diff(old: Dict[str, Any], new: Dict[str, Any]) -> List[str]:
         "category",
         "tags",
         "dueDate",
+        "deliveryDate",
+        "deliveryAt",
+        "expectedDelivery",
+        "eta",
+        "deadline",
         "notes",
         "description",
         "lastComment",
         "commentCount",
-        "updatedAt",
     ]
 
     keys: List[str] = []
     for k in preferred_keys:
         if k in old or k in new:
             keys.append(k)
+
+    # Also include any other top-level keys that actually changed, otherwise we may miss
+    # updates stored under non-preferred keys (e.g. `delivery` dict).
+    noisy = {"updatedAt", "createdAt", "attachments", "history", "events"}
+    all_keys = set(old.keys()) | set(new.keys())
+    extra_changed = []
+    for k in all_keys:
+        if k in noisy or k in keys:
+            continue
+        if old.get(k) != new.get(k):
+            extra_changed.append(k)
+    extra_changed = sorted(extra_changed)[:15]
+    keys.extend(extra_changed)
 
     # If curated list is empty, compare a limited set of top-level keys (avoid exploding on huge blobs)
     if not keys:
@@ -338,6 +355,10 @@ def send_email(cfg: Config, to_email: str, subject: str, text_body: str) -> None
         "from": {"email": cfg.mail_from},
         "subject": subject,
         "content": [{"type": "text/plain", "value": text_body}],
+        # Prevent SendGrid from rewriting links (you want to see the real SITE_URL in the email)
+        "tracking_settings": {
+            "click_tracking": {"enable": False, "enable_text": False}
+        },
     }
 
     r = requests.post(
