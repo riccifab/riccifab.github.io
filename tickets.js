@@ -527,7 +527,9 @@ ticketForm.addEventListener("submit", async (e) => {
 
   if (!currentUser) return;
 
-  const lab = ($("tLab").value || "").trim();
+  const labDisplay = (currentLab || "").toString().trim().replace(/\s+/g, " ");
+  const labKey = labDisplay.toLowerCase();
+  if (!labDisplay) { setMsg(formMsg, "No lab set for this account (allowlist.lab).", "err"); return; }
   const category = $("tCategory").value;
   const priority = $("tPriority").value;
   const expectedDeliveryDate = $("tExpected").value;
@@ -567,7 +569,8 @@ ticketForm.addEventListener("submit", async (e) => {
       title,
       description,
       definitionOfDone,
-      lab,
+      lab: labDisplay,
+      labKey: labKey,
       category,
       priority,
       status: "NEW",
