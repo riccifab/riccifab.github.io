@@ -1,1 +1,2 @@
 [![Notify PI on new tickets](https://github.com/riccifab/riccifab.github.io/actions/workflows/ticket_notify_pi.yml/badge.svg)](https://github.com/riccifab/riccifab.github.io/actions/workflows/ticket_notify_pi.yml)
+[![Weekly ticket digest](https://github.com/riccifab/riccifab.github.io/actions/workflows/weekly_ticket_digest.yml/badge.svg)](https://github.com/riccifab/riccifab.github.io/actions/workflows/weekly_ticket_digest.yml)
