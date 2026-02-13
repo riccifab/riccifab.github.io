@@ -280,7 +280,11 @@ function applyFiltersAndRender() {
   const cat = fCategory.value || "";
 
   let list = [...ticketsCache];
-  if (st) list = list.filter(t => t.status === st);
+  if (st === "__OPEN__") {
+    list = list.filter(t => t.status !== "CLOSED");
+  } else if (st) {
+    list = list.filter(t => t.status === st);
+  }
   if (pr) list = list.filter(t => t.priority === pr);
   if (lb) list = list.filter(t => (t.lab || "") === lb);
   if (cat) list = list.filter(t => t.category === cat);
