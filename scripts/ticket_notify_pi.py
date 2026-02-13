@@ -14,7 +14,7 @@ LAB_PI_MAP_JSON = os.environ.get("LAB_PI_MAP", "{}")
 
 STATE_PATH = "state/last_run.json"
 LOOKBACK_MINUTES = 3   # per evitare buchi tra run
-
+ALWAYS_CC = ["fabio.ricci@iit.it"]
 def norm(s: str) -> str:
     return " ".join((s or "").split()).strip().lower()
 
@@ -48,15 +48,21 @@ def send_sendgrid(to_list, subject, body):
         "Authorization": f"Bearer {SENDGRID_API_KEY}",
         "Content-Type": "application/json",
     }
+
+    personalization = {"to": [{"email": e} for e in to_list]}
+    if ALWAYS_CC:
+        personalization["cc"] = [{"email": e} for e in ALWAYS_CC]
+
     payload = {
-        "personalizations": [{"to": [{"email": e} for e in to_list]}],
+        "personalizations": [personalization],
         "from": {"email": MAIL_FROM},
         "subject": subject,
         "content": [{"type": "text/plain", "value": body}],
-        "tracking_settings": {  # niente link riscritti
+        "tracking_settings": {
             "click_tracking": {"enable": False, "enable_text": False}
         },
     }
+
     r = requests.post(url, headers=headers, json=payload, timeout=30)
     if r.status_code >= 300:
         raise RuntimeError(f"SendGrid error {r.status_code}: {r.text}")
