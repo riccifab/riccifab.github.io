@@ -160,16 +160,53 @@ def main() -> None:
         seen_ids.add(tid)
 
         t = doc.to_dict() or {}
+        def parse_created_dt(doc, t) -> datetime | None:
+            v = t.get("createdAt")
 
-        created_at = t.get("createdAt")
-        if not hasattr(created_at, "to_datetime"):
+            # Firestore Timestamp
+            if hasattr(v, "to_datetime"):
+                return v.to_datetime().replace(tzinfo=timezone.utc)
+
+            # ISO string
+            if isinstance(v, str) and v.strip():
+                s = v.strip()
+                try:
+                    if s.endswith("Z"):
+                        s = s[:-1] + "+00:00"
+                    dt = datetime.fromisoformat(s)
+                    if dt.tzinfo is None:
+                        dt = dt.replace(tzinfo=timezone.utc)
+                    return dt.astimezone(timezone.utc)
+                except Exception:
+                    pass
+
+            # epoch seconds / ms
+            if isinstance(v, (int, float)):
+                try:
+                    vv = float(v)
+                    # heuristica: se è troppo grande è probabilmente ms
+                    if vv > 10_000_000_000:  # ~2286 in seconds, quindi qui è ms
+                        vv = vv / 1000.0
+                    return datetime.fromtimestamp(vv, tz=timezone.utc)
+                except Exception:
+                    pass
+
+            # fallback: doc create_time (Timestamp)
+            try:
+                if hasattr(doc, "create_time") and hasattr(doc.create_time, "to_datetime"):
+                    return doc.create_time.to_datetime().replace(tzinfo=timezone.utc)
+            except Exception:
+                pass
+
+            return None
+        
+        created_dt = parse_created_dt(doc, t)
+        if not created_dt:
             print(f"SKIP: ticket={tid} missing/invalid createdAt")
             continue
-
-        created_dt = created_at.to_datetime().replace(tzinfo=timezone.utc)
-
         # Evita doppi invii (LOOKBACK)
         if created_dt <= last_run:
+            
             continue
 
         # Prendi lab in modo robusto
