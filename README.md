@@ -4,6 +4,7 @@
 [![Weekly digest](https://github.com/riccifab/riccifab.github.io/actions/workflows/weekly_ticket_digest.yml/badge.svg?branch=main)](https://github.com/riccifab/riccifab.github.io/actions/workflows/weekly_ticket_digest.yml)
 
 ![Hero screenshot placeholder](docs/img/hero.png)
+<img width="420" height="187" alt="Screenshot 2026-02-13 alle 21 18 32" src="https://github.com/user-attachments/assets/6c868082-30ce-461f-80d8-9414cbebbff9" />
 
 A lightweight, GitHub Pages–hosted ticketing website used to track lab/tech requests and keep stakeholders in the loop via automated email notifications.
 
