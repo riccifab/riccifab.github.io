@@ -96,7 +96,10 @@ def send_sendgrid(to_list, subject, body):
         "personalizations": [{"to": [{"email": e} for e in to_list]}],
         "from": {"email": MAIL_FROM},
         "subject": subject,
-        "content": [{"type": "text/plain", "value": body}]
+        "content": [{"type": "text/plain", "value": body}],
+        "tracking_settings": {
+            "click_tracking": { "enable": False, "enable_text": False }
+        }
     }
     r = requests.post(url, headers=headers, json=payload, timeout=30)
     if r.status_code >= 300:
