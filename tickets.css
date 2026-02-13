@@ -250,20 +250,24 @@ input:focus, select:focus, textarea:focus { border-color: rgba(74,222,128,0.65);
   inset: 0;
   background: rgba(0,0,0,0.55);
   display: flex;
-  align-items: flex-start;
+  align-items: center;  
   justify-content: center;
   padding: 1.2rem;
   z-index: 50;
+  overflow: auto; 
 }
 
-.modalCard {
+.modalCard{
   width: min(920px, 100%);
   background: rgba(15,23,42,0.96);
-  border-radius: var(--radius);
+  border-radius: 18px;
   border: 1px solid rgba(148,163,184,0.32);
-  box-shadow: var(--shadow);
+  box-shadow: 0 24px 60px rgba(15,23,42,0.9), 0 0 0 1px rgba(15,23,42,0.7);
   padding: 1.1rem 1.2rem 1.1rem;
   backdrop-filter: blur(18px);
+
+  max-height: calc(100vh - 2.4rem);  /* IMPORTANT */
+  overflow-y: auto;                   /* IMPORTANT */
 }
 
 .footer {
