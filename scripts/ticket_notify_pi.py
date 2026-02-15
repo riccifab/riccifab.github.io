@@ -269,7 +269,7 @@ def main() -> None:
         by = t.get("createdByEmail", "-")
 
         subject = f"[Ticket] New ({lab_disp or lab_key}) — {title}".strip()
-        link = f"{site_url}/tickets.html" if site_url else "(SITE_URL not set)"
+        link = f"{site_url}" if site_url else "(SITE_URL not set)"
 
         body = "\n".join(
             [
