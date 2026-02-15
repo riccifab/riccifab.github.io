@@ -67,7 +67,7 @@ def load_config() -> Config:
         sendgrid_api_key=_env("SENDGRID_API_KEY", required=True),
         mail_from=_env("MAIL_FROM", required=True),
         mail_cc=_env("MAIL_CC", default=""),
-        site_url=_env("SITE_URL", default="").rstrip("/") + ("/" if _env("SITE_URL", default="").strip() else ""),
+        site_url=_env("SITE_URL", default="").rstrip("/") + ("" if _env("SITE_URL", default="").strip() else ""),
         tickets_collection=_env("TICKETS_COLLECTION", default="tickets"),
         state_dir=_env("STATE_DIR", default="state"),
         debug=_env("DEBUG", default="0") == "1",
