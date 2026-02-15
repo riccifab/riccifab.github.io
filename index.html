@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Neurotech – lab tools & status</title>
+  <title>Lab tools & request portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -79,6 +79,139 @@
       border-radius: 999px;
       background: #22c55e;
       box-shadow: 0 0 10px rgba(34,197,94,0.8);
+    }
+
+    /* HERO */
+
+    .hero {
+      margin-top: 1.1rem;
+      border-radius: 22px;
+      border: 1px solid rgba(148,163,184,0.28);
+      padding: 1.35rem 1.35rem;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(74,222,128,0.18), transparent 55%),
+        radial-gradient(circle at 85% 30%, rgba(59,130,246,0.16), transparent 55%),
+        rgba(15,23,42,0.88);
+      box-shadow:
+        0 30px 70px rgba(15,23,42,0.9),
+        0 0 0 1px rgba(15,23,42,0.6);
+      backdrop-filter: blur(18px);
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .hero h2 {
+      margin: 0 0 0.55rem 0;
+      font-size: 1.35rem;
+      letter-spacing: 0.01em;
+    }
+
+    .hero p {
+      margin: 0 0 0.95rem 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.45;
+      max-width: 64ch;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.55rem 0.95rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.4);
+      text-decoration: none;
+      color: var(--fg);
+      background: rgba(15,23,42,0.92);
+      font-size: 0.86rem;
+      transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, border-color 0.08s ease-out;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 12px 28px rgba(15,23,42,0.9),
+        0 0 0 1px rgba(148,163,184,0.55);
+      border-color: rgba(148,163,184,0.65);
+    }
+
+    .btn.primary {
+      border-color: rgba(74,222,128,0.75);
+      background:
+        radial-gradient(circle at top left, rgba(74,222,128,0.24), rgba(15,23,42,1));
+    }
+
+    .btn.primary:hover {
+      box-shadow:
+        0 14px 34px rgba(15,23,42,0.92),
+        0 0 0 1px rgba(74,222,128,0.9);
+    }
+
+    .btn .icon {
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+
+    .divider {
+      margin: 1.25rem 0 1.35rem;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(148,163,184,0.35), transparent);
+      opacity: 0.9;
+    }
+
+    /* micro polish */
+
+    .card {
+      transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, border-color 0.08s ease-out;
+    }
+
+    .card:hover {
+      transform: translateY(-1px);
+      border-color: rgba(148,163,184,0.38);
+      box-shadow:
+        0 28px 72px rgba(15,23,42,0.92),
+        0 0 0 1px rgba(15,23,42,0.7);
+    }
+
+    .tool {
+      transition: transform 0.08s ease-out, border-color 0.08s ease-out;
+    }
+
+    .tool:hover {
+      transform: translateY(-1px);
+      border-color: rgba(148,163,184,0.5);
+    }
+
+    .pill-dot {
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.25); opacity: 0.75; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .pill-dot { animation: none; }
+      .card, .tool, .btn, .tool-link { transition: none; }
+      .card:hover, .tool:hover, .btn:hover, .tool-link:hover { transform: none; }
     }
 
     main.layout {
@@ -278,9 +411,9 @@
   <div class="page">
     <header>
       <div>
-        <h1>Fabio Ricci IIT Neurotech</h1>
+        <h1>Fabio Ricci — IIT Neurotech</h1>
         <small>
-          Lab tools, development archive, work status indicator.
+          Simple entry point for lab tools and a ticketing portal to track technical work.
         </small>
       </div>
       <div class="pill">
@@ -288,6 +421,30 @@
         <span>GitHub Pages</span>
       </div>
     </header>
+
+    <section class="hero" aria-label="Landing overview">
+      <div>
+        <h2>One place for tickets, status, and ongoing builds</h2>
+        <p>
+          Submit a ticket for technical work and track updates in one place. The goal is simple: fewer ad‑hoc messages, more clarity on priorities and delivery dates.
+        </p>
+        <div class="cta-row">
+          <a class="btn primary" href="tickets.html">
+            <span class="icon">🎫</span>
+            <span>Open ticketing portal</span>
+          </a>
+          <a class="btn" href="work_status.html">
+            <span class="icon">●</span>
+            <span>Check my status</span>
+          </a>
+          <a class="btn" href="https://github.com/riccifab" target="_blank" rel="noreferrer">
+            <span class="icon">↗</span>
+            <span>GitHub profile</span>
+          </a>
+        </div>
+      </div>
+    </section>
+    <div class="divider" aria-hidden="true"></div>
 
     <main class="layout">
       <!-- LEFT: tools / modules -->
@@ -297,24 +454,22 @@
           <span class="label">modules</span>
         </h2>
         <p>
-          List of useful lab tools
+          Quick links to the tools on this site.
         </p>
 
         <div class="tools-list">
           <article class="tool">
             <div class="tool-header">
               <div class="tool-title">Work status indicator</div>
-              <div class="tool-tag">status · ESP8266</div>
+              <div class="tool-tag">availability · status</div>
             </div>
             <div class="tool-desc">
-              Web interface to control if I'm around (default / Lab / busy / free / away / other)
-              the same color is displayed on a physical LED indicator at my desk on the lab network.
-              The page always shows the current state to anyone visiting.
+              A small page that shows whether I’m currently available or busy. It’s mirrored on a physical LED indicator on my desk, so people in the lab can see my status at a glance.
             </div>
             <div class="tool-actions">
               <a class="tool-link" href="work_status.html">
                 <span class="icon">●</span>
-                <span>Open work_status</span>
+                <span>Open status page</span>
               </a>
             </div>
           </article>
@@ -322,17 +477,16 @@
           <!-- NEW: Ticketing -->
           <article class="tool">
             <div class="tool-header">
-              <div class="tool-title">PI ticketing</div>
-              <div class="tool-tag">tickets · Firebase</div>
+              <div class="tool-title">Ticketing portal</div>
+              <div class="tool-tag">requests · tracking</div>
             </div>
             <div class="tool-desc">
-              Ticket system for PIs: priority, expected delivery date, commercially available?,
-              deferrable to lab members (and why not). Includes comments and status tracking.
+              A simple ticketing form for technical work (hardware, software, setups). Each ticket has a priority and an expected delivery date, plus comments and email updates when something changes.
             </div>
             <div class="tool-actions">
               <a class="tool-link" href="tickets.html">
                 <span class="icon">🎫</span>
-                <span>Open ticketing</span>
+                <span>Open ticketing portal</span>
               </a>
             </div>
           </article>
@@ -343,8 +497,7 @@
               <div class="tool-tag">planned</div>
             </div>
             <div class="tool-desc">
-              Placeholder for a future assistant aware of setups, documentation and lab procedures.
-              It will run on a separate backend, with this site as the front-end entry point.
+              Planned: a helper that can answer questions about our setups, point to documentation, and suggest standard procedures. This will require a separate backend; the website will stay as the entry point.
             </div>
             <div class="tool-actions">
               <span class="tool-link secondary">
@@ -363,15 +516,14 @@
           <span class="label">projects</span>
         </h2>
         <p>
-          A selection of recent projects developed over the past months.
+          A few examples of recent work and ongoing builds.
         </p>
 
         <div class="dev-list">
           <article class="dev-item">
             <h3>Clock work status indicator</h3>
             <p>
-              Status indicator based on an ESP8266 and an LED ring, controlled via the
-              <code>work_status</code> web module and synchronized through Firebase Realtime Database.
+              A desk indicator that shows my current availability. It combines a small web page with a simple hardware device so the status is visible both online and in the office.
             </p>
             <div class="dev-meta">hardware · firmware · web UI</div>
             <a class="dev-link" href="https://github.com/riccifab/Shadow_clock" target="_blank" rel="noreferrer">
@@ -383,9 +535,7 @@
           <article class="dev-item">
             <h3>Wide-field MRI-compatible imaging (Test bench)</h3>
             <p>
-              4f optical system for mesoscale cortical imaging inside a high-field magnet,
-              with a remote camera and relay optics under strict MR-compatibility constraints.
-              The system is currently in bench testing and shows promising results.
+              Prototype optical system for wide-field cortical imaging in an MRI environment. The design keeps sensitive electronics far from the magnet and uses MR-compatible mechanics. Currently under bench validation.
             </p>
             <div class="dev-meta">optics · electronics · mechanics · system integration</div>
           </article>
@@ -393,33 +543,26 @@
           <article class="dev-item">
             <h3>VR fresnel rig mounting</h3>
             <p>
-              A three-screen mechanical mounting system forming a visual mosaic to create a virtual reality environment for mice, using Fresnel lenses to equalize light intensity.
+              Mechanical mounting system for a three-screen visual arena for mice. Uses Fresnel lenses to shape the optical path and help keep brightness more uniform across screens.
             </p>
             <div class="dev-meta">mechanics</div>
           </article>
 
           <article class="dev-item">
-            <h3>PI ticketing system</h3>
+            <h3>Ticketing portal</h3>
             <p>
-              Web-based ticketing platform for managing technical requests from PIs,
-              including priority level, expected delivery date, commercial availability,
-              task delegation to lab members, comments, and status tracking.
-              Built on Firebase with a dedicated web interface.
+              Web-based ticketing portal to manage technical requests. Each ticket tracks priority, expected delivery date, and comments, with email notifications when updates happen.
             </p>
-            <div class="dev-meta">web app · Firebase · workflow management</div>
+            <div class="dev-meta">web app · workflow visibility</div>
             <a class="dev-link" href="https://github.com/riccifab/riccifab.github.io" target="_blank" rel="noreferrer">
-              <span>Website repository</span>
+              <span>Repository</span>
               <span>↗</span>
             </a>
           </article>
           <article class="dev-item">
             <h3>Universal Headframe system</h3>
             <p>
-              Modular and open-source headframe platform for rodent experiments,
-              designed to standardize head-fixation geometry across setups and
-              facilitate reproducible alignment between behavioral, imaging and
-              electrophysiology rigs. Developed and maintained within the lab
-              as a shared hardware standard.
+              Open, modular headframe platform for rodent experiments. The goal is to standardize geometry across rigs so animals can be moved between behavior, imaging, and electrophysiology setups with repeatable alignment.
             </p>
             <div class="dev-meta">mechanical design · open hardware · lab standardization</div>
             <a class="dev-link" href="https://github.com/iurillilab/Universal_Headframe" target="_blank" rel="noreferrer">
@@ -432,7 +575,12 @@
     </main>
 
     <footer>
-      IIT Neurotech.
+      IIT Neurotech — internal lab utilities and request tracking. ·
+      <a class="dev-link" href="tickets.html">Ticketing portal</a>
+      <span style="opacity:0.55">·</span>
+      <a class="dev-link" href="work_status.html">Work status</a>
+      <span style="opacity:0.55">·</span>
+      <a class="dev-link" href="https://github.com/riccifab" target="_blank" rel="noreferrer">GitHub</a>
     </footer>
   </div>
 </body>
