@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Fabio Ricci — Ticketing portal & lab tools</title>
+	<meta content="summary_large_image" name="twitter:card" />
+	<meta content="website" property="og:type" />
+	<meta content="Ticketing portal and lab tools: submit technical requests, track delivery dates, and check work status." property="og:description" />
+	<meta content="https://riccifab.github.io/" property="og:url" />
+	<meta content="assets/hero-ticketing.png" property="og:image" />
+	<meta content="Fabio Ricci — Ticketing portal & lab tools" property="og:title" />
+	<meta content="Ticketing portal and lab tools: submit technical requests, track delivery dates, and check work status." name="description" />
+	<meta charset="utf-8" />
+	<meta content="width=device-width" name="viewport" />
+	<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;800;900" rel="stylesheet" type="text/css" />
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@200;300;400;500;700;900" rel="stylesheet" type="text/css" />
+	<style>
+		.bee-row,
+		.bee-row-content {
+			position: relative
+		}
+
+		.bee-button-content,
+		.bee-row-15 .bee-col-2 .bee-block-1,
+		.bee-row-15 .bee-col-2 .bee-block-1 .bee-button-container {
+			text-align: center
+		}
+
+		.bee-row-2,
+		.bee-row-3,
+		.bee-row-4,
+		.bee-row-5 {
+			background-color: #0e0e10
+		}
+
+		body {
+			background-color: #0e0e10;
+			color: #dddddf;
+			font-family: Source Sans Pro, Tahoma, Verdana, Segoe, sans-serif
+		}
+
+		a {
+			color: #dddddf
+		}
+
+		* {
+			box-sizing: border-box
+		}
+
+		body,
+		h1,
+		h2,
+		p {
+			margin: 0
+		}
+
+		.bee-menu .bee-hamburger-trigger {
+			display: none
+		}
+
+		.bee-row-content {
+			max-width: 1440px;
+			margin: 0 auto;
+			display: flex
+		}
+
+		.bee-row-content .bee-col-w3 {
+			flex-basis: 25%
+		}
+
+		.bee-row-content .bee-col-w4 {
+			flex-basis: 33.3333333333%
+		}
+
+		.bee-row-content .bee-col-w6 {
+			flex-basis: 50%
+		}
+
+		.bee-row-15 .bee-col-2 .bee-block-1 div.label:not(.inline),
+		.bee-row-15 .bee-col-2 .bee-block-1 label:not(.inline),
+		.bee-row-content .bee-col-w12 {
+			flex-basis: 100%
+		}
+
+		.bee-button a,
+		.bee-icon .bee-icon-label-right a,
+		.bee-menu ul li a {
+			text-decoration: none
+		}
+
+		.bee-divider,
+		.bee-image {
+			overflow: auto
+		}
+
+		.bee-divider .center,
+		.bee-image .bee-center {
+			margin: 0 auto
+		}
+
+		.bee-row-1 .bee-col-1 .bee-block-1,
+		.bee-row-12 .bee-col-1 .bee-block-1,
+		.bee-row-12 .bee-col-2 .bee-block-1,
+		.bee-row-12 .bee-col-3 .bee-block-1,
+		.bee-row-16 .bee-col-1 .bee-block-1,
+		.bee-row-17 .bee-col-1 .bee-block-1,
+		.bee-row-2 .bee-col-2 .bee-block-1,
+		.bee-row-3 .bee-col-1 .bee-block-1,
+		.bee-row-6 .bee-col-1 .bee-block-1,
+		.bee-row-6 .bee-col-2 .bee-block-1,
+		.bee-row-8 .bee-col-1 .bee-block-1,
+		.bee-row-8 .bee-col-1 .bee-block-4,
+		.bee-row-8 .bee-col-2 .bee-block-1,
+		.bee-row-9 .bee-col-1 .bee-block-1,
+		.bee-row-9 .bee-col-2 .bee-block-1,
+		.bee-row-9 .bee-col-2 .bee-block-4 {
+			width: 100%
+		}
+
+		.bee-icon {
+			display: inline-block;
+			vertical-align: middle
+		}
+
+		.bee-icon .bee-content {
+			display: flex;
+			align-items: center
+		}
+
+		.bee-image img {
+			display: block;
+			width: 100%
+		}
+
+		.bee-menu .bee-hamburger-controls {
+			cursor: pointer;
+			display: inline-block;
+			position: relative
+		}
+
+		.bee-menu .bee-hamburger-controls span {
+			display: block;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			background-size: 100%;
+			background-repeat: no-repeat;
+			transition: .12s ease-in-out
+		}
+
+		.bee-menu ul {
+			list-style-type: none;
+			margin: 0;
+			padding: 0
+		}
+
+		.bee-menu ul.bee-horizontal li {
+			display: inline-block
+		}
+
+		.bee-paragraph {
+			overflow-wrap: anywhere
+		}
+
+		.bee-row-1,
+		.bee-row-10,
+		.bee-row-11,
+		.bee-row-12,
+		.bee-row-13,
+		.bee-row-15,
+		.bee-row-16,
+		.bee-row-17,
+		.bee-row-6,
+		.bee-row-7,
+		.bee-row-8,
+		.bee-row-9 {
+			background-color: #0e0e10;
+			background-repeat: no-repeat
+		}
+
+		/* Header */
+		.bee-row-1 .bee-row-content {
+			padding: 10px 60px
+		}
+
+		.bee-row-1 .bee-col-1,
+		.bee-row-1 .bee-col-2,
+		.bee-row-1 .bee-col-3 {
+			padding-bottom: 5px;
+			padding-top: 5px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center
+		}
+
+		.bee-row-1 .bee-col-2 .bee-block-1 {
+			color: #dddddf;
+			font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;
+			font-size: 15px;
+			font-weight: 600;
+			letter-spacing: 2px;
+			padding: 10px;
+			text-align: center;
+			text-transform: uppercase
+		}
+
+		/* Header nav spacing */
+		.bee-row-1 .bee-col-2 .bee-block-1 .bee-menu ul.bee-horizontal {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 18px;
+			flex-wrap: wrap;
+		}
+
+		.bee-row-1 .bee-col-2 .bee-block-1 .bee-menu ul.bee-horizontal li {
+			display: block;
+			padding: 0;
+		}
+
+		.bee-row-1 .bee-col-2 .bee-block-1 .bee-menu ul.bee-horizontal li a {
+			display: inline-block;
+			padding: 8px 12px;
+			border-radius: 999px;
+			border: 1px solid rgba(221, 221, 223, 0.22);
+			line-height: 1;
+			letter-spacing: 1px;
+			text-transform: uppercase;
+			font-weight: 600;
+			font-size: 13px;
+			color: rgba(221, 221, 223, 0.92);
+			background: rgba(5, 7, 18, 0.25);
+		}
+
+		.bee-row-1 .bee-col-2 .bee-block-1 .bee-menu ul.bee-horizontal li a:hover {
+			border-color: rgba(221, 221, 223, 0.55);
+			background: rgba(221, 221, 223, 0.10);
+		}
+
+		.bee-row-1 .bee-col-3 .bee-block-1 {
+			padding: 10px;
+			text-align: right
+		}
+
+		/* Hero */
+		.bee-row-2 {
+			background-image:
+				radial-gradient(1100px 600px at 15% 0%, rgba(96, 165, 250, 0.22), transparent 60%),
+				radial-gradient(900px 540px at 82% 12%, rgba(74, 222, 128, 0.18), transparent 62%),
+				radial-gradient(700px 520px at 70% 92%, rgba(244, 63, 94, 0.14), transparent 60%),
+				linear-gradient(135deg, #050712, #0b1220);
+			background-repeat: no-repeat;
+			background-size: cover
+		}
+
+		.bee-row-2 .bee-row-content,
+		.bee-row-5 .bee-row-content {
+			background-repeat: no-repeat;
+			background-size: auto;
+			border-radius: 0;
+			color: #dddddf;
+			padding: 60px
+		}
+
+		.bee-row-2 .bee-col-1,
+		.bee-row-2 .bee-col-2,
+		.bee-row-7 .bee-col-1 {
+			padding-bottom: 60px;
+			padding-top: 60px
+		}
+
+		.bee-row-2 .bee-col-1 .bee-block-1 {
+			padding: 10px;
+			text-align: left;
+			width: 100%
+		}
+
+		.bee-row-2 .bee-col-1 .bee-block-2 {
+			padding: 10px 60px 10px 10px
+		}
+
+		.bee-row-2 .bee-col-1 .bee-block-3,
+		.bee-row-3 .bee-col-2 .bee-block-3 {
+			padding: 10px;
+			text-align: left
+		}
+
+		.bee-row-2 .bee-col-1 .bee-block-4 {
+			padding: 18px 10px 10px;
+			text-align: left
+		}
+
+		.bee-row-2 .bee-col-1 .bee-block-1 h1 {
+			color: #dddddf;
+			direction: ltr;
+			font-family: Roboto, Tahoma, Verdana, Segoe, sans-serif;
+			font-size: 64px;
+			font-weight: 400;
+			letter-spacing: 1px;
+			line-height: 110%;
+			text-align: left
+		}
+
+		.bee-row-2 .bee-col-1 .bee-block-3 {
+			color: rgba(221, 221, 223, 0.82);
+			direction: ltr;
+			font-size: 20px;
+			font-weight: 400;
+			letter-spacing: 0;
+			line-height: 140%;
+			text-align: left
+		}
+
+		/* Buttons */
+		.bee-row-1 .bee-col-3 .bee-block-1 a {
+			background-color: transparent;
+			border-bottom: 1px solid rgba(221, 221, 223, 0.9);
+			border-left: 1px solid rgba(221, 221, 223, 0.9);
+			border-radius: 25px;
+			border-right: 1px solid rgba(221, 221, 223, 0.9);
+			border-top: 1px solid rgba(221, 221, 223, 0.9);
+			color: #dddddf;
+			direction: ltr;
+			font-family: inherit;
+			font-size: 16px;
+			font-weight: 700;
+			letter-spacing: 0;
+			line-height: 200%;
+			padding: 6px 18px;
+			width: auto
+		}
+
+		.bee-row-1 .bee-col-3 .bee-block-1 a:hover {
+			background-color: #dddddf !important;
+			border-color: #dddddf !important;
+			color: #0e0e10 !important
+		}
+
+		.bee-row-2 .bee-col-1 .bee-block-4 a {
+			background-color: #dddddf;
+			border-radius: 25px;
+			color: #0e0e10;
+			direction: ltr;
+			font-family: "Source Sans Pro", Tahoma, Verdana, Segoe, sans-serif;
+			font-size: 18px;
+			font-weight: 700;
+			letter-spacing: 0;
+			line-height: 200%;
+			padding: 8px 26px;
+			width: auto
+		}
+
+		.bee-row-2 .bee-col-1 .bee-block-4 a:hover {
+			background-color: transparent !important;
+			border: 1px solid #dddddf !important;
+			color: #dddddf !important
+		}
+
+		/* Sections */
+		.bee-row-3 .bee-row-content,
+		.bee-row-7 .bee-row-content,
+		.bee-row-10 .bee-row-content,
+		.bee-row-11 .bee-row-content {
+			background-repeat: no-repeat;
+			border-radius: 0;
+			color: #dddddf
+		}
+
+		.bee-row-3 .bee-row-content {
+			padding: 40px 60px 10px
+		}
+
+		.bee-row-3 .bee-col-1 {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			border-radius: 0
+		}
+
+		.bee-row-3 .bee-col-2 {
+			padding-left: 35px;
+			padding-right: 60px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center
+		}
+
+		.bee-row-3 .bee-col-2 .bee-block-1 {
+			padding: 10px
+		}
+
+		.bee-row-3 .bee-col-2 .bee-block-2 {
+			padding: 15px 60px 15px 10px;
+			text-align: left;
+			width: 100%
+		}
+
+		.bee-row-3 .bee-col-2 .bee-block-4 {
+			padding: 18px 10px 10px;
+			text-align: left
+		}
+
+		.bee-row-3 .bee-col-2 .bee-block-1 p {
+			color: #7194ce;
+			font-size: 16px;
+			letter-spacing: 2px;
+			text-transform: uppercase
+		}
+
+		.bee-row-3 .bee-col-2 .bee-block-2 h2,
+		.bee-row-7 .bee-col-1 .bee-block-2 h2,
+		.bee-row-11 .bee-col-1 .bee-block-2 h2 {
+			color: #dddddf;
+			direction: ltr;
+			font-family: Source Sans Pro, Tahoma, Verdana, Segoe, sans-serif;
+			font-size: 52px;
+			font-weight: 400;
+			letter-spacing: 1px;
+			line-height: 120%;
+			text-align: left
+		}
+
+		.bee-row-3 .bee-col-2 .bee-block-3 {
+			color: rgba(221, 221, 223, 0.84);
+			font-size: 18px;
+			font-weight: 300;
+			line-height: 150%
+		}
+
+		/* Tools grid cards */
+		.bee-row-7 .bee-row-content {
+			padding: 60px 60px 20px
+		}
+
+		.bee-row-7 .bee-col-1 .bee-block-1 {
+			padding: 10px;
+			text-align: center;
+			color: #7194ce;
+			font-size: 16px;
+			letter-spacing: 2px;
+			text-transform: uppercase
+		}
+
+		.bee-row-7 .bee-col-1 .bee-block-2 {
+			padding: 10px 60px 15px;
+			text-align: center;
+			width: 100%
+		}
+
+		.bee-row-7 .bee-col-1 .bee-block-2 h2 {
+			text-align: center
+		}
+
+		.bee-row-8 .bee-row-content,
+		.bee-row-9 .bee-row-content {
+			padding-left: 60px;
+			padding-right: 60px
+		}
+
+		.bee-row-8 .bee-row-content {
+			padding-bottom: 10px
+		}
+
+		.bee-row-8 .bee-col-1,
+		.bee-row-8 .bee-col-2,
+		.bee-row-9 .bee-col-1,
+		.bee-row-9 .bee-col-2 {
+			border-radius: 28px;
+			border: 1px solid rgba(221, 221, 223, 0.22);
+			display: flex;
+			background: rgba(5, 7, 18, 0.55);
+			backdrop-filter: blur(14px)
+		}
+
+		.bee-row-8 .bee-col-1,
+		.bee-row-9 .bee-col-2 {
+			padding-left: 28px;
+			padding-top: 28px;
+			flex-direction: column;
+			justify-content: flex-end
+		}
+
+		.bee-row-8 .bee-col-2,
+		.bee-row-9 .bee-col-1 {
+			flex-direction: column;
+			justify-content: flex-end
+		}
+
+		.bee-row-8 .bee-col-2 .bee-block-2,
+		.bee-row-9 .bee-col-1 .bee-block-2 {
+			padding-left: 28px;
+			padding-right: 28px;
+			width: 100%
+		}
+
+		.bee-row-8 .bee-col-2 .bee-block-3,
+		.bee-row-9 .bee-col-1 .bee-block-3 {
+			padding: 10px 28px 5px
+		}
+
+		.bee-row-8 .bee-col-1 .bee-block-2,
+		.bee-row-9 .bee-col-2 .bee-block-2 {
+			padding: 10px 10px 5px
+		}
+
+		.bee-row-8 .bee-col-1 .bee-block-3,
+		.bee-row-9 .bee-col-2 .bee-block-3 {
+			padding: 5px 40px 22px 10px
+		}
+
+		.bee-row-8 .bee-col-2 .bee-block-4,
+		.bee-row-9 .bee-col-1 .bee-block-4 {
+			padding: 5px 40px 35px 28px
+		}
+
+		.bee-row-8 .bee-col-1 .bee-block-2 p,
+		.bee-row-9 .bee-col-2 .bee-block-2 p {
+			color: #7194ce;
+			font-size: 16px;
+			letter-spacing: 2px;
+			text-transform: uppercase
+		}
+
+		.bee-row-8 .bee-col-1 .bee-block-3 p,
+		.bee-row-8 .bee-col-2 .bee-block-3 p,
+		.bee-row-9 .bee-col-1 .bee-block-3 p,
+		.bee-row-9 .bee-col-2 .bee-block-3 p {
+			color: #dddddf;
+			font-size: 18px;
+			font-weight: 700;
+			letter-spacing: 0;
+			line-height: 130%
+		}
+
+		.bee-row-8 .bee-col-1 .bee-block-3 + .bee-block-4 p,
+		.bee-row-8 .bee-col-2 .bee-block-4 p,
+		.bee-row-9 .bee-col-1 .bee-block-4 p,
+		.bee-row-9 .bee-col-2 .bee-block-3 + .bee-block-4 p {
+			color: rgba(221, 221, 223, 0.82);
+			font-size: 16px;
+			font-weight: 300;
+			line-height: 150%
+		}
+
+		/* CTA row */
+		.bee-row-10 .bee-row-content {
+			padding: 30px 60px 60px
+		}
+
+		.bee-row-10 .bee-col-1 .bee-block-1 {
+			padding: 10px;
+			text-align: center
+		}
+
+		.bee-row-10 .bee-col-1 .bee-block-1 a {
+			background-color: #dddddf;
+			border-radius: 25px;
+			color: #0e0e10;
+			direction: ltr;
+			font-family: "Source Sans Pro", Tahoma, Verdana, Segoe, sans-serif;
+			font-size: 18px;
+			font-weight: 700;
+			letter-spacing: 0;
+			line-height: 200%;
+			padding: 10px 30px;
+			width: auto
+		}
+
+		.bee-row-10 .bee-col-1 .bee-block-1 a:hover {
+			background-color: transparent !important;
+			border: 1px solid #dddddf !important;
+			color: #dddddf !important
+		}
+
+		/* Recent development (3 cards) */
+		.bee-row-12 .bee-row-content {
+			padding: 20px 60px
+		}
+
+		.bee-row-12 .bee-col-1,
+		.bee-row-12 .bee-col-2,
+		.bee-row-12 .bee-col-3 {
+			background-color: rgba(5, 7, 18, 0.55);
+			border: 1px solid rgba(221, 221, 223, 0.22);
+			padding-bottom: 20px;
+			border-radius: 24px
+		}
+
+		.bee-row-12 .bee-col-1 .bee-block-2,
+		.bee-row-12 .bee-col-2 .bee-block-2,
+		.bee-row-12 .bee-col-3 .bee-block-2 {
+			padding: 26px 18px 8px 18px
+		}
+
+		.bee-row-12 .bee-col-1 .bee-block-3,
+		.bee-row-12 .bee-col-2 .bee-block-3,
+		.bee-row-12 .bee-col-3 .bee-block-3 {
+			padding: 14px 18px 18px 18px
+		}
+
+		.bee-row-12 .bee-col-1 .bee-block-2 p,
+		.bee-row-12 .bee-col-2 .bee-block-2 p,
+		.bee-row-12 .bee-col-3 .bee-block-2 p {
+			color: #7194ce;
+			font-size: 16px;
+			letter-spacing: 2px;
+			text-transform: uppercase
+		}
+
+		.bee-row-12 .bee-col-1 .bee-block-3 p,
+		.bee-row-12 .bee-col-2 .bee-block-3 p,
+		.bee-row-12 .bee-col-3 .bee-block-3 p {
+			color: rgba(221, 221, 223, 0.84);
+			font-size: 16px;
+			font-weight: 300;
+			line-height: 150%
+		}
+
+		/* Notes section */
+		.bee-row-11 .bee-row-content {
+			padding: 50px 60px 20px
+		}
+
+		.bee-row-11 .bee-col-1 .bee-block-1 {
+			padding: 10px;
+			text-align: center;
+			color: #7194ce;
+			letter-spacing: 2px;
+			text-transform: uppercase
+		}
+
+		.bee-row-11 .bee-col-1 .bee-block-2 {
+			padding: 10px;
+			text-align: center;
+			width: 100%
+		}
+
+		.bee-row-11 .bee-col-1 .bee-block-2 h2 {
+			text-align: center
+		}
+
+		.bee-row-11 .bee-col-1 .bee-block-3 {
+			padding: 15px 120px 5px;
+			text-align: center;
+			color: rgba(221, 221, 223, 0.84);
+			font-size: 18px;
+			font-weight: 300;
+			line-height: 150%
+		}
+
+		/* Footer */
+		.bee-row-17 .bee-row-content {
+			padding: 40px 60px 60px
+		}
+
+		.bee-row-17 .bee-col-1,
+		.bee-row-17 .bee-col-2,
+		.bee-row-17 .bee-col-3,
+		.bee-row-17 .bee-col-4 {
+			padding-bottom: 5px;
+			padding-top: 5px
+		}
+
+		.bee-row-17 .bee-col-2 .bee-block-1,
+		.bee-row-17 .bee-col-3 .bee-block-1,
+		.bee-row-17 .bee-col-4 .bee-block-1 {
+			color: #dddddf;
+			font-size: 16px;
+			font-weight: 700;
+			letter-spacing: 2px;
+			line-height: 120%;
+			text-align: left;
+			text-transform: uppercase
+		}
+
+		.bee-row-17 .bee-col-2 .bee-block-2,
+		.bee-row-17 .bee-col-2 .bee-block-3,
+		.bee-row-17 .bee-col-2 .bee-block-4,
+		.bee-row-17 .bee-col-3 .bee-block-2,
+		.bee-row-17 .bee-col-3 .bee-block-3,
+		.bee-row-17 .bee-col-4 .bee-block-2,
+		.bee-row-17 .bee-col-4 .bee-block-3,
+		.bee-row-17 .bee-col-4 .bee-block-4 {
+			color: rgba(221, 221, 223, 0.84);
+			font-size: 16px;
+			font-weight: 300;
+			letter-spacing: 0;
+			line-height: 160%;
+			text-align: left
+		}
+
+		/* Mobile */
+		@media (max-width:768px) {
+			.bee-menu ul.with-bee-hamburger {
+				display: none;
+				padding: 5px 0;
+				position: relative;
+				top: -4px
+			}
+
+			.bee-menu ul.with-bee-hamburger li {
+				display: block;
+				text-align: center
+			}
+
+			#bee-hamburger-menu-r0c1m0:checked~ul,
+			.bee-row-content:not(.no_stack) {
+				display: block
+			}
+
+			.bee-row-1 .bee-row-content {
+				padding: 10px 15px !important
+			}
+
+			.bee-row-2 .bee-row-content,
+			.bee-row-3 .bee-row-content,
+			.bee-row-7 .bee-row-content,
+			.bee-row-8 .bee-row-content,
+			.bee-row-9 .bee-row-content,
+			.bee-row-10 .bee-row-content,
+			.bee-row-11 .bee-row-content,
+			.bee-row-12 .bee-row-content,
+			.bee-row-17 .bee-row-content {
+				padding: 20px 15px !important
+			}
+
+			.bee-row-2 .bee-col-1 {
+				padding: 30px 0 30px !important
+			}
+
+			.bee-row-2 .bee-col-2 {
+				padding: 10px 0 30px !important
+			}
+
+			.bee-row-3 .bee-col-2 {
+				padding: 15px 0 !important
+			}
+
+			.bee-row-2 .bee-col-1 .bee-block-1 h1 {
+				font-size: 42px
+			}
+
+			.bee-row-3 .bee-col-2 .bee-block-2 h2,
+			.bee-row-7 .bee-col-1 .bee-block-2 h2,
+			.bee-row-11 .bee-col-1 .bee-block-2 h2 {
+				font-size: 34px
+			}
+
+			.bee-row-11 .bee-col-1 .bee-block-3 {
+				padding: 15px 10px 5px !important
+			}
+
+			.bee-row-8 .bee-col-1,
+			.bee-row-8 .bee-col-2,
+			.bee-row-9 .bee-col-1,
+			.bee-row-9 .bee-col-2 {
+				margin-bottom: 20px !important
+			}
+
+			.bee-row-1 .bee-col-2 .bee-block-1 .bee-hamburger-controls {
+				width: 36px;
+				height: 36px;
+				background-color: #dddddf;
+				border-radius: 0
+			}
+
+			.bee-row-1 .bee-col-2 .bee-block-1 .bee-hamburger-controls span {
+				width: 18px;
+				height: 18px
+			}
+
+			.bee-row-1 .bee-col-2 .bee-block-1 .bee-hamburger-controls span.bee-hamburger-open {
+				background-image: url("data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjY0IiB2aWV3Qm94PSIwIDAgNjQgNjQiIHdpZHRoPSI2NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSIjMGUwZTEwIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxyZWN0IGhlaWdodD0iMTIiIHJ4PSI2IiB3aWR0aD0iNjQiLz48cmVjdCBoZWlnaHQ9IjEyIiByeD0iNiIgd2lkdGg9IjY0IiB5PSI1MiIvPjxyZWN0IGhlaWdodD0iMTIiIHJ4PSI2IiB3aWR0aD0iNjQiIHk9IjI2Ii8+PC9nPjwvc3ZnPg==");
+				transform: translate(-50%, -50%) scaleY(1)
+			}
+
+			.bee-row-1 .bee-col-2 .bee-block-1 .bee-hamburger-controls span.bee-hamburger-close {
+				background-image: url("data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjY0IiB2aWV3Qm94PSIwIDAgNjQgNjQiIHdpZHRoPSI2NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSIjMGUwZTEwIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxyZWN0IGhlaWdodD0iMTIiIHJ4PSI2IiB0cmFuc2Zvcm09Im1hdHJpeCgtLjcwNzEwNjc4IC0uNzA3MTA2NzggLjcwNzEwNjc4IC0uNzA3MTA2NzggMzEuOTkxMzc4IDc3LjIzNDAxOSkiIHdpZHRoPSI4MiIgeD0iLTkuMDA4NjIyIiB5PSIyNS45OTEzNzgiLz48cmVjdCBoZWlnaHQ9IjEyIiByeD0iNiIgdHJhbnNmb3JtPSJtYXRyaXgoLS43MDcxMDY3OCAuNzA3MTA2NzggLS43MDcxMDY3OCAtLjcwNzEwNjc4IDc3LjgxOTgwNiAzMi4yMzQwMTkpIiB3aWR0aD0iODIiIHg9Ii04Ljc2NTk4MSIgeT0iMjYuMjM0MDE5Ii8+PC9nPjwvc3ZnPg==");
+				transform: translate(-50%, -50%) scaleY(0)
+			}
+
+			.bee-row-1 .bee-col-2 .bee-block-1 ul.with-bee-hamburger {
+				background-color: #dddddf
+			}
+
+			.bee-row-1 .bee-col-2 .bee-block-1 ul.with-bee-hamburger li,
+			.bee-row-1 .bee-col-2 .bee-block-1 ul.with-bee-hamburger li a {
+				color: #0e0e10
+			}
+
+			#bee-hamburger-menu-r0c1m0:checked~.bee-hamburger-controls .bee-hamburger-open {
+				transform: translate(-50%, -50%) scaleY(0)
+			}
+
+			#bee-hamburger-menu-r0c1m0:checked~.bee-hamburger-controls .bee-hamburger-close {
+				transform: translate(-50%, -50%) scaleY(1)
+			}
+
+			.bee-row-1 .bee-col-3 .bee-block-1,
+			.bee-row-1 .bee-col-3 .bee-block-1 .bee-button-content {
+				text-align: center !important
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div class="bee-page-container">
+
+		<!-- Header -->
+		<div class="bee-row bee-row-1">
+			<div class="bee-row-content">
+				<div class="bee-col bee-col-1 bee-col-w3">
+					<div class="bee-block bee-block-1 bee-image">
+						<img alt="Fabio Ricci" class="bee-autowidth" src="assets/logo.png" style="max-width:140px;" title="Fabio Ricci" />
+					</div>
+				</div>
+				<div class="bee-col bee-col-2 bee-col-w6">
+					<div class="bee-block bee-block-1 bee-menu">
+						<nav class="bee-menu">
+							<input class="bee-hamburger-trigger" id="bee-hamburger-menu-r0c1m0" type="checkbox" />
+							<label class="bee-hamburger-controls" for="bee-hamburger-menu-r0c1m0"><span class="bee-hamburger-open"></span><span class="bee-hamburger-close"></span></label>
+							<ul class="bee-horizontal with-bee-hamburger">
+								<li><a href="index.html" target="_self" title="Home">Home</a></li>
+								<li><a href="tickets.html" target="_self" title="Ticketing portal">Ticketing portal</a></li>
+								<li><a href="work_status.html" target="_self" title="Work status">Work status</a></li>
+								<li><a href="https://github.com/riccifab" target="_blank" rel="noreferrer" title="GitHub">GitHub</a></li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+				<div class="bee-col bee-col-3 bee-col-w3">
+					<div class="bee-block bee-block-1 bee-button">
+						<a class="bee-button-content" href="tickets.html" style="font-size: 16px; display: inline-block;" target="_self">
+							<span style="word-break: break-word; font-size: 16px; line-height: 200%; letter-spacing: normal;">Open portal</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Hero -->
+		<div class="bee-row bee-row-2">
+			<div class="bee-row-content" style="gap:20px;">
+				<div class="bee-col bee-col-1 bee-col-w6">
+					<div class="bee-block bee-block-1 bee-heading">
+						<h1>Ticketing portal &amp; lab tools</h1>
+					</div>
+					<div class="bee-block bee-block-2 bee-spacer">
+						<div class="spacer" style="height:24px;"></div>
+					</div>
+					<div class="bee-block bee-block-3 bee-paragraph">
+						<p>
+							Submit a ticket for technical work (hardware, software, experimental rigs) and track updates in one place.
+							The requester receives email notifications when something changes (e.g., delivery date or status).
+						</p>
+					</div>
+					<div class="bee-block bee-block-4 bee-button">
+						<a class="bee-button-content" href="tickets.html" style="font-size: 18px; display: inline-block;" target="_self">
+							<span style="word-break: break-word; font-size: 18px; line-height: 200%; letter-spacing: normal;">Open ticketing portal</span>
+						</a>
+					</div>
+					<div class="bee-block bee-block-4 bee-paragraph" style="padding-top:12px; color: rgba(221,221,223,0.75); font-size: 14px;">
+						<p>Tip: include expected delivery date and priority to avoid back-and-forth.</p>
+					</div>
+				</div>
+				<div class="bee-col bee-col-2 bee-col-w6">
+					<div class="bee-block bee-block-1 bee-image">
+						<img alt="Ticketing portal preview" class="bee-center bee-autowidth" src="assets/hero-ticketing.png" style="max-width:640px; border-radius:24px; border:1px solid rgba(221,221,223,0.20);" title="Ticketing portal preview" />
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Why tickets -->
+		<div class="bee-row bee-row-3">
+			<div class="bee-row-content" style="gap:20px;">
+				<div class="bee-col bee-col-1 bee-col-w6">
+					<div class="bee-block bee-block-1 bee-image">
+						<img alt="Workflow" class="bee-fixedwidth" src="assets/section-workflow.png" style="max-width:660px; border-radius:24px; border:1px solid rgba(221,221,223,0.20);" title="Workflow" />
+					</div>
+				</div>
+				<div class="bee-col bee-col-2 bee-col-w6">
+					<div class="bee-block bee-block-1 bee-paragraph">
+						<p>WHY THIS EXISTS</p>
+					</div>
+					<div class="bee-block bee-block-2 bee-heading">
+						<h2>No more trench warfare.</h2>
+					</div>
+					<div class="bee-block bee-block-3 bee-paragraph">
+						<p>
+							Until now, handling requests has often felt like a small war: scattered messages, missing information, shifting priorities, and constant interruptions.
+							The ticket is my way to stop fighting fires and move to a clear, defensible process.
+							It forces the essentials upfront (scope, priority, delivery date), keeps a single source of truth, and avoids endless back-and-forth.
+							Every update stays visible, and the requester gets a short email summary when something changes.
+						</p>
+					</div>
+					<div class="bee-block bee-block-4 bee-button">
+						<a class="bee-button-content" href="work_status.html" style="font-size: 18px; display: inline-block;" target="_self">
+							<span style="word-break: break-word; font-size: 18px; line-height: 200%; letter-spacing: normal;">Check work status</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Tools title -->
+		<div class="bee-row bee-row-7">
+			<div class="bee-row-content">
+				<div class="bee-col bee-col-1 bee-col-w12">
+					<div class="bee-block bee-block-1 bee-paragraph">
+						<p>TOOLS</p>
+					</div>
+					<div class="bee-block bee-block-2 bee-heading">
+						<h2>What you’ll find here</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Tools grid row 1 -->
+		<div class="bee-row bee-row-8">
+			<div class="bee-row-content" style="gap:20px;">
+				<div class="bee-col bee-col-1 bee-col-w6">
+					<div class="bee-block bee-block-1 bee-image">
+						<img alt="Ticket icon" class="bee-fixedwidth" src="assets/icon-ticket.png" style="max-width:56px;" title="Ticket" />
+					</div>
+					<div class="bee-block bee-block-2 bee-paragraph">
+						<p>TICKETING PORTAL</p>
+					</div>
+					<div class="bee-block bee-block-3 bee-paragraph">
+						<p>Submit and track technical requests</p>
+					</div>
+					<div class="bee-block bee-block-4 bee-paragraph">
+						<p>
+							Create a ticket with scope, priority, and delivery date. When anything is updated, the requester receives an email summary.
+						</p>
+						<p style="margin-top:12px;"><a href="tickets.html" target="_self" style="text-decoration: underline;">Open ticketing portal →</a></p>
+					</div>
+				</div>
+				<div class="bee-col bee-col-2 bee-col-w6" style="padding-top:28px;">
+					<div class="bee-block bee-block-1 bee-image">
+						<img alt="Status icon" class="bee-fixedwidth" src="assets/icon-status.png" style="max-width:56px;" title="Status" />
+					</div>
+					<div class="bee-block bee-block-2 bee-paragraph">
+						<p>WORK STATUS</p>
+					</div>
+					<div class="bee-block bee-block-3 bee-paragraph">
+						<p>Availability, online and in the office</p>
+					</div>
+					<div class="bee-block bee-block-4 bee-paragraph">
+						<p>
+							A simple status page mirrored on a physical desk indicator so lab members can quickly see whether I’m available.
+						</p>
+						<p style="margin-top:12px;"><a href="work_status.html" target="_self" style="text-decoration: underline;">Open status page →</a></p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Tools grid row 2 -->
+		<div class="bee-row bee-row-9">
+			<div class="bee-row-content" style="gap:20px; padding-top:10px;">
+				<div class="bee-col bee-col-1 bee-col-w6" style="padding-top:28px;">
+					<div class="bee-block bee-block-1 bee-image">
+						<img alt="RAG icon" class="bee-fixedwidth" src="assets/icon-rag.png" style="max-width:56px;" title="Assistant" />
+					</div>
+					<div class="bee-block bee-block-2 bee-paragraph">
+						<p>DIGITAL ASSISTANT</p>
+					</div>
+					<div class="bee-block bee-block-3 bee-paragraph">
+						<p>Planned: documentation-aware helper</p>
+					</div>
+					<div class="bee-block bee-block-4 bee-paragraph">
+						<p>
+							Planned: a helper that can answer questions about our setups and point to relevant documentation. This will require a separate backend.
+						</p>
+					</div>
+				</div>
+				<div class="bee-col bee-col-2 bee-col-w6">
+					<div class="bee-block bee-block-1 bee-image">
+						<img alt="Repo icon" class="bee-fixedwidth" src="assets/icon-github.png" style="max-width:56px;" title="GitHub" />
+					</div>
+					<div class="bee-block bee-block-2 bee-paragraph">
+						<p>REPOSITORIES</p>
+					</div>
+					<div class="bee-block bee-block-3 bee-paragraph">
+						<p>Code, hardware, and project notes</p>
+					</div>
+					<div class="bee-block bee-block-4 bee-paragraph">
+						<p>
+							Most projects are documented on GitHub. The landing page links to the relevant repositories.
+						</p>
+						<p style="margin-top:12px;"><a href="https://github.com/riccifab" target="_blank" rel="noreferrer" style="text-decoration: underline;">Open GitHub profile →</a></p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Main CTA -->
+		<div class="bee-row bee-row-10">
+			<div class="bee-row-content">
+				<div class="bee-col bee-col-1 bee-col-w12">
+					<div class="bee-block bee-block-1 bee-button">
+						<a class="bee-button-content" href="tickets.html" style="font-size: 18px; display: inline-block;" target="_self">
+							<span style="word-break: break-word; font-size: 18px; line-height: 200%; letter-spacing: normal;">Create a ticket</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Notes / Policy -->
+		<div class="bee-row bee-row-11">
+			<div class="bee-row-content">
+				<div class="bee-col bee-col-1 bee-col-w12">
+					<div class="bee-block bee-block-1 bee-paragraph">
+						<p>NOTIFICATIONS</p>
+					</div>
+					<div class="bee-block bee-block-2 bee-heading">
+						<h2>Email update policy</h2>
+					</div>
+					<div class="bee-block bee-block-3 bee-paragraph">
+						<p>
+							When a ticket is updated, the email goes to the person who created the ticket (not to the PI).
+							Fabio is kept in CC for traceability.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Recent development -->
+		<div class="bee-row bee-row-12">
+			<div class="bee-row-content" style="gap:20px;">
+				<div class="bee-col bee-col-1 bee-col-w4">
+					<div class="bee-block bee-block-1 bee-image">
+						<img alt="Shadow Clock" class="bee-center bee-fixedwidth" src="assets/dev-shadowclock.png" style="max-width:424px;border-radius:24px 24px 0px 0px;" title="Shadow Clock" />
+					</div>
+					<div class="bee-block bee-block-2 bee-paragraph">
+						<p>WORK STATUS INDICATOR</p>
+					</div>
+					<div class="bee-block bee-block-3 bee-paragraph">
+						<p>
+							A desk device + web page showing availability. Useful for reducing interruptions.
+							<a href="https://github.com/riccifab/Shadow_clock" target="_blank" rel="noreferrer" style="text-decoration: underline;">Repository</a>
+						</p>
+					</div>
+				</div>
+				<div class="bee-col bee-col-2 bee-col-w4">
+					<div class="bee-block bee-block-1 bee-image">
+						<img alt="Ticketing portal" class="bee-center bee-fixedwidth" src="assets/dev-ticketing.png" style="max-width:424px;border-radius:24px 24px 0px 0px;" title="Ticketing portal" />
+					</div>
+					<div class="bee-block bee-block-2 bee-paragraph">
+						<p>TICKETING PORTAL</p>
+					</div>
+					<div class="bee-block bee-block-3 bee-paragraph">
+						<p>
+							A lightweight portal for requests, delivery dates, and update emails.
+							<a href="https://github.com/riccifab/riccifab.github.io" target="_blank" rel="noreferrer" style="text-decoration: underline;">Repository</a>
+						</p>
+					</div>
+				</div>
+				<div class="bee-col bee-col-3 bee-col-w4">
+					<div class="bee-block bee-block-1 bee-image">
+						<img alt="Universal Headframe" class="bee-center bee-fixedwidth" src="assets/dev-headframe.png" style="max-width:424px;border-radius:24px 24px 0px 0px;" title="Universal Headframe" />
+					</div>
+					<div class="bee-block bee-block-2 bee-paragraph">
+						<p>UNIVERSAL HEADFRAME</p>
+					</div>
+					<div class="bee-block bee-block-3 bee-paragraph">
+						<p>
+							Modular headframe platform for rodent experiments.
+							<a href="https://github.com/iurillilab/Universal_Headframe" target="_blank" rel="noreferrer" style="text-decoration: underline;">Repository</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Footer -->
+		<div class="bee-row bee-row-17">
+			<div class="bee-row-content" style="gap:20px;">
+				<div class="bee-col bee-col-1 bee-col-w3">
+					<div class="bee-block bee-block-1 bee-image">
+						<img alt="Fabio Ricci" class="bee-center bee-autowidth" src="assets/logo-mark.png" style="max-width:200px;" title="Fabio Ricci" />
+					</div>
+				</div>
+				<div class="bee-col bee-col-2 bee-col-w3">
+					<div class="bee-block bee-block-1 bee-paragraph"><p>Navigation</p></div>
+					<div class="bee-block bee-block-2 bee-paragraph"><p><a href="index.html" target="_self">Home</a></p></div>
+					<div class="bee-block bee-block-3 bee-paragraph"><p><a href="tickets.html" target="_self">Ticketing portal</a></p></div>
+					<div class="bee-block bee-block-4 bee-paragraph"><p><a href="work_status.html" target="_self">Work status</a></p></div>
+				</div>
+				<div class="bee-col bee-col-3 bee-col-w3">
+					<div class="bee-block bee-block-1 bee-paragraph"><p>Repositories</p></div>
+					<div class="bee-block bee-block-2 bee-paragraph"><p><a href="https://github.com/riccifab" target="_blank" rel="noreferrer">GitHub profile</a></p></div>
+					<div class="bee-block bee-block-3 bee-paragraph"><p><a href="https://github.com/riccifab/riccifab.github.io" target="_blank" rel="noreferrer">Ticketing portal repo</a></p></div>
+				</div>
+				<div class="bee-col bee-col-4 bee-col-w3">
+					<div class="bee-block bee-block-1 bee-paragraph"><p>Contact</p></div>
+					<div class="bee-block bee-block-2 bee-paragraph"><p><a href="mailto:fabio.ricci@iit.it">fabio.ricci@iit.it</a></p></div>
+					<div class="bee-block bee-block-3 bee-paragraph"><p>IIT — CNCS Rovereto</p></div>
+					<div class="bee-block bee-block-4 bee-paragraph"><p style="opacity:0.75;">Last update: <span id="lastUpdate">—</span></p></div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script>
+		// lightweight “last updated” indicator (client-side)
+		document.getElementById('lastUpdate').textContent = new Date().toISOString().slice(0, 10);
+	</script>
+</body>
+
+</html>
