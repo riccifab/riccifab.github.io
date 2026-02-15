@@ -32,7 +32,7 @@
   },
   "EBSqrt5MvANKwj88pK53": {
     "adminEtaDate": "",
-    "adminNotes": "",
+    "adminNotes": "test mail",
     "assigneeEmail": "luca.ferrando@iit.it",
     "canBeDeferred": "yes",
     "category": "other",
@@ -60,7 +60,7 @@
       "JC"
     ],
     "title": "Coffee",
-    "updatedAt": "2026-02-13T21:08:21.412000+00:00",
+    "updatedAt": "2026-02-15T15:42:29.158000+00:00",
     "whyNotDeferredCode": "",
     "whyNotDeferredText": ""
   },
