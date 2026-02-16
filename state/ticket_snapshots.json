@@ -65,6 +65,8 @@
     "whyNotDeferredText": ""
   },
   "Uunw9ABLuTSCWgv16sm3": {
+    "adminEtaDate": "",
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "electronics",
@@ -76,22 +78,23 @@
     "deferTo": "",
     "definitionOfDone": "- So effettivamente saldare senza fare danni a me o alle cose attorno",
     "description": "Per poter saldare i coils per il setup WFI+fMRI",
+    "effortAdmin": "S",
     "effortGuess": "S",
     "estimatedCostEUR": null,
-    "expectedDeliveryDate": "2026-02-26",
+    "expectedDeliveryDate": "2026-02-17",
     "hardDeadline": false,
     "hardDeadlineDate": "",
     "impact": "not_blocking",
     "lab": "Gozzi",
     "priority": "P3",
     "procurementNeeded": "unknown",
-    "status": "NEW",
+    "status": "APPROVED",
     "tags": [
       "coils",
       "welding"
     ],
     "title": "Imparare a saldare",
-    "updatedAt": "2026-02-16T08:48:11.512000+00:00",
+    "updatedAt": "2026-02-16T09:41:30.909000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "skills only Fabio has"
   },
@@ -150,13 +153,13 @@
     "lab": "Rossi",
     "priority": "P2",
     "procurementNeeded": "unknown",
-    "status": "TRIAGE",
+    "status": "APPROVED",
     "tags": [
       "Screens",
       "teensy"
     ],
     "title": "New screen VR with reward and lickometer",
-    "updatedAt": "2026-02-13T17:53:57.850000+00:00",
+    "updatedAt": "2026-02-16T09:50:14.667000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "Requires knowledge of electronics, and implementation of designs already done by Fabio already"
   },
