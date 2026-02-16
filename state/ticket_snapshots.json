@@ -98,6 +98,36 @@
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "skills only Fabio has"
   },
+  "fwWjFLBzZ3FZrOkCV7lw": {
+    "assigneeEmail": "",
+    "canBeDeferred": "no",
+    "category": "mechanics",
+    "commercialLink": "",
+    "commerciallyAvailable": "no",
+    "createdAt": "2026-02-16T16:20:21.520000+00:00",
+    "createdByEmail": "david.sastre@iit.it",
+    "createdByUid": "ML3qA8nFqvXk6NM9dWLMkn5COcn1",
+    "deferTo": "",
+    "definitionOfDone": "Having the replicas",
+    "description": "I need two 3d mock versions of the chronic electrodes we will purchase (I sent a picture with dimension on teams) to test implementation with the 3D channel coil of the fMRI",
+    "effortGuess": "S",
+    "estimatedCostEUR": null,
+    "expectedDeliveryDate": "2026-01-24",
+    "hardDeadline": false,
+    "hardDeadlineDate": "",
+    "impact": "not_blocking",
+    "lab": "Gozzi",
+    "priority": "P2",
+    "procurementNeeded": "no",
+    "status": "NEW",
+    "tags": [
+      "electrode"
+    ],
+    "title": "3d printed replicas of chronic electrode implants",
+    "updatedAt": "2026-02-16T16:20:21.520000+00:00",
+    "whyNotDeferredCode": "skills",
+    "whyNotDeferredText": "Requires 3d printing skills"
+  },
   "janxP8gW0Sk83a3qlrK1": {
     "adminEtaDate": "2026-03-09",
     "adminNotes": "",
