@@ -94,11 +94,13 @@
       "welding"
     ],
     "title": "Imparare a saldare",
-    "updatedAt": "2026-02-16T09:41:30.909000+00:00",
+    "updatedAt": "2026-02-16T17:20:55.940000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "skills only Fabio has"
   },
   "fwWjFLBzZ3FZrOkCV7lw": {
+    "adminEtaDate": "",
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "mechanics",
@@ -110,21 +112,22 @@
     "deferTo": "",
     "definitionOfDone": "Having the replicas",
     "description": "I need two 3d mock versions of the chronic electrodes we will purchase (I sent a picture with dimension on teams) to test implementation with the 3D channel coil of the fMRI",
+    "effortAdmin": "S",
     "effortGuess": "S",
     "estimatedCostEUR": null,
-    "expectedDeliveryDate": "2026-01-24",
+    "expectedDeliveryDate": "2026-02-20",
     "hardDeadline": false,
     "hardDeadlineDate": "",
     "impact": "not_blocking",
     "lab": "Gozzi",
     "priority": "P2",
     "procurementNeeded": "no",
-    "status": "NEW",
+    "status": "APPROVED",
     "tags": [
       "electrode"
     ],
     "title": "3d printed replicas of chronic electrode implants",
-    "updatedAt": "2026-02-16T16:20:21.520000+00:00",
+    "updatedAt": "2026-02-16T17:00:36.181000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "Requires 3d printing skills"
   },
