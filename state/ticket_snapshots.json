@@ -196,6 +196,8 @@
     "whyNotDeferredText": "boh"
   },
   "wlc70YQ6BlUtAwqxo0DL": {
+    "adminEtaDate": "",
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "mechanics",
@@ -207,6 +209,7 @@
     "deferTo": "",
     "definitionOfDone": "- sostituire gli elettrodi che non funzionano nelle cuffie",
     "description": "Ciao Fabio,\nabbiamo di nuovo delle cuffie eeg da sistemare, come la scorsa volta ci potrebbero essere elettrodi da sostituire e magari la retina da rivedere.\ndovremmo avere già il materiale per rimpiazzare le cose dalla scorsa volta",
+    "effortAdmin": "",
     "effortGuess": "S",
     "estimatedCostEUR": 0,
     "expectedDeliveryDate": "2026-03-18",
@@ -219,7 +222,7 @@
     "status": "NEW",
     "tags": [],
     "title": "Cuffie eeg",
-    "updatedAt": "2026-02-16T10:26:54.936000+00:00",
+    "updatedAt": "2026-02-16T11:51:45.891000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "servono specifici strumenti e qualcuno che sappia cosa fare"
   }
