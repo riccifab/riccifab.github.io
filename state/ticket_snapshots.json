@@ -64,6 +64,37 @@
     "whyNotDeferredCode": "",
     "whyNotDeferredText": ""
   },
+  "Uunw9ABLuTSCWgv16sm3": {
+    "assigneeEmail": "",
+    "canBeDeferred": "no",
+    "category": "electronics",
+    "commercialLink": "",
+    "commerciallyAvailable": "unknown",
+    "createdAt": "2026-02-16T08:48:11.512000+00:00",
+    "createdByEmail": "martina.grandi@iit.it",
+    "createdByUid": "s8sWw9Px2wZNJbMkfmTljWZBady1",
+    "deferTo": "",
+    "definitionOfDone": "- So effettivamente saldare senza fare danni a me o alle cose attorno",
+    "description": "Per poter saldare i coils per il setup WFI+fMRI",
+    "effortGuess": "S",
+    "estimatedCostEUR": null,
+    "expectedDeliveryDate": "2026-02-26",
+    "hardDeadline": false,
+    "hardDeadlineDate": "",
+    "impact": "not_blocking",
+    "lab": "Gozzi",
+    "priority": "P3",
+    "procurementNeeded": "unknown",
+    "status": "NEW",
+    "tags": [
+      "coils",
+      "welding"
+    ],
+    "title": "Imparare a saldare",
+    "updatedAt": "2026-02-16T08:48:11.512000+00:00",
+    "whyNotDeferredCode": "skills",
+    "whyNotDeferredText": "skills only Fabio has"
+  },
   "janxP8gW0Sk83a3qlrK1": {
     "adminEtaDate": "2026-03-09",
     "adminNotes": "",
