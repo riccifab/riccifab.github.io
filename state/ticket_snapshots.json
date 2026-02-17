@@ -88,13 +88,13 @@
     "lab": "Gozzi",
     "priority": "P3",
     "procurementNeeded": "unknown",
-    "status": "APPROVED",
+    "status": "CLOSED",
     "tags": [
       "coils",
       "welding"
     ],
     "title": "Imparare a saldare",
-    "updatedAt": "2026-02-16T17:20:55.940000+00:00",
+    "updatedAt": "2026-02-17T12:01:35.569000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "skills only Fabio has"
   },
