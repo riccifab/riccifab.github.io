@@ -186,13 +186,13 @@
     "lab": "Rossi",
     "priority": "P2",
     "procurementNeeded": "unknown",
-    "status": "APPROVED",
+    "status": "IN_PROGRESS",
     "tags": [
       "Screens",
       "teensy"
     ],
     "title": "New screen VR with reward and lickometer",
-    "updatedAt": "2026-02-16T09:50:14.667000+00:00",
+    "updatedAt": "2026-02-17T15:04:02.175000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "Requires knowledge of electronics, and implementation of designs already done by Fabio already"
   },
