@@ -258,5 +258,35 @@
     "updatedAt": "2026-02-16T11:51:45.891000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "servono specifici strumenti e qualcuno che sappia cosa fare"
+  },
+  "x2WwKfh8Jf0p0yNNRCD4": {
+    "assigneeEmail": "",
+    "canBeDeferred": "no",
+    "category": "software",
+    "commercialLink": "",
+    "commerciallyAvailable": "no",
+    "createdAt": "2026-02-17T17:28:20.094000+00:00",
+    "createdByEmail": "annika.michalek@iit.it",
+    "createdByUid": "YAr96nF7a0cpu0KPZZs5umz6bLq2",
+    "deferTo": "",
+    "definitionOfDone": "-there are no artefacts (cut-off images, ghost of previous image in the next channel) when EXP time is shorter than 12 ms \n-there is a setable \"break time\" after each LED's exposure",
+    "description": "We need to understand when/which signal the camera is truly giving as trigger and adjust the script. Additionally we need to add an \"after EXP break\" array to allow the adjustment of the imaging frequency (not default of camera recovery time)",
+    "effortGuess": "M",
+    "estimatedCostEUR": 0,
+    "expectedDeliveryDate": "2026-03-03",
+    "hardDeadline": false,
+    "hardDeadlineDate": "",
+    "impact": "not_blocking",
+    "lab": "Gozzi",
+    "priority": "P2",
+    "procurementNeeded": "no",
+    "status": "NEW",
+    "tags": [
+      "WFI software"
+    ],
+    "title": "Work on acquisition software",
+    "updatedAt": "2026-02-17T17:28:20.094000+00:00",
+    "whyNotDeferredCode": "integration",
+    "whyNotDeferredText": "Camera output seems to be more complex than previously thought; Fabio is the master of his code."
   }
 }
