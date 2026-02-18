@@ -228,6 +228,36 @@
     "whyNotDeferredCode": "tools",
     "whyNotDeferredText": "boh"
   },
+  "u9dlqr6gjAo69BRG8Q65": {
+    "assigneeEmail": "",
+    "canBeDeferred": "no",
+    "category": "mechanics",
+    "commercialLink": "",
+    "commerciallyAvailable": "no",
+    "createdAt": "2026-02-18T20:19:42.244000+00:00",
+    "createdByEmail": "eric.press@iit.it",
+    "createdByUid": "58CKNxTHNHRz9LzrcPHQpsh8E442",
+    "deferTo": "",
+    "definitionOfDone": "Works when securely holds 2 headstage + CamNT probes and attaches to the MPM rig.",
+    "description": "I'd like to test out the dual-probe holder you designed for a previous study. Despite needing ~3mm inter-probe distance for future experiments with Neuropixels, I would like to test the current design with the probes we have in the lab for which I should only need ~7.5mm of separation to reach my targets.\nThe mounting post that connects to the MPM manipulator should be 2mm in diameter OR contain a 2mm bore hole with a set screw for attachment to a 2mm diameter calibration rod - perhaps the second option is better. 3D printed with rigid plastic is sufficient for now.",
+    "effortGuess": "M",
+    "estimatedCostEUR": 500,
+    "expectedDeliveryDate": "2026-02-25",
+    "hardDeadline": false,
+    "hardDeadlineDate": "",
+    "impact": "not_blocking",
+    "lab": "Gozzi",
+    "priority": "P2",
+    "procurementNeeded": "unknown",
+    "status": "NEW",
+    "tags": [
+      "3d printer"
+    ],
+    "title": "Dual-probe holder for electrophysiology",
+    "updatedAt": "2026-02-18T20:19:42.244000+00:00",
+    "whyNotDeferredCode": "skills",
+    "whyNotDeferredText": "It's Fabio's design, he knows how to modify and print it for best precision"
+  },
   "wlc70YQ6BlUtAwqxo0DL": {
     "adminEtaDate": "",
     "adminNotes": "",
