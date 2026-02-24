@@ -136,7 +136,7 @@
   },
   "fwWjFLBzZ3FZrOkCV7lw": {
     "adminEtaDate": "",
-    "adminNotes": "If you can come 19 Feb 2026 to discuss designs better",
+    "adminNotes": "Just need some super attack to glue",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "mechanics",
@@ -151,19 +151,19 @@
     "effortAdmin": "S",
     "effortGuess": "S",
     "estimatedCostEUR": null,
-    "expectedDeliveryDate": "2026-02-20",
+    "expectedDeliveryDate": "2026-02-24",
     "hardDeadline": false,
     "hardDeadlineDate": "",
     "impact": "not_blocking",
     "lab": "Gozzi",
     "priority": "P2",
     "procurementNeeded": "no",
-    "status": "IN_PROGRESS",
+    "status": "DONE",
     "tags": [
       "electrode"
     ],
     "title": "3d printed replicas of chronic electrode implants",
-    "updatedAt": "2026-02-17T16:46:10.722000+00:00",
+    "updatedAt": "2026-02-24T14:14:23.374000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "Requires 3d printing skills"
   },
