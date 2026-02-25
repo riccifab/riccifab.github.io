@@ -136,7 +136,7 @@
   },
   "fwWjFLBzZ3FZrOkCV7lw": {
     "adminEtaDate": "",
-    "adminNotes": "Just need some super attack to glue",
+    "adminNotes": "Left at your desk",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "mechanics",
@@ -158,12 +158,12 @@
     "lab": "Gozzi",
     "priority": "P2",
     "procurementNeeded": "no",
-    "status": "DONE",
+    "status": "CLOSED",
     "tags": [
       "electrode"
     ],
     "title": "3d printed replicas of chronic electrode implants",
-    "updatedAt": "2026-02-24T14:14:23.374000+00:00",
+    "updatedAt": "2026-02-25T10:39:27.851000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "Requires 3d printing skills"
   },
