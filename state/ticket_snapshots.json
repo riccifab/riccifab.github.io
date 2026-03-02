@@ -32,7 +32,7 @@
   },
   "90ATtOV4zQpED5FNPiOR": {
     "adminEtaDate": "",
-    "adminNotes": "Needs to be better discussed",
+    "adminNotes": "Taking half a week of vacation, delayed",
     "assigneeEmail": "",
     "canBeDeferred": "yes",
     "category": "other",
@@ -47,7 +47,7 @@
     "effortAdmin": "M",
     "effortGuess": "S",
     "estimatedCostEUR": null,
-    "expectedDeliveryDate": "2026-03-06",
+    "expectedDeliveryDate": "2026-03-12",
     "hardDeadline": false,
     "hardDeadlineDate": "",
     "impact": "not_blocking",
@@ -62,7 +62,7 @@
       "mouse holder"
     ],
     "title": "3D modeling: modify mouse holder in fusion",
-    "updatedAt": "2026-02-20T15:23:56.341000+00:00",
+    "updatedAt": "2026-03-02T07:50:20.124000+00:00",
     "whyNotDeferredCode": "",
     "whyNotDeferredText": ""
   },
@@ -296,6 +296,8 @@
     "whyNotDeferredText": "boh"
   },
   "u9dlqr6gjAo69BRG8Q65": {
+    "adminEtaDate": "",
+    "adminNotes": "adjusting the delay, taking half a week of vacation, should be deliveredend of  this week",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "mechanics",
@@ -307,21 +309,22 @@
     "deferTo": "",
     "definitionOfDone": "Works when securely holds 2 headstage + CamNT probes and attaches to the MPM rig.",
     "description": "I'd like to test out the dual-probe holder you designed for a previous study. Despite needing ~3mm inter-probe distance for future experiments with Neuropixels, I would like to test the current design with the probes we have in the lab for which I should only need ~7.5mm of separation to reach my targets.\nThe mounting post that connects to the MPM manipulator should be 2mm in diameter OR contain a 2mm bore hole with a set screw for attachment to a 2mm diameter calibration rod - perhaps the second option is better. 3D printed with rigid plastic is sufficient for now.",
+    "effortAdmin": "",
     "effortGuess": "M",
     "estimatedCostEUR": 500,
-    "expectedDeliveryDate": "2026-02-25",
+    "expectedDeliveryDate": "2026-03-09",
     "hardDeadline": false,
     "hardDeadlineDate": "",
     "impact": "not_blocking",
     "lab": "Gozzi",
     "priority": "P2",
     "procurementNeeded": "unknown",
-    "status": "NEW",
+    "status": "TRIAGE",
     "tags": [
       "3d printer"
     ],
     "title": "Dual-probe holder for electrophysiology",
-    "updatedAt": "2026-02-18T20:19:42.244000+00:00",
+    "updatedAt": "2026-03-02T07:48:07.087000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "It's Fabio's design, he knows how to modify and print it for best precision"
   },
@@ -357,8 +360,8 @@
     "whyNotDeferredText": "servono specifici strumenti e qualcuno che sappia cosa fare"
   },
   "x2WwKfh8Jf0p0yNNRCD4": {
-    "adminEtaDate": "2026-02-28",
-    "adminNotes": "",
+    "adminEtaDate": "2026-03-09",
+    "adminNotes": "Im gonna be in rome for half of this week",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "software",
@@ -373,7 +376,7 @@
     "effortAdmin": "M",
     "effortGuess": "M",
     "estimatedCostEUR": 0,
-    "expectedDeliveryDate": "2026-02-27",
+    "expectedDeliveryDate": "2026-03-09",
     "hardDeadline": false,
     "hardDeadlineDate": "",
     "impact": "not_blocking",
@@ -385,7 +388,7 @@
       "WFI software"
     ],
     "title": "Work on acquisition software",
-    "updatedAt": "2026-02-20T09:53:46.110000+00:00",
+    "updatedAt": "2026-03-02T07:45:17.807000+00:00",
     "whyNotDeferredCode": "integration",
     "whyNotDeferredText": "Camera output seems to be more complex than previously thought; Fabio is the master of his code."
   }
