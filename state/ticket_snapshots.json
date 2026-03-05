@@ -62,7 +62,7 @@
   },
   "90ATtOV4zQpED5FNPiOR": {
     "adminEtaDate": "",
-    "adminNotes": "Taking half a week of vacation, delayed",
+    "adminNotes": "Ready to discuss this",
     "assigneeEmail": "",
     "canBeDeferred": "yes",
     "category": "other",
@@ -92,7 +92,7 @@
       "mouse holder"
     ],
     "title": "3D modeling: modify mouse holder in fusion",
-    "updatedAt": "2026-03-02T07:50:20.124000+00:00",
+    "updatedAt": "2026-03-05T13:46:16.970000+00:00",
     "whyNotDeferredCode": "",
     "whyNotDeferredText": ""
   },
@@ -349,12 +349,12 @@
     "lab": "Gozzi",
     "priority": "P2",
     "procurementNeeded": "unknown",
-    "status": "TRIAGE",
+    "status": "IN_PROGRESS",
     "tags": [
       "3d printer"
     ],
     "title": "Dual-probe holder for electrophysiology",
-    "updatedAt": "2026-03-02T07:48:07.087000+00:00",
+    "updatedAt": "2026-03-05T13:46:33.306000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "It's Fabio's design, he knows how to modify and print it for best precision"
   },
