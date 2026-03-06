@@ -413,12 +413,12 @@
     "lab": "Gozzi",
     "priority": "P2",
     "procurementNeeded": "no",
-    "status": "IN_PROGRESS",
+    "status": "CLOSED",
     "tags": [
       "WFI software"
     ],
     "title": "Work on acquisition software",
-    "updatedAt": "2026-03-02T07:45:17.807000+00:00",
+    "updatedAt": "2026-03-06T16:56:18.493000+00:00",
     "whyNotDeferredCode": "integration",
     "whyNotDeferredText": "Camera output seems to be more complex than previously thought; Fabio is the master of his code."
   }
