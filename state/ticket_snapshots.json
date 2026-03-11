@@ -130,6 +130,36 @@
     "whyNotDeferredCode": "",
     "whyNotDeferredText": ""
   },
+  "NyGcOp3egpMIixDY1DR6": {
+    "assigneeEmail": "",
+    "canBeDeferred": "no",
+    "category": "procurement",
+    "commercialLink": "",
+    "commerciallyAvailable": "no",
+    "createdAt": "2026-03-11T11:36:34.099000+00:00",
+    "createdByEmail": "eric.press@iit.it",
+    "createdByUid": "58CKNxTHNHRz9LzrcPHQpsh8E442",
+    "deferTo": "",
+    "definitionOfDone": "Done when delivered to lab.",
+    "description": "Please modify the \"USS Enterprise\" version of the Allen headframe to thin the walls to 1mm (from 2mm). Please print 20x in titanium from the Chinese supplier.",
+    "effortGuess": "S",
+    "estimatedCostEUR": 250,
+    "expectedDeliveryDate": "2026-04-06",
+    "hardDeadline": false,
+    "hardDeadlineDate": "",
+    "impact": "not_blocking",
+    "lab": "Gozzi",
+    "priority": "P2",
+    "procurementNeeded": "yes",
+    "status": "NEW",
+    "tags": [
+      "headframe"
+    ],
+    "title": "Thin-wall Allen headframe variant",
+    "updatedAt": "2026-03-11T11:36:34.099000+00:00",
+    "whyNotDeferredCode": "tools",
+    "whyNotDeferredText": "Fabio's design and contacts for titanium printing"
+  },
   "Uunw9ABLuTSCWgv16sm3": {
     "adminEtaDate": "",
     "adminNotes": "",
