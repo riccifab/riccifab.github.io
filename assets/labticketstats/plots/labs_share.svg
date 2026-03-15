@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520" role="img">
+<rect width="100%" height="100%" rx="28" fill="#f8fafc" />
+<text x="28" y="38" fill="#0f172a" font-size="24" font-family="Arial, sans-serif" font-weight="700">Labs share</text>
+<text x="28" y="62" fill="#475569" font-size="13" font-family="Arial, sans-serif">Current snapshot across all tickets.</text>
+<path d="M 220.000 136.000 A 144 144 0 1 1 77.466 300.493 L 140.814 291.385 A 80 80 0 1 0 220.000 200.000 Z" fill="#2563eb" />
+<path d="M 77.466 300.493 A 144 144 0 0 1 142.148 158.859 L 176.749 212.700 A 80 80 0 0 0 140.814 291.385 Z" fill="#0f766e" />
+<path d="M 142.148 158.859 A 144 144 0 0 1 220.000 136.000 L 220.000 200.000 A 80 80 0 0 0 176.749 212.700 Z" fill="#f97316" />
+<circle cx="220" cy="280" r="78" fill="#ffffff" />
+<text x="220" y="270" text-anchor="middle" fill="#64748b" font-size="14" font-family="Arial, sans-serif">Total</text>
+<text x="220" y="302" text-anchor="middle" fill="#0f172a" font-size="34" font-family="Arial, sans-serif" font-weight="700">11</text>
+<circle cx="430" cy="152" r="9" fill="#2563eb" />
+<text x="448" y="148" fill="#0f172a" font-size="15" font-family="Arial, sans-serif" font-weight="600">Gozzi</text>
+<text x="448" y="170" fill="#475569" font-size="13" font-family="Arial, sans-serif">8 tickets • 73%</text>
+<circle cx="430" cy="204" r="9" fill="#0f766e" />
+<text x="448" y="200" fill="#0f172a" font-size="15" font-family="Arial, sans-serif" font-weight="600">Rossi</text>
+<text x="448" y="222" fill="#475569" font-size="13" font-family="Arial, sans-serif">2 tickets • 18%</text>
+<circle cx="430" cy="256" r="9" fill="#f97316" />
+<text x="448" y="252" fill="#0f172a" font-size="15" font-family="Arial, sans-serif" font-weight="600">Lombardo</text>
+<text x="448" y="274" fill="#475569" font-size="13" font-family="Arial, sans-serif">1 tickets • 9%</text>
+</svg>

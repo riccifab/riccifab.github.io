@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="280" viewBox="0 0 920 280" role="img">
+<rect width="100%" height="100%" rx="28" fill="#f8fafc" />
+<text x="24" y="36" fill="#0f172a" font-size="24" font-family="Arial, sans-serif" font-weight="700">Open tickets by ETA bucket</text>
+<text x="24" y="60" fill="#475569" font-size="13" font-family="Arial, sans-serif">Overdue and near-term tickets stand out here.</text>
+<text x="24" y="101" fill="#0f172a" font-size="13" font-family="Arial, sans-serif">Overdue</text>
+<rect x="150" y="84" width="680" height="24" rx="10" fill="#e2e8f0" />
+<rect x="150" y="84" width="136.0" height="24" rx="10" fill="#ea580c" />
+<text x="842" y="101" fill="#0f172a" font-size="13" font-family="Arial, sans-serif">1</text>
+<text x="24" y="143" fill="#0f172a" font-size="13" font-family="Arial, sans-serif">0-7d</text>
+<rect x="150" y="126" width="680" height="24" rx="10" fill="#e2e8f0" />
+<rect x="150" y="126" width="136.0" height="24" rx="10" fill="#ea580c" />
+<text x="842" y="143" fill="#0f172a" font-size="13" font-family="Arial, sans-serif">1</text>
+<text x="24" y="185" fill="#0f172a" font-size="13" font-family="Arial, sans-serif">8-14d</text>
+<rect x="150" y="168" width="680" height="24" rx="10" fill="#e2e8f0" />
+<rect x="150" y="168" width="136.0" height="24" rx="10" fill="#ea580c" />
+<text x="842" y="185" fill="#0f172a" font-size="13" font-family="Arial, sans-serif">1</text>
+<text x="24" y="227" fill="#0f172a" font-size="13" font-family="Arial, sans-serif">15-30d</text>
+<rect x="150" y="210" width="680" height="24" rx="10" fill="#e2e8f0" />
+<rect x="150" y="210" width="680.0" height="24" rx="10" fill="#ea580c" />
+<text x="842" y="227" fill="#0f172a" font-size="13" font-family="Arial, sans-serif">5</text>
+</svg>

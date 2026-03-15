@@ -1,0 +1,22 @@
+[
+  {
+    "detail": "Gozzi holds 5 open tickets out of 8 total.",
+    "title": "Largest backlog"
+  },
+  {
+    "detail": "#janxP8gW in Rossi is late by 3 days (Laser UPS installation).",
+    "title": "Most overdue request"
+  },
+  {
+    "detail": "#janxP8gW has been open for 31 days (Laser UPS installation).",
+    "title": "Oldest open ticket"
+  },
+  {
+    "detail": "#90ATtOV4 collected 2 comments and is in status IN_PROGRESS.",
+    "title": "Comment hotspot"
+  },
+  {
+    "detail": "This snapshot still has no requester snapshots, so effort and ETA drift analysis will become more useful on newer tickets.",
+    "title": "Legacy ticket sample"
+  }
+]

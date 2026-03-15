@@ -1,0 +1,52 @@
+{
+  "approx_resolution_days_average": 9.0,
+  "approx_resolution_days_median": 8.8,
+  "average_comment_count": 0.6,
+  "done_tickets": 3,
+  "effort_changes": 0,
+  "eta_changes": 0,
+  "generated_at": "2026-03-15T16:15:50.225908+00:00",
+  "median_comment_count": 0.0,
+  "open_tickets": 8,
+  "overdue_open_tickets": 1,
+  "priority_changes": 0,
+  "tickets_total": 11,
+  "tickets_with_comments": 4,
+  "tickets_with_requester_snapshot": 0,
+  "top_categories": [
+    [
+      "mechanics",
+      4
+    ],
+    [
+      "electronics",
+      4
+    ],
+    [
+      "software",
+      1
+    ],
+    [
+      "procurement",
+      1
+    ],
+    [
+      "other",
+      1
+    ]
+  ],
+  "top_labs": [
+    [
+      "Gozzi",
+      8
+    ],
+    [
+      "Rossi",
+      2
+    ],
+    [
+      "Lombardo",
+      1
+    ]
+  ]
+}

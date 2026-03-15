@@ -26,4 +26,5 @@ LATEST_EXPORT="$(cd "$ROOT_DIR" && ls -dt exports/tickets-* | head -n 1)"
 
 echo "Export directory: $ROOT_DIR/$LATEST_EXPORT"
 echo "Dashboard: $ROOT_DIR/$LATEST_EXPORT/analysis/dashboard.html"
+echo "Site page: $ROOT_DIR/labticketstats.html"
 echo "Analysis report: $ROOT_DIR/$LATEST_EXPORT/analysis/report.md"
