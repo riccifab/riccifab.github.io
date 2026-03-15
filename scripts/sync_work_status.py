@@ -31,7 +31,7 @@ RTDB_URL = (os.getenv("FIREBASE_RTDB_URL") or DEFAULT_RTDB_URL).rstrip("/")
 TICKETS_COLLECTION = os.getenv("TICKETS_COLLECTION") or "tickets"
 KNOWN_LABS = [
     lab.strip()
-    for lab in (os.getenv("WORKSTATUS_PI_LABS") or "Gozzi,Iurilli,Rossi").split(",")
+    for lab in (os.getenv("WORKSTATUS_PI_LABS") or "Gozzi,Iurilli,Lombardo,Rossi").split(",")
     if lab.strip()
 ]
 LAB_ALIASES = {" ".join(lab.split()).casefold(): lab for lab in KNOWN_LABS}
