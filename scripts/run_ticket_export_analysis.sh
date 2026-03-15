@@ -25,4 +25,5 @@ LATEST_EXPORT="$(cd "$ROOT_DIR" && ls -dt exports/tickets-* | head -n 1)"
 "$VENV_PY" "$ROOT_DIR/scripts/analyze_tickets.py" --input-dir "$ROOT_DIR/$LATEST_EXPORT"
 
 echo "Export directory: $ROOT_DIR/$LATEST_EXPORT"
+echo "Dashboard: $ROOT_DIR/$LATEST_EXPORT/analysis/dashboard.html"
 echo "Analysis report: $ROOT_DIR/$LATEST_EXPORT/analysis/report.md"

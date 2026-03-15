@@ -52,7 +52,7 @@ cp /path/to/your/service-account.json local/credentials/service-account.json
 ./scripts/run_ticket_export_analysis.sh
 ```
 
-Outputs are written under `exports/tickets-*/` and `exports/tickets-*/analysis/`.
+Outputs are written under `exports/tickets-*/` and `exports/tickets-*/analysis/`, including a Markdown report, a visual `dashboard.html`, CSV summaries, and SVG plots.
 
 If you prefer storing the JSON elsewhere on your machine, create `.env.local` from `.env.local.example` and set `GOOGLE_APPLICATION_CREDENTIALS` there instead.
 
