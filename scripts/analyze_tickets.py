@@ -1086,6 +1086,28 @@ def render_line_chart_svg(
         for x, y in points:
             lines.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="4.5" fill="{color}" stroke="#fff" stroke-width="2" />')
 
+    end_labels = []
+    for key, label, color in series:
+        last_value = safe_float(rows[-1].get(key))
+        _, last_y = point(len(rows) - 1, last_value)
+        end_labels.append({"label": label, "value": compact_number(last_value), "color": color, "y": last_y})
+
+    end_labels.sort(key=lambda item: item["y"])
+    min_gap = 28
+    for index in range(1, len(end_labels)):
+        if end_labels[index]["y"] - end_labels[index - 1]["y"] < min_gap:
+            end_labels[index]["y"] = end_labels[index - 1]["y"] + min_gap
+
+    label_x = width - 144
+    for item in end_labels:
+        y = max(96, min(height - 36, item["y"]))
+        lines.append(f'<rect x="{label_x}" y="{y - 13:.1f}" width="114" height="26" rx="13" fill="#ffffff" stroke="{item["color"]}" stroke-width="1.5" />')
+        lines.append(f'<circle cx="{label_x + 14}" cy="{y:.1f}" r="5" fill="{item["color"]}" />')
+        lines.append(
+            f'<text x="{label_x + 26}" y="{y + 4:.1f}" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">'
+            f'{html_escape(item["label"] + " " + item["value"])}</text>'
+        )
+
     lines.append("</svg>")
     return "\n".join(lines)
 
