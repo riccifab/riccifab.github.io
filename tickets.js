@@ -137,7 +137,6 @@ function closeModal() {
 }
 
 /* ========= Modal wiring ========= */
-modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
 btnCloseModal.addEventListener("click", closeModal);
 btnNewTicket.addEventListener("click", openModal);
 
