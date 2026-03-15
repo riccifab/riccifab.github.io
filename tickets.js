@@ -583,7 +583,7 @@ function bindNewTicketDynamicLogic() {
     }
     syncConditionalRequiredField(tDeferTo, tDeferred.value === "yes");
     syncConditionalRequiredField(tWhyNotCode, tDeferred.value !== "yes");
-    syncConditionalRequiredField(tWhyNotText, tDeferred.value !== "yes");
+    syncConditionalRequiredField(tWhyNotText, false);
   }
 
   [tHardDeadline, tCommercially, tDeferred].forEach(el => el.addEventListener("change", apply));
@@ -650,7 +650,6 @@ ticketForm.addEventListener("submit", async (e) => {
   if (hardDeadline && !hardDeadlineDate) { setMsg(formMsg, "Hard deadline date required.", "err"); return; }
   if (commerciallyAvailable === "yes" && !commercialLink) { setMsg(formMsg, "Commercial link required.", "err"); return; }
   if (canBeDeferred === "yes" && !deferTo) { setMsg(formMsg, "If deferred=yes specify who.", "err"); return; }
-  if (canBeDeferred === "no" && !whyNotDeferredText) { setMsg(formMsg, "If deferred=no specify why.", "err"); return; }
   if (priority === "P0" && description.length < 40) { setMsg(formMsg, "P0 needs a specific description (>= 40 chars).", "err"); return; }
 
   try {
