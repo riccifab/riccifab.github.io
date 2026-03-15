@@ -9,11 +9,20 @@ import csv
 import datetime as dt
 import json
 import os
+import sys
 from pathlib import Path
 from typing import Any
 
-from google.cloud import firestore
-from google.oauth2 import service_account
+try:
+    from google.cloud import firestore
+    from google.oauth2 import service_account
+except ModuleNotFoundError as exc:
+    missing = exc.name or "google"
+    raise SystemExit(
+        "Missing Python dependency "
+        f"'{missing}'. Install the script requirements first with:\n"
+        f"  {sys.executable} -m pip install -r scripts/requirements.txt"
+    ) from exc
 
 
 def load_db() -> firestore.Client:

@@ -24,6 +24,7 @@ import datetime as dt
 import json
 import math
 import re
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
@@ -784,4 +785,12 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    try:
+        raise SystemExit(main())
+    except ModuleNotFoundError as exc:
+        missing = exc.name or "unknown"
+        raise SystemExit(
+            "Missing Python dependency "
+            f"'{missing}'. Install the script requirements first with:\n"
+            f"  {sys.executable} -m pip install -r scripts/requirements.txt"
+        ) from exc
