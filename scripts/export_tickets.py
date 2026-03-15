@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 try:
+    from google.auth.exceptions import DefaultCredentialsError
     from google.cloud import firestore
     from google.oauth2 import service_account
 except ModuleNotFoundError as exc:
@@ -86,7 +87,17 @@ def load_db(project_id: str, credentials_file: str | None = None) -> firestore.C
     creds = load_credentials(credentials_file=credentials_file)
     if creds is not None:
         return firestore.Client(project=project_id, credentials=creds)
-    return firestore.Client(project=project_id)
+    try:
+        return firestore.Client(project=project_id)
+    except DefaultCredentialsError as exc:
+        raise SystemExit(
+            "Google credentials not found.\n"
+            "Use one of these options:\n"
+            f"  1. {sys.executable} scripts/export_tickets.py --credentials-file /path/to/service-account.json\n"
+            "  2. export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json\n"
+            "  3. gcloud auth application-default login\n"
+            "The credentials must have access to Firestore for this project."
+        ) from exc
 
 
 def parse_timestamp(value: Any) -> str:
