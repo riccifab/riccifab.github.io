@@ -1,0 +1,67 @@
+name: Daily ticket analysis
+
+on:
+  schedule:
+    - cron: "0 6 * * *" # 06:00 UTC = 07:00 Rome in winter, 08:00 in summer
+  workflow_dispatch: {}
+
+concurrency:
+  group: daily-ticket-analysis
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scripts/requirements.txt
+
+      - name: Export tickets and build analysis
+        env:
+          FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+          GCP_SA_KEY_B64: ${{ secrets.GCP_SA_KEY_B64 }}
+        run: |
+          python scripts/export_tickets.py
+          LATEST_EXPORT="$(ls -dt exports/tickets-* | head -n 1)"
+          python scripts/analyze_tickets.py --input-dir "$LATEST_EXPORT"
+          echo "latest_export=$LATEST_EXPORT" >> "$GITHUB_OUTPUT"
+        id: build
+
+      - name: Upload latest export artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ticket-analysis-${{ github.run_id }}
+          path: ${{ steps.build.outputs.latest_export }}
+          retention-days: 14
+
+      - name: Commit refreshed stats page
+        run: |
+          git config user.name "ticket-analysis-bot"
+          git config user.email "ticket-analysis-bot@users.noreply.github.com"
+
+          git add labticketstats.html assets/labticketstats
+
+          if git diff --cached --quiet; then
+            echo "No stats changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Refresh daily ticket stats"
+          git push origin HEAD:main
