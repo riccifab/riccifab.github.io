@@ -111,6 +111,14 @@ label { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.82rem;
   font-weight: 700;
 }
 
+.conditional-mark {
+  display: none;
+}
+
+.required-field .conditional-mark {
+  display: inline;
+}
+
 input, select, textarea {
   width: 100%;
   border: 1px solid var(--border);

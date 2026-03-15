@@ -253,7 +253,7 @@ def compute_diff(old: Dict[str, Any], new: Dict[str, Any]) -> List[str]:
 
     # Also include any other top-level keys that actually changed, otherwise we may miss
     # updates stored under non-preferred keys (e.g. `delivery` dict).
-    noisy = {"updatedAt", "createdAt", "attachments", "history", "events"}
+    noisy = {"updatedAt", "createdAt", "attachments", "history", "events", "requesterSubmission", "requesterSubmittedAt"}
     all_keys = set(old.keys()) | set(new.keys())
     extra_changed = []
     for k in all_keys:

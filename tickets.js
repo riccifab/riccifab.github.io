@@ -138,6 +138,47 @@ function bindAutoDatePickers(root = document) {
   });
 }
 
+function buildRequesterSubmissionSnapshot(data) {
+  return {
+    title: data.title || "",
+    description: data.description || "",
+    definitionOfDone: data.definitionOfDone || "",
+    lab: data.lab || "",
+    category: data.category || "",
+    priority: data.priority || "",
+    expectedDeliveryDate: data.expectedDeliveryDate || "",
+    hardDeadline: !!data.hardDeadline,
+    hardDeadlineDate: data.hardDeadlineDate || "",
+    commerciallyAvailable: data.commerciallyAvailable || "unknown",
+    commercialLink: data.commercialLink || "",
+    estimatedCostEUR: data.estimatedCostEUR ?? null,
+    procurementNeeded: data.procurementNeeded || "unknown",
+    canBeDeferred: data.canBeDeferred || "no",
+    deferTo: data.deferTo || "",
+    whyNotDeferredCode: data.whyNotDeferredCode || "",
+    whyNotDeferredText: data.whyNotDeferredText || "",
+    effortGuess: data.effortGuess || "",
+    tags: Array.isArray(data.tags) ? data.tags : []
+  };
+}
+
+function requesterSnapshotHtml(t) {
+  const r = t?.requesterSubmission;
+  if (!r || typeof r !== "object") return "";
+
+  return `
+    <hr class="sep"/>
+
+    <div class="muted small">Requester original input</div>
+    <div class="grid2" style="margin-top:0.6rem;">
+      <div><div class="muted small">Requested priority</div><div class="code">${safeText(r.priority || "-")}</div></div>
+      <div><div class="muted small">Requested ETA</div><div class="code">${safeText(r.expectedDeliveryDate || "-")}</div></div>
+      <div><div class="muted small">Requested lab / category</div><div class="code">${safeText(r.lab || "-")} • ${safeText(r.category || "-")}</div></div>
+      <div><div class="muted small">Requested effort</div><div class="code">${safeText(r.effortGuess || "-")}</div></div>
+    </div>
+  `;
+}
+
 function syncConditionalRequiredField(input, active) {
   if (!input) return;
   input.required = active;
@@ -418,6 +459,7 @@ function renderDetails(t) {
     <div><div class="muted small">Description</div><div style="white-space:pre-wrap; margin-top:0.35rem;">${safeText(t.description || "")}</div></div>
     <div style="margin-top:0.9rem;"><div class="muted small">DoD</div><div style="white-space:pre-wrap; margin-top:0.35rem;">${safeText(t.definitionOfDone || "")}</div></div>
 
+    ${requesterSnapshotHtml(t)}
     ${isAdmin ? adminControlsHtml(t) : ""}
   `;
 
@@ -478,6 +520,7 @@ function wireAdminControls(t) {
   async function save(partial = {}) {
     try {
       await updateDoc(doc(db, "tickets", t.id), {
+        requesterSubmission: t.requesterSubmission || buildRequesterSubmissionSnapshot(t),
         status: aStatus.value,
         priority: aPriority.value,
         assigneeEmail: (aAssigneeEmail.value || "").trim(),
@@ -581,6 +624,27 @@ ticketForm.addEventListener("submit", async (e) => {
   const effortGuess = $("tEffort").value;
 
   const tags = ($("tTags").value || "").split(",").map(x => x.trim()).filter(Boolean).slice(0, 12);
+  const requesterSubmission = buildRequesterSubmissionSnapshot({
+    title,
+    description,
+    definitionOfDone,
+    lab,
+    category,
+    priority,
+    expectedDeliveryDate,
+    hardDeadline,
+    hardDeadlineDate,
+    commerciallyAvailable,
+    commercialLink,
+    estimatedCostEUR,
+    procurementNeeded,
+    canBeDeferred,
+    deferTo,
+    whyNotDeferredCode,
+    whyNotDeferredText,
+    effortGuess,
+    tags
+  });
 
   if (!lab || !title || !description || !definitionOfDone || !expectedDeliveryDate) { setMsg(formMsg, "Fill required fields.", "err"); return; }
   if (hardDeadline && !hardDeadlineDate) { setMsg(formMsg, "Hard deadline date required.", "err"); return; }
@@ -611,6 +675,8 @@ ticketForm.addEventListener("submit", async (e) => {
       whyNotDeferredText: canBeDeferred === "no" ? whyNotDeferredText : "",
       effortGuess,
       tags,
+      requesterSubmission,
+      requesterSubmittedAt: serverTimestamp(),
       createdByUid: currentUser.uid,
       createdByEmail: currentUser.email,
       assigneeEmail: "",
