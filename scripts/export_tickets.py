@@ -9,6 +9,7 @@ import csv
 import datetime as dt
 import json
 import os
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -25,12 +26,67 @@ except ModuleNotFoundError as exc:
     ) from exc
 
 
-def load_db() -> firestore.Client:
-    project_id = os.environ["FIREBASE_PROJECT_ID"]
-    sa_b64 = os.environ["GCP_SA_KEY_B64"]
-    info = json.loads(base64.b64decode(sa_b64).decode("utf-8"))
-    creds = service_account.Credentials.from_service_account_info(info)
-    return firestore.Client(project=project_id, credentials=creds)
+REPO_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ID_PATTERN = re.compile(r'projectId:\s*"([^"]+)"')
+
+
+def load_local_env() -> None:
+    for path in (REPO_ROOT / ".env", REPO_ROOT / ".env.local"):
+        if not path.exists():
+            continue
+        for raw_line in path.read_text(encoding="utf-8").splitlines():
+            line = raw_line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            key = key.strip()
+            if not key or key in os.environ:
+                continue
+            value = value.strip()
+            if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
+                value = value[1:-1]
+            os.environ[key] = value
+
+
+def detect_project_id() -> str:
+    env_value = os.getenv("FIREBASE_PROJECT_ID", "").strip()
+    if env_value:
+        return env_value
+
+    for path in (REPO_ROOT / "tickets.js", REPO_ROOT / "work_status.html"):
+        if not path.exists():
+            continue
+        match = PROJECT_ID_PATTERN.search(path.read_text(encoding="utf-8"))
+        if match:
+            return match.group(1)
+
+    raise SystemExit(
+        "Missing FIREBASE_PROJECT_ID. Set it in the environment or .env, "
+        "or keep a Firebase config with projectId in tickets.js/work_status.html."
+    )
+
+
+def load_credentials(credentials_file: str | None = None) -> service_account.Credentials | None:
+    if credentials_file:
+        return service_account.Credentials.from_service_account_file(credentials_file)
+
+    env_credentials_file = os.getenv("GOOGLE_APPLICATION_CREDENTIALS", "").strip()
+    if env_credentials_file:
+        return service_account.Credentials.from_service_account_file(env_credentials_file)
+
+    sa_b64 = os.getenv("GCP_SA_KEY_B64", "").strip()
+    if sa_b64:
+        info = json.loads(base64.b64decode(sa_b64).decode("utf-8"))
+        return service_account.Credentials.from_service_account_info(info)
+
+    return None
+
+
+def load_db(project_id: str, credentials_file: str | None = None) -> firestore.Client:
+    creds = load_credentials(credentials_file=credentials_file)
+    if creds is not None:
+        return firestore.Client(project=project_id, credentials=creds)
+    return firestore.Client(project=project_id)
 
 
 def parse_timestamp(value: Any) -> str:
@@ -159,15 +215,20 @@ def default_output_dir() -> Path:
 
 
 def main() -> int:
+    load_local_env()
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--out-dir", default=str(default_output_dir()))
     parser.add_argument("--no-comments", action="store_true")
+    parser.add_argument("--project-id", default="")
+    parser.add_argument("--credentials-file", default="")
     args = parser.parse_args()
 
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    db = load_db()
+    project_id = (args.project_id or detect_project_id()).strip()
+    db = load_db(project_id=project_id, credentials_file=(args.credentials_file or "").strip() or None)
     tickets, comments = collect_export(db, include_comments=not args.no_comments)
 
     write_json(out_dir / "tickets.json", tickets)
