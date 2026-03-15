@@ -40,6 +40,14 @@ CHART_COLORS = [
     "#84cc16",
 ]
 DISPLAY_TIMEZONE = ZoneInfo("Europe/Rome")
+CARD_TONES = [
+    "tone-emerald",
+    "tone-sky",
+    "tone-violet",
+    "tone-rose",
+    "tone-amber",
+    "tone-cyan",
+]
 STOPWORDS = {
     "a",
     "an",
@@ -1238,12 +1246,16 @@ def render_rank_list(title: str, rows: list[dict[str, Any]], formatter) -> str:
     return f'<section class="list-card"><h3>{html_escape(title)}</h3><ol>{items}</ol></section>'
 
 
+def tone_class(index: int) -> str:
+    return CARD_TONES[index % len(CARD_TONES)]
+
+
 def render_insights(insights: list[dict[str, str]]) -> str:
     if not insights:
-        return '<section class="insights"><div class="insight"><h3>No standout findings</h3><p>The snapshot looks fairly balanced.</p></div></section>'
+        return '<section class="insights"><div class="insight tone-cyan"><h3>No standout findings</h3><p>The snapshot looks fairly balanced.</p></div></section>'
     cards = "".join(
-        f'<div class="insight"><h3>{html_escape(item["title"])}</h3><p>{html_escape(item["detail"])}</p></div>'
-        for item in insights
+        f'<div class="insight {tone_class(index)}"><h3>{html_escape(item["title"])}</h3><p>{html_escape(item["detail"])}</p></div>'
+        for index, item in enumerate(insights)
     )
     return f'<section class="insights">{cards}</section>'
 
@@ -1280,8 +1292,8 @@ def render_stats_html(
         ("Median closure days", compact_number(summary["approx_resolution_days_median"])),
     ]
     cards_html = "".join(
-        f'<div class="kpi"><div class="kpi-label">{html_escape(label)}</div><div class="kpi-value">{html_escape(value)}</div></div>'
-        for label, value in cards
+        f'<div class="kpi {tone_class(index)}"><div class="kpi-label">{html_escape(label)}</div><div class="kpi-value">{html_escape(value)}</div></div>'
+        for index, (label, value) in enumerate(cards)
     )
     meta_items = (
         [f"Updated: {generated_label}"]
@@ -1466,11 +1478,42 @@ def render_stats_html(
       border: 1px solid rgba(148, 163, 184, 0.15);
       padding: 16px 18px;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }}
+    .kpi::before,
+    .insight::before {{
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top right, var(--tone-soft, rgba(255, 255, 255, 0.06)), transparent 48%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 72%);
+      z-index: 0;
+    }}
+    .kpi::after,
+    .insight::after {{
+      content: "";
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--tone, #4ade80), transparent 80%);
+      opacity: 0.9;
+      z-index: 1;
+    }}
+    .kpi > *,
+    .insight > * {{
+      position: relative;
+      z-index: 2;
     }}
     .kpi-label {{
-      color: var(--muted);
+      color: var(--tone, var(--muted));
       font-size: 0.88rem;
       margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }}
     .kpi-value {{
       font-family: "Space Grotesk", sans-serif;
@@ -1492,11 +1535,41 @@ def render_stats_html(
     }}
     .insight {{
       padding: 18px 18px 20px;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }}
+    .insight h3 {{
+      color: var(--tone, var(--ink));
     }}
     .insight p {{
       margin: 10px 0 0;
       color: var(--muted);
       line-height: 1.48;
+    }}
+    .tone-emerald {{
+      --tone: #4ade80;
+      --tone-soft: rgba(74, 222, 128, 0.18);
+    }}
+    .tone-sky {{
+      --tone: #38bdf8;
+      --tone-soft: rgba(56, 189, 248, 0.18);
+    }}
+    .tone-violet {{
+      --tone: #a78bfa;
+      --tone-soft: rgba(167, 139, 250, 0.18);
+    }}
+    .tone-rose {{
+      --tone: #fb7185;
+      --tone-soft: rgba(251, 113, 133, 0.18);
+    }}
+    .tone-amber {{
+      --tone: #fbbf24;
+      --tone-soft: rgba(251, 191, 36, 0.18);
+    }}
+    .tone-cyan {{
+      --tone: #22d3ee;
+      --tone-soft: rgba(34, 211, 238, 0.18);
     }}
     .plot-grid {{
       display: grid;
