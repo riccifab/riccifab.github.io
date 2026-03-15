@@ -97,6 +97,8 @@ let refreshNewTicketFormState = () => {};
 
 const STATUS = ["NEW","TRIAGE","APPROVED","REJECTED","IN_PROGRESS","WAITING_ON_PI","WAITING_ON_PROCUREMENT","BLOCKED","DONE","CLOSED"];
 const PRIORITY = ["P0","P1","P2","P3"];
+const CATEGORIES = ["electronics", "mechanics", "optics", "software", "procurement", "other"];
+const YES_NO_UNKNOWN = ["unknown", "yes", "no"];
 
 /* ========= Helpers ========= */
 function setPill(signedIn, text) {
@@ -115,6 +117,23 @@ function setMsg(el, text, type = "") {
   if (type) el.classList.add(type);
 }
 function safeText(s) { return (s ?? "").toString().replace(/[<>]/g, ""); }
+function optionList(options, selectedValue, { allowCustom = false, emptyLabel = null } = {}) {
+  const rendered = [];
+
+  if (emptyLabel !== null) {
+    rendered.push(`<option value="" ${!selectedValue ? "selected" : ""}>${safeText(emptyLabel)}</option>`);
+  }
+
+  options.forEach((value) => {
+    rendered.push(`<option value="${safeText(value)}" ${selectedValue === value ? "selected" : ""}>${safeText(value)}</option>`);
+  });
+
+  if (allowCustom && selectedValue && !options.includes(selectedValue)) {
+    rendered.push(`<option value="${safeText(selectedValue)}" selected>${safeText(selectedValue)}</option>`);
+  }
+
+  return rendered.join("");
+}
 function fmtDateTime(ts) {
   if (!ts) return "-";
   try {
@@ -445,8 +464,10 @@ function renderDetails(t) {
 
     <div class="grid2">
       <div><div class="muted small">ETA</div><div class="code">${safeText(t.expectedDeliveryDate || "-")}</div></div>
+      <div><div class="muted small">Category</div><div class="code">${safeText(t.category || "-")}</div></div>
       <div><div class="muted small">Hard deadline</div><div class="code">${t.hardDeadline?"yes":"no"}${t.hardDeadlineDate? " • "+safeText(t.hardDeadlineDate):""}</div></div>
       <div><div class="muted small">Commercially available</div><div class="code">${safeText(t.commerciallyAvailable || "unknown")}</div></div>
+      <div><div class="muted small">Procurement needed</div><div class="code">${safeText(t.procurementNeeded || "unknown")}</div></div>
       <div><div class="muted small">Commercial link</div><div class="code">${t.commercialLink ? `<a href="${safeText(t.commercialLink)}" target="_blank" rel="noreferrer">${safeText(t.commercialLink)}</a>` : "-"}</div></div>
       <div><div class="muted small">Deferred</div><div class="code">${safeText(t.canBeDeferred || "-")}${t.deferTo ? " • "+safeText(t.deferTo):""}</div></div>
       <div><div class="muted small">Why not deferred</div><div class="code">${safeText(t.whyNotDeferredCode || "-")}${t.whyNotDeferredText ? " • "+safeText(t.whyNotDeferredText):""}</div></div>
@@ -468,8 +489,10 @@ function renderDetails(t) {
 }
 
 function adminControlsHtml(t) {
-  const statusOptions = STATUS.map(s => `<option value="${s}" ${t.status===s?"selected":""}>${s}</option>`).join("");
-  const prioOptions = PRIORITY.map(p => `<option value="${p}" ${t.priority===p?"selected":""}>${p}</option>`).join("");
+  const statusOptions = optionList(STATUS, t.status, { allowCustom: true });
+  const prioOptions = optionList(PRIORITY, t.priority, { allowCustom: true });
+  const categoryOptions = optionList(CATEGORIES, t.category, { allowCustom: true });
+  const procurementOptions = optionList(YES_NO_UNKNOWN, t.procurementNeeded || "unknown");
 
   return `
     <hr class="sep"/>
@@ -483,9 +506,12 @@ function adminControlsHtml(t) {
         ETA
         <input id="aExpected" type="date" value="${safeText(t.expectedDeliveryDate || "")}" />
       </label>
+      <label>Category<select id="aCategory">${categoryOptions}</select></label>
       <label>Status<select id="aStatus">${statusOptions}</select></label>
       <label>Priority<select id="aPriority">${prioOptions}</select></label>
       <label>Assignee email<input id="aAssigneeEmail" type="text" value="${safeText(t.assigneeEmail || "")}" /></label>
+      <label>Procurement needed<select id="aProcurement">${procurementOptions}</select></label>
+      <label>Commercial link<input id="aCommercialLink" type="url" placeholder="https://..." value="${safeText(t.commercialLink || "")}" /></label>
       <label>Effort (admin)
         <select id="aEffort">
           <option value="" ${!t.effortAdmin?"selected":""}>(none)</option>
@@ -512,7 +538,10 @@ function wireAdminControls(t) {
   const adminSaveMsg = $("adminSaveMsg");
   const aStatus = $("aStatus");
   const aPriority = $("aPriority");
+  const aCategory = $("aCategory");
   const aAssigneeEmail = $("aAssigneeEmail");
+  const aProcurement = $("aProcurement");
+  const aCommercialLink = $("aCommercialLink");
   const aEffort = $("aEffort");
   const aNotes = $("aNotes");
   const aExpected = $("aExpected");
@@ -523,7 +552,10 @@ function wireAdminControls(t) {
         requesterSubmission: t.requesterSubmission || buildRequesterSubmissionSnapshot(t),
         status: aStatus.value,
         priority: aPriority.value,
+        category: aCategory.value || "",
         assigneeEmail: (aAssigneeEmail.value || "").trim(),
+        procurementNeeded: aProcurement.value || "unknown",
+        commercialLink: (aCommercialLink.value || "").trim(),
         effortAdmin: aEffort.value || "",
         adminNotes: (aNotes.value || "").trim(),
         ...partial,
