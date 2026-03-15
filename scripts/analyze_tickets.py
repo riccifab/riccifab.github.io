@@ -48,6 +48,13 @@ CARD_TONES = [
     "tone-amber",
     "tone-cyan",
 ]
+INSIGHT_TONES = {
+    "Largest backlog": "tone-sky",
+    "Most overdue request": "tone-rose",
+    "Oldest open ticket": "tone-violet",
+    "Comment hotspot": "tone-amber",
+    "Older tickets note": "tone-cyan",
+}
 STOPWORDS = {
     "a",
     "an",
@@ -1272,11 +1279,15 @@ def tone_class(index: int) -> str:
     return CARD_TONES[index % len(CARD_TONES)]
 
 
+def insight_tone(title: str, index: int) -> str:
+    return INSIGHT_TONES.get(title, CARD_TONES[index % len(CARD_TONES)])
+
+
 def render_insights(insights: list[dict[str, str]]) -> str:
     if not insights:
         return '<section class="insights"><div class="insight tone-cyan"><h3>No standout findings</h3><p>The snapshot looks fairly balanced.</p></div></section>'
     cards = "".join(
-        f'<div class="insight {tone_class(index)}"><h3>{html_escape(item["title"])}</h3><p>{html_escape(item["detail"])}</p></div>'
+        f'<div class="insight {insight_tone(item["title"], index)}"><h3>{html_escape(item["title"])}</h3><p>{html_escape(item["detail"])}</p></div>'
         for index, item in enumerate(insights)
     )
     return f'<section class="insights">{cards}</section>'
