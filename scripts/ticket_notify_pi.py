@@ -183,6 +183,20 @@ def send_sendgrid(sendgrid_api_key: str, mail_from: str, to_list: list[str], sub
         raise RuntimeError(f"SendGrid error {r.status_code}: {r.text}")
 
 
+def build_stats_link(site_url: str) -> str:
+    if not site_url:
+        return ""
+    url = site_url.split("#", 1)[0].rstrip("/")
+    if url.endswith("/labticketstats.html") or url.endswith("labticketstats.html"):
+        return url
+    if url.endswith("/tickets.html") or url.endswith("tickets.html"):
+        return url[: -len("tickets.html")] + "labticketstats.html"
+    if url.endswith(".html"):
+        base = url.rsplit("/", 1)[0]
+        return f"{base}/labticketstats.html"
+    return f"{url}/labticketstats.html"
+
+
 # ----------------------------
 # Main
 # ----------------------------
@@ -270,6 +284,7 @@ def main() -> None:
 
         subject = f"[Ticket] New ({lab_disp or lab_key}) — {title}".strip()
         link = f"{site_url}" if site_url else "(SITE_URL not set)"
+        stats_link = build_stats_link(site_url)
 
         body = "\n".join(
             [
@@ -284,6 +299,7 @@ def main() -> None:
                 f"Created by: {by}",
                 "",
                 f"Tickets page: {link}",
+                *( [f"Stats page: {stats_link}"] if stats_link else [] ),
             ]
         )
 

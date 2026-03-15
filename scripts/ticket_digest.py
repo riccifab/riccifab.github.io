@@ -12,6 +12,20 @@ EXCLUDE_DONE = (os.environ.get("EXCLUDE_DONE", "0") == "1")
 SENDGRID_API_KEY = os.environ["SENDGRID_API_KEY"]
 MAIL_FROM = os.environ["MAIL_FROM"]
 
+
+def build_stats_link(site_url: str) -> str:
+    if not site_url:
+        return ""
+    url = site_url.split("#", 1)[0].rstrip("/")
+    if url.endswith("/labticketstats.html") or url.endswith("labticketstats.html"):
+        return url
+    if url.endswith("/tickets.html") or url.endswith("tickets.html"):
+        return url[: -len("tickets.html")] + "labticketstats.html"
+    if url.endswith(".html"):
+        base = url.rsplit("/", 1)[0]
+        return f"{base}/labticketstats.html"
+    return f"{url}/labticketstats.html"
+
 def db_client():
     sa_b64 = os.environ["GCP_SA_KEY_B64"]
     info = json.loads(base64.b64decode(sa_b64).decode("utf-8"))
@@ -61,6 +75,7 @@ def fmt_ticket(t):
 def build_body(tickets):
     now = datetime.now(timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M %Z")
     labs = by_lab_counts(tickets)
+    stats_url = build_stats_link(SITE_URL)
 
     lines = []
     lines.append("Weekly digest: OPEN tickets")
@@ -74,6 +89,8 @@ def build_body(tickets):
 
     if SITE_URL:
         lines.append(f"Site: {SITE_URL}")
+        if stats_url:
+            lines.append(f"Stats: {stats_url}")
         lines.append("")
 
     lines.append("Tickets (first 200):")

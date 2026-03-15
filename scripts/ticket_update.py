@@ -385,6 +385,20 @@ def build_ticket_link(cfg: Config, ticket_id: str) -> str:
     return ticket_id
 
 
+def build_stats_link(site_url: str) -> str:
+    if not site_url:
+        return ""
+    url = site_url.split("#", 1)[0].rstrip("/")
+    if url.endswith("/labticketstats.html") or url.endswith("labticketstats.html"):
+        return url
+    if url.endswith("/tickets.html") or url.endswith("tickets.html"):
+        return url[: -len("tickets.html")] + "labticketstats.html"
+    if url.endswith(".html"):
+        base = url.rsplit("/", 1)[0]
+        return f"{base}/labticketstats.html"
+    return f"{url}/labticketstats.html"
+
+
 def main() -> int:
     cfg = load_config()
     ensure_state_dir(cfg)
@@ -460,7 +474,10 @@ def main() -> int:
             f"Updated at (UTC): {_to_iso(updated_at)}",
         ]
         if cfg.site_url:
-            body_lines.append(f"Site URL: {cfg.site_url}")
+            body_lines.append(f"Ticket portal: {build_ticket_link(cfg, ticket_id)}")
+            stats_link = build_stats_link(cfg.site_url)
+            if stats_link:
+                body_lines.append(f"Stats page: {stats_link}")
         body_lines.extend([
             "",
             "Changes:",
