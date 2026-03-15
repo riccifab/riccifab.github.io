@@ -394,7 +394,7 @@ function renderTicketsTable(list) {
 
   if (list.length === 0) {
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="8" class="muted">No tickets.</td>`;
+    tr.innerHTML = `<td colspan="10" class="muted">No tickets.</td>`;
     ticketsTbody.appendChild(tr);
     return;
   }
@@ -407,6 +407,8 @@ function renderTicketsTable(list) {
       <td class="code">${safeText(t.priority || "-")}</td>
       <td class="code">${safeText(t.status || "-")}</td>
       <td>${safeText(t.lab || "-")}</td>
+      <td>${safeText(t.category || "-")}</td>
+      <td class="code">${safeText(t.procurementNeeded || "unknown")}</td>
       <td class="code">${safeText(t.expectedDeliveryDate || "-")}</td>
       <td class="code">${fmtDateTime(t.createdAt)}</td>
       <td class="code">${fmtDateTime(t.updatedAt)}</td>
