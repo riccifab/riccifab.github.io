@@ -1091,11 +1091,11 @@ def write_plot_svgs(plots_dir: Path, analysis: dict[str, Any]) -> list[dict[str,
     chart_specs = [
         {
             "file": "labs_share.svg",
-            "title": "Labs share",
-            "subtitle": "Ticket volume split by current lab.",
+            "title": "Tickets by lab",
+            "subtitle": "How the full ticket load is split across labs.",
             "span": "regular",
             "svg": render_donut_chart_svg(
-                "Labs share",
+                "Tickets by lab",
                 analysis["lab_distribution_rows"],
                 "lab",
                 "count",
@@ -1104,11 +1104,11 @@ def write_plot_svgs(plots_dir: Path, analysis: dict[str, Any]) -> list[dict[str,
         },
         {
             "file": "categories_share.svg",
-            "title": "Categories share",
-            "subtitle": "How requests distribute across categories.",
+            "title": "Tickets by category",
+            "subtitle": "Which kinds of requests arrive most often.",
             "span": "regular",
             "svg": render_donut_chart_svg(
-                "Categories share",
+                "Tickets by category",
                 analysis["category_distribution_rows"],
                 "category",
                 "count",
@@ -1117,11 +1117,11 @@ def write_plot_svgs(plots_dir: Path, analysis: dict[str, Any]) -> list[dict[str,
         },
         {
             "file": "effort_share.svg",
-            "title": "Effort mix",
-            "subtitle": "Current effort labels, including unspecified tickets.",
+            "title": "Tickets by effort",
+            "subtitle": "Current effort sizing, including tickets still unsized.",
             "span": "regular",
             "svg": render_donut_chart_svg(
-                "Effort mix",
+                "Tickets by effort",
                 analysis["effort_distribution_rows"],
                 "effort",
                 "count",
@@ -1130,11 +1130,11 @@ def write_plot_svgs(plots_dir: Path, analysis: dict[str, Any]) -> list[dict[str,
         },
         {
             "file": "status_share.svg",
-            "title": "Status share",
-            "subtitle": "Current pipeline distribution.",
+            "title": "Tickets by status",
+            "subtitle": "Where the current workload sits in the pipeline.",
             "span": "regular",
             "svg": render_donut_chart_svg(
-                "Status share",
+                "Tickets by status",
                 analysis["status_summary_rows"],
                 "status",
                 "count",
@@ -1144,22 +1144,22 @@ def write_plot_svgs(plots_dir: Path, analysis: dict[str, Any]) -> list[dict[str,
         },
         {
             "file": "ticket_flow_timeline.svg",
-            "title": "Ticket flow evolution",
-            "subtitle": "Created vs closed tickets per week, plus cumulative open backlog.",
+            "title": "Created, closed, and still open",
+            "subtitle": "Weekly created tickets, weekly closed tickets, and the total backlog still open.",
             "span": "wide",
             "svg": render_line_chart_svg(
-                "Ticket flow evolution",
+                "Created, closed, and still open",
                 analysis["timeline_rows"],
                 subtitle="Closure uses updatedAt as the best available proxy.",
             ),
         },
         {
             "file": "open_priority.svg",
-            "title": "Open backlog by priority",
-            "subtitle": "Current open tickets split by priority.",
+            "title": "Open tickets by priority",
+            "subtitle": "How urgent the current open queue is by assigned priority.",
             "span": "regular",
             "svg": render_horizontal_bar_chart_svg(
-                "Open backlog by priority",
+                "Open tickets by priority",
                 analysis["open_priority_summary_rows"],
                 "priority",
                 "open_count",
@@ -1169,11 +1169,11 @@ def write_plot_svgs(plots_dir: Path, analysis: dict[str, Any]) -> list[dict[str,
         },
         {
             "file": "comments_hotspots.svg",
-            "title": "Comment hotspots",
-            "subtitle": "Tickets generating the most coordination noise.",
+            "title": "Most commented tickets",
+            "subtitle": "Tickets that are generating the most back-and-forth.",
             "span": "regular",
             "svg": render_horizontal_bar_chart_svg(
-                "Comment hotspots",
+                "Most commented tickets",
                 top_comment_chart_rows,
                 "label",
                 "count",
@@ -1184,11 +1184,11 @@ def write_plot_svgs(plots_dir: Path, analysis: dict[str, Any]) -> list[dict[str,
         },
         {
             "file": "open_eta_buckets.svg",
-            "title": "Open tickets by ETA bucket",
-            "subtitle": "How urgent the current open queue is.",
+            "title": "Open tickets by urgency",
+            "subtitle": "How many open tickets are overdue, near-term, or further out.",
             "span": "regular",
             "svg": render_horizontal_bar_chart_svg(
-                "Open tickets by ETA bucket",
+                "Open tickets by urgency",
                 analysis["open_eta_bucket_rows"],
                 "bucket",
                 "count",
@@ -1198,11 +1198,11 @@ def write_plot_svgs(plots_dir: Path, analysis: dict[str, Any]) -> list[dict[str,
         },
         {
             "file": "open_by_lab.svg",
-            "title": "Open backlog by lab",
-            "subtitle": "Current open workload concentration.",
+            "title": "Labs with the most open tickets",
+            "subtitle": "Where the unfinished workload is currently concentrated.",
             "span": "regular",
             "svg": render_horizontal_bar_chart_svg(
-                "Open backlog by lab",
+                "Labs with the most open tickets",
                 open_by_lab_rows,
                 "label",
                 "count",
@@ -1248,6 +1248,15 @@ def render_stats_html(
     summary = analysis["summary"]
     source_label = input_dir.name if root_mode else str(input_dir)
     output_label = f"{input_dir.name}/analysis" if root_mode else str(out_dir)
+    hero_links = [
+        ("Back to home", "index.html" if root_mode else "../../../index.html"),
+        ("Ticketing portal", "tickets.html" if root_mode else "../../../tickets.html"),
+        ("Work status", "work_status.html" if root_mode else "../../../work_status.html"),
+    ]
+    hero_links_html = "".join(
+        f'<a class="hero-link{" primary" if index == 0 else ""}" href="{html_escape(href)}">{html_escape(label)}</a>'
+        for index, (label, href) in enumerate(hero_links)
+    )
     cards = [
         ("Total tickets", compact_number(summary["tickets_total"])),
         ("Open tickets", compact_number(summary["open_tickets"])),
@@ -1268,7 +1277,7 @@ def render_stats_html(
         for item in plot_manifest
     )
     overdue_html = render_rank_list(
-        "Watchlist: overdue",
+        "Overdue tickets to watch",
         analysis["overdue_open_tickets"][:5],
         lambda row: (
             f'<strong>{html_escape(row["title"])}</strong>'
@@ -1276,7 +1285,7 @@ def render_stats_html(
         ),
     )
     comments_html = render_rank_list(
-        "Comment hotspots",
+        "Most commented tickets",
         analysis["top_commented_rows"][:5],
         lambda row: (
             f'<strong>{html_escape(row["title"])}</strong>'
@@ -1375,6 +1384,33 @@ def render_stats_html(
       max-width: 70ch;
       color: var(--muted);
       line-height: 1.55;
+    }}
+    .hero-links {{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }}
+    .hero-link {{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 0.92rem;
+      transition: transform 0.08s ease-out, border-color 0.08s ease-out, background 0.08s ease-out;
+    }}
+    .hero-link:hover {{
+      transform: translateY(-1px);
+      border-color: rgba(148, 163, 184, 0.42);
+      background: rgba(255, 255, 255, 0.08);
+    }}
+    .hero-link.primary {{
+      border-color: rgba(74, 222, 128, 0.42);
+      background: rgba(74, 222, 128, 0.12);
     }}
     .meta {{
       display: flex;
@@ -1515,7 +1551,8 @@ def render_stats_html(
     <section class="hero">
       <div class="eyebrow">{html_escape(root_badge)}</div>
       <h1>{html_escape(page_title)}</h1>
-      <p>A visual overview of categories, labs, effort mix, ticket evolution, and collaboration hotspots. This page is meant to be the quick operational read, while the export folder keeps the raw CSV and markdown report for deeper digging.</p>
+      <p>A quick visual overview of workload, categories, effort sizing, ticket timing, and discussion volume. This page is meant to be the fast read, while the export folder keeps the raw CSV and markdown report for deeper digging.</p>
+      <div class="hero-links">{hero_links_html}</div>
       <div class="meta">
         <span>Source export: {html_escape(source_label)}</span>
         <span>Analysis output: {html_escape(output_label)}</span>

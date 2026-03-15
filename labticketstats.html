@@ -88,6 +88,33 @@
       color: var(--muted);
       line-height: 1.55;
     }
+    .hero-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .hero-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 0.92rem;
+      transition: transform 0.08s ease-out, border-color 0.08s ease-out, background 0.08s ease-out;
+    }
+    .hero-link:hover {
+      transform: translateY(-1px);
+      border-color: rgba(148, 163, 184, 0.42);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .hero-link.primary {
+      border-color: rgba(74, 222, 128, 0.42);
+      background: rgba(74, 222, 128, 0.12);
+    }
     .meta {
       display: flex;
       flex-wrap: wrap;
@@ -227,22 +254,23 @@
     <section class="hero">
       <div class="eyebrow">Live page snapshot</div>
       <h1>Lab Ticket Stats</h1>
-      <p>A visual overview of categories, labs, effort mix, ticket evolution, and collaboration hotspots. This page is meant to be the quick operational read, while the export folder keeps the raw CSV and markdown report for deeper digging.</p>
+      <p>A quick visual overview of workload, categories, effort sizing, ticket timing, and discussion volume. This page is meant to be the fast read, while the export folder keeps the raw CSV and markdown report for deeper digging.</p>
+      <div class="hero-links"><a class="hero-link primary" href="index.html">Back to home</a><a class="hero-link" href="tickets.html">Ticketing portal</a><a class="hero-link" href="work_status.html">Work status</a></div>
       <div class="meta">
         <span>Source export: tickets-20260315-171358</span>
         <span>Analysis output: tickets-20260315-171358/analysis</span>
-        <span>Generated: 2026-03-15T16:15:50.225908+00:00</span>
+        <span>Generated: 2026-03-15T16:28:16.105991+00:00</span>
       </div>
       <section class="kpis"><div class="kpi"><div class="kpi-label">Total tickets</div><div class="kpi-value">11</div></div><div class="kpi"><div class="kpi-label">Open tickets</div><div class="kpi-value">8</div></div><div class="kpi"><div class="kpi-label">Done / closed</div><div class="kpi-value">3</div></div><div class="kpi"><div class="kpi-label">Overdue open</div><div class="kpi-value">1</div></div><div class="kpi"><div class="kpi-label">Avg comments</div><div class="kpi-value">0.6</div></div><div class="kpi"><div class="kpi-label">Median closure days</div><div class="kpi-value">8.8</div></div></section>
     </section>
 
     <section class="insights"><div class="insight"><h3>Largest backlog</h3><p>Gozzi holds 5 open tickets out of 8 total.</p></div><div class="insight"><h3>Most overdue request</h3><p>#janxP8gW in Rossi is late by 3 days (Laser UPS installation).</p></div><div class="insight"><h3>Oldest open ticket</h3><p>#janxP8gW has been open for 31 days (Laser UPS installation).</p></div><div class="insight"><h3>Comment hotspot</h3><p>#90ATtOV4 collected 2 comments and is in status IN_PROGRESS.</p></div><div class="insight"><h3>Legacy ticket sample</h3><p>This snapshot still has no requester snapshots, so effort and ETA drift analysis will become more useful on newer tickets.</p></div></section>
 
-    <section class="plot-grid"><article class="plot-card "><div class="plot-meta"><h3>Labs share</h3><p>Ticket volume split by current lab.</p></div><img src="assets/labticketstats/plots/labs_share.svg" alt="Labs share" /></article><article class="plot-card "><div class="plot-meta"><h3>Categories share</h3><p>How requests distribute across categories.</p></div><img src="assets/labticketstats/plots/categories_share.svg" alt="Categories share" /></article><article class="plot-card "><div class="plot-meta"><h3>Effort mix</h3><p>Current effort labels, including unspecified tickets.</p></div><img src="assets/labticketstats/plots/effort_share.svg" alt="Effort mix" /></article><article class="plot-card "><div class="plot-meta"><h3>Status share</h3><p>Current pipeline distribution.</p></div><img src="assets/labticketstats/plots/status_share.svg" alt="Status share" /></article><article class="plot-card wide"><div class="plot-meta"><h3>Ticket flow evolution</h3><p>Created vs closed tickets per week, plus cumulative open backlog.</p></div><img src="assets/labticketstats/plots/ticket_flow_timeline.svg" alt="Ticket flow evolution" /></article><article class="plot-card "><div class="plot-meta"><h3>Open backlog by priority</h3><p>Current open tickets split by priority.</p></div><img src="assets/labticketstats/plots/open_priority.svg" alt="Open backlog by priority" /></article><article class="plot-card "><div class="plot-meta"><h3>Comment hotspots</h3><p>Tickets generating the most coordination noise.</p></div><img src="assets/labticketstats/plots/comments_hotspots.svg" alt="Comment hotspots" /></article><article class="plot-card "><div class="plot-meta"><h3>Open tickets by ETA bucket</h3><p>How urgent the current open queue is.</p></div><img src="assets/labticketstats/plots/open_eta_buckets.svg" alt="Open tickets by ETA bucket" /></article><article class="plot-card "><div class="plot-meta"><h3>Open backlog by lab</h3><p>Current open workload concentration.</p></div><img src="assets/labticketstats/plots/open_by_lab.svg" alt="Open backlog by lab" /></article></section>
+    <section class="plot-grid"><article class="plot-card "><div class="plot-meta"><h3>Tickets by lab</h3><p>How the full ticket load is split across labs.</p></div><img src="assets/labticketstats/plots/labs_share.svg" alt="Tickets by lab" /></article><article class="plot-card "><div class="plot-meta"><h3>Tickets by category</h3><p>Which kinds of requests arrive most often.</p></div><img src="assets/labticketstats/plots/categories_share.svg" alt="Tickets by category" /></article><article class="plot-card "><div class="plot-meta"><h3>Tickets by effort</h3><p>Current effort sizing, including tickets still unsized.</p></div><img src="assets/labticketstats/plots/effort_share.svg" alt="Tickets by effort" /></article><article class="plot-card "><div class="plot-meta"><h3>Tickets by status</h3><p>Where the current workload sits in the pipeline.</p></div><img src="assets/labticketstats/plots/status_share.svg" alt="Tickets by status" /></article><article class="plot-card wide"><div class="plot-meta"><h3>Created, closed, and still open</h3><p>Weekly created tickets, weekly closed tickets, and the total backlog still open.</p></div><img src="assets/labticketstats/plots/ticket_flow_timeline.svg" alt="Created, closed, and still open" /></article><article class="plot-card "><div class="plot-meta"><h3>Open tickets by priority</h3><p>How urgent the current open queue is by assigned priority.</p></div><img src="assets/labticketstats/plots/open_priority.svg" alt="Open tickets by priority" /></article><article class="plot-card "><div class="plot-meta"><h3>Most commented tickets</h3><p>Tickets that are generating the most back-and-forth.</p></div><img src="assets/labticketstats/plots/comments_hotspots.svg" alt="Most commented tickets" /></article><article class="plot-card "><div class="plot-meta"><h3>Open tickets by urgency</h3><p>How many open tickets are overdue, near-term, or further out.</p></div><img src="assets/labticketstats/plots/open_eta_buckets.svg" alt="Open tickets by urgency" /></article><article class="plot-card "><div class="plot-meta"><h3>Labs with the most open tickets</h3><p>Where the unfinished workload is currently concentrated.</p></div><img src="assets/labticketstats/plots/open_by_lab.svg" alt="Labs with the most open tickets" /></article></section>
 
     <section class="lists">
-      <section class="list-card"><h3>Watchlist: overdue</h3><ol><li><strong>Laser UPS installation</strong><span>Rossi · P3 · overdue by 3 days</span></li></ol></section>
-      <section class="list-card"><h3>Comment hotspots</h3><ol><li><strong>3D modeling: modify mouse holder in fusion</strong><span>Gozzi · IN_PROGRESS · 2 comments</span></li><li><strong>Dual-probe holder for electrophysiology</strong><span>Gozzi · WAITING_ON_PROCUREMENT · 1 comment</span></li><li><strong>Laser UPS installation</strong><span>Rossi · TRIAGE · 1 comment</span></li><li><strong>Imparare a saldare</strong><span>Gozzi · CLOSED · 3 comments</span></li></ol></section>
+      <section class="list-card"><h3>Overdue tickets to watch</h3><ol><li><strong>Laser UPS installation</strong><span>Rossi · P3 · overdue by 3 days</span></li></ol></section>
+      <section class="list-card"><h3>Most commented tickets</h3><ol><li><strong>3D modeling: modify mouse holder in fusion</strong><span>Gozzi · IN_PROGRESS · 2 comments</span></li><li><strong>Dual-probe holder for electrophysiology</strong><span>Gozzi · WAITING_ON_PROCUREMENT · 1 comment</span></li><li><strong>Laser UPS installation</strong><span>Rossi · TRIAGE · 1 comment</span></li><li><strong>Imparare a saldare</strong><span>Gozzi · CLOSED · 3 comments</span></li></ol></section>
     </section>
   </main>
 </body>

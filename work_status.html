@@ -437,11 +437,17 @@
       color: var(--muted);
     }
 
+    .tasks-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-bottom: 0.8rem;
+    }
+
     .tasks-cta {
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      margin-bottom: 0.8rem;
       text-decoration: none;
     }
 
@@ -788,7 +794,10 @@
             Tickets with status <code>IN_PROGRESS</code>, grouped by PI and synced automatically from the ticket database.
           </p>
 
-          <a class="auth-btn tasks-cta" href="tickets.html">Open ticket portal</a>
+          <div class="tasks-actions">
+            <a class="auth-btn tasks-cta" href="tickets.html">Open ticket portal</a>
+            <a class="auth-btn tasks-cta" href="labticketstats.html">Open stats</a>
+          </div>
           <div id="tasks-groups"></div>
           <div id="tasks-status" class="tasks-status">Waiting for sync…</div>
         </div>
