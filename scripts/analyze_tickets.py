@@ -15,6 +15,7 @@ from collections import Counter, defaultdict
 from html import escape as html_escape
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo
 
 
 DATE_FMT = "%Y-%m-%d"
@@ -38,6 +39,7 @@ CHART_COLORS = [
     "#06b6d4",
     "#84cc16",
 ]
+DISPLAY_TIMEZONE = ZoneInfo("Europe/Rome")
 STOPWORDS = {
     "a",
     "an",
@@ -187,6 +189,13 @@ def parse_date(value: Any) -> dt.date | None:
             return None
 
     return None
+
+
+def format_display_timestamp(value: Any, *, timezone: ZoneInfo = DISPLAY_TIMEZONE) -> str:
+    parsed = parse_timestamp(value)
+    if not parsed:
+        return "-"
+    return parsed.astimezone(timezone).strftime("%d/%m/%Y, %H:%M")
 
 
 def load_json(path: Path) -> Any:
@@ -777,8 +786,8 @@ def analyze_tickets(
     if summary["tickets_with_requester_snapshot"] == 0:
         insights.append(
             {
-                "title": "Legacy ticket sample",
-                "detail": "This snapshot still has no requester snapshots, so effort and ETA drift analysis will become more useful on newer tickets.",
+                "title": "Older tickets note",
+                "detail": "These tickets were created before we started saving the original request separately, so requested-vs-final effort and ETA comparisons are still limited here.",
             }
         )
 
@@ -1248,6 +1257,7 @@ def render_stats_html(
     summary = analysis["summary"]
     source_label = input_dir.name if root_mode else str(input_dir)
     output_label = f"{input_dir.name}/analysis" if root_mode else str(out_dir)
+    generated_label = format_display_timestamp(summary["generated_at"])
     hero_links = [
         ("Back to home", "index.html" if root_mode else "../../../index.html"),
         ("Ticketing portal", "tickets.html" if root_mode else "../../../tickets.html"),
@@ -1268,6 +1278,25 @@ def render_stats_html(
     cards_html = "".join(
         f'<div class="kpi"><div class="kpi-label">{html_escape(label)}</div><div class="kpi-value">{html_escape(value)}</div></div>'
         for label, value in cards
+    )
+    meta_items = (
+        [
+            f"Updated: {generated_label}",
+            f"Snapshot: {compact_number(summary['tickets_total'])} tickets",
+            f"Open right now: {compact_number(summary['open_tickets'])}",
+        ]
+        if root_mode
+        else [
+            f"Source export: {source_label}",
+            f"Analysis output: {output_label}",
+            f"Generated: {generated_label}",
+        ]
+    )
+    meta_html = "".join(f"<span>{html_escape(item)}</span>" for item in meta_items)
+    visible_insights = (
+        [item for item in analysis["insights"] if item.get("title") != "Older tickets note"]
+        if root_mode
+        else analysis["insights"]
     )
     plots_html = "".join(
         f'<article class="plot-card {"wide" if item["span"] == "wide" else ""}">'
@@ -1551,17 +1580,13 @@ def render_stats_html(
     <section class="hero">
       <div class="eyebrow">{html_escape(root_badge)}</div>
       <h1>{html_escape(page_title)}</h1>
-      <p>A quick visual overview of workload, categories, effort sizing, ticket timing, and discussion volume. This page is meant to be the fast read, while the export folder keeps the raw CSV and markdown report for deeper digging.</p>
+      <p>This page gives a quick view of which labs are busiest, which categories are filling up, how large requests are, and where work is getting delayed or discussed the most.</p>
       <div class="hero-links">{hero_links_html}</div>
-      <div class="meta">
-        <span>Source export: {html_escape(source_label)}</span>
-        <span>Analysis output: {html_escape(output_label)}</span>
-        <span>Generated: {html_escape(summary["generated_at"])}</span>
-      </div>
+      <div class="meta">{meta_html}</div>
       <section class="kpis">{cards_html}</section>
     </section>
 
-    {render_insights(analysis["insights"])}
+    {render_insights(visible_insights)}
 
     <section class="plot-grid">{plots_html}</section>
 
@@ -1582,7 +1607,7 @@ def render_report(input_dir: Path, out_dir: Path, analysis: dict[str, Any]) -> s
         "",
         f"- Source export: `{input_dir}`",
         f"- Analysis output: `{out_dir}`",
-        f"- Generated at: `{summary['generated_at']}`",
+        f"- Generated at: `{format_display_timestamp(summary['generated_at'])}`",
         f"- Site page: `labticketstats.html`",
         "",
         "## Key Takeaways",
@@ -1630,7 +1655,7 @@ def render_report(input_dir: Path, out_dir: Path, analysis: dict[str, Any]) -> s
             "## Notes",
             "",
             "- Closure timing uses `updatedAt` as a proxy because a dedicated close timestamp is not stored yet.",
-            "- Requester/admin drift metrics improve once newer tickets include requester snapshots.",
+            "- Requested-vs-final effort and ETA comparisons improve once newer tickets include the original requester snapshot.",
             "",
         ]
     )

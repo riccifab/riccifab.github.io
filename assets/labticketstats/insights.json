@@ -16,7 +16,7 @@
     "title": "Comment hotspot"
   },
   {
-    "detail": "This snapshot still has no requester snapshots, so effort and ETA drift analysis will become more useful on newer tickets.",
-    "title": "Legacy ticket sample"
+    "detail": "These tickets were created before we started saving the original request separately, so requested-vs-final effort and ETA comparisons are still limited here.",
+    "title": "Older tickets note"
   }
 ]
