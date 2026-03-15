@@ -2,7 +2,7 @@ name: ticket-update-notify
 
 on:
   schedule:
-    - cron: "*/10 * * * *"   # ogni 10 minuti
+    - cron: "*/5 * * * *"   # ogni 5 minuti
   workflow_dispatch:
 
 concurrency:

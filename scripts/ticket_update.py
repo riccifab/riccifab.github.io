@@ -241,6 +241,8 @@ def compute_diff(old: Dict[str, Any], new: Dict[str, Any]) -> List[str]:
         "notes",
         "description",
         "lastComment",
+        "lastCommentAuthorEmail",
+        "lastCommentAt",
         "commentCount",
     ]
 

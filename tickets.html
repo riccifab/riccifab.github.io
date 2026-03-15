@@ -132,7 +132,7 @@
                 <th>Prio</th>
                 <th>Status</th>
                 <th>Lab</th>
-                <th>Expected</th>
+                <th>ETA</th>
                 <th>Created</th>
                 <th>Updated</th>
               </tr>
@@ -207,7 +207,7 @@
             </label>
 
             <label>
-              Expected delivery date
+              Desired ETA
               <input id="tExpected" type="date" required />
             </label>
           </div>
@@ -311,9 +311,9 @@
             <label>
               Impact
               <select id="tImpact" required>
-                <option value="not_blocking">not_blocking</option>
-                <option value="blocks_week">blocks_week</option>
-                <option value="blocks_today">blocks_today</option>
+                <option value="not_blocking">normal</option>
+                <option value="blocks_week">blocks this week</option>
+                <option value="blocks_today">blocks today</option>
               </select>
             </label>
 
@@ -344,6 +344,6 @@
     <footer class="footer">IIT Neurotech.</footer>
   </div>
 
-  <script type="module" src="tickets.js?v=20260315a"></script>
+  <script type="module" src="tickets.js?v=20260315b"></script>
 </body>
 </html>

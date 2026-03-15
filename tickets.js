@@ -20,6 +20,7 @@ import {
   where,
   orderBy,
   limit,
+  increment,
   updateDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -95,6 +96,11 @@ let selectedTicketId = null;
 
 const STATUS = ["NEW","TRIAGE","APPROVED","REJECTED","IN_PROGRESS","WAITING_ON_PI","WAITING_ON_PROCUREMENT","BLOCKED","DONE","CLOSED"];
 const PRIORITY = ["P0","P1","P2","P3"];
+const IMPACT_LABELS = {
+  not_blocking: "normal",
+  blocks_week: "blocks this week",
+  blocks_today: "blocks today"
+};
 
 /* ========= Helpers ========= */
 function setPill(signedIn, text) {
@@ -113,6 +119,7 @@ function setMsg(el, text, type = "") {
   if (type) el.classList.add(type);
 }
 function safeText(s) { return (s ?? "").toString().replace(/[<>]/g, ""); }
+function formatImpact(s) { return IMPACT_LABELS[s] || safeText(s || "-"); }
 function fmtDateTime(ts) {
   if (!ts) return "-";
   try {
@@ -122,6 +129,18 @@ function fmtDateTime(ts) {
     }
   } catch {}
   return "-";
+}
+
+function bindAutoDatePickers(root = document) {
+  const nodes = root.querySelectorAll?.('input[type="date"]') || [];
+  nodes.forEach((input) => {
+    if (input.dataset.autoPickerBound === "1") return;
+    input.dataset.autoPickerBound = "1";
+    input.addEventListener("click", () => {
+      if (input.disabled || input.readOnly || typeof input.showPicker !== "function") return;
+      try { input.showPicker(); } catch {}
+    });
+  });
 }
 
 function openModal() {
@@ -139,6 +158,7 @@ function closeModal() {
 /* ========= Modal wiring ========= */
 btnCloseModal.addEventListener("click", closeModal);
 btnNewTicket.addEventListener("click", openModal);
+bindAutoDatePickers(document);
 
 /* ========= Allowlist ========= */
 async function ensureAllowedOrThrow(user) {
@@ -379,13 +399,13 @@ function renderDetails(t) {
     <hr class="sep"/>
 
     <div class="grid2">
-      <div><div class="muted small">Expected</div><div class="code">${safeText(t.expectedDeliveryDate || "-")}</div></div>
+      <div><div class="muted small">ETA</div><div class="code">${safeText(t.expectedDeliveryDate || "-")}</div></div>
       <div><div class="muted small">Hard deadline</div><div class="code">${t.hardDeadline?"yes":"no"}${t.hardDeadlineDate? " • "+safeText(t.hardDeadlineDate):""}</div></div>
       <div><div class="muted small">Commercially available</div><div class="code">${safeText(t.commerciallyAvailable || "unknown")}</div></div>
       <div><div class="muted small">Commercial link</div><div class="code">${t.commercialLink ? `<a href="${safeText(t.commercialLink)}" target="_blank" rel="noreferrer">${safeText(t.commercialLink)}</a>` : "-"}</div></div>
       <div><div class="muted small">Deferred</div><div class="code">${safeText(t.canBeDeferred || "-")}${t.deferTo ? " • "+safeText(t.deferTo):""}</div></div>
       <div><div class="muted small">Why not deferred</div><div class="code">${safeText(t.whyNotDeferredCode || "-")}${t.whyNotDeferredText ? " • "+safeText(t.whyNotDeferredText):""}</div></div>
-      <div><div class="muted small">Impact / Effort</div><div class="code">${safeText(t.impact || "-")} • ${safeText(t.effortGuess || "-")}</div></div>
+      <div><div class="muted small">Impact / Effort</div><div class="code">${formatImpact(t.impact)} • ${safeText(t.effortGuess || "-")}</div></div>
       <div><div class="muted small">Tags</div><div class="code">${safeText(tags || "-")}</div></div>
     </div>
 
@@ -398,6 +418,7 @@ function renderDetails(t) {
   `;
 
   if (isAdmin) wireAdminControls(t);
+  bindAutoDatePickers(ticketDetails);
 }
 
 function adminControlsHtml(t) {
@@ -413,13 +434,12 @@ function adminControlsHtml(t) {
 
     <div class="grid2">
       <label>
-        Expected delivery (update)
+        ETA
         <input id="aExpected" type="date" value="${safeText(t.expectedDeliveryDate || "")}" />
       </label>
       <label>Status<select id="aStatus">${statusOptions}</select></label>
       <label>Priority<select id="aPriority">${prioOptions}</select></label>
       <label>Assignee email<input id="aAssigneeEmail" type="text" value="${safeText(t.assigneeEmail || "")}" /></label>
-      <label>Admin ETA<input id="aAdminEta" type="date" value="${safeText(t.adminEtaDate || "")}" /></label>
       <label>Effort (admin)
         <select id="aEffort">
           <option value="" ${!t.effortAdmin?"selected":""}>(none)</option>
@@ -447,7 +467,6 @@ function wireAdminControls(t) {
   const aStatus = $("aStatus");
   const aPriority = $("aPriority");
   const aAssigneeEmail = $("aAssigneeEmail");
-  const aAdminEta = $("aAdminEta");
   const aEffort = $("aEffort");
   const aNotes = $("aNotes");
   const aExpected = $("aExpected");
@@ -458,7 +477,6 @@ function wireAdminControls(t) {
         status: aStatus.value,
         priority: aPriority.value,
         assigneeEmail: (aAssigneeEmail.value || "").trim(),
-        adminEtaDate: aAdminEta.value || "",
         effortAdmin: aEffort.value || "",
         adminNotes: (aNotes.value || "").trim(),
         ...partial,
@@ -615,8 +633,17 @@ btnAddComment.onclick = async () => {
       createdAt: serverTimestamp()
     });
 
-    try { await updateDoc(doc(db, "tickets", selectedTicketId), { updatedAt: serverTimestamp() }); } catch {}
+    try {
+      await updateDoc(doc(db, "tickets", selectedTicketId), {
+        updatedAt: serverTimestamp(),
+        lastComment: text,
+        lastCommentAuthorEmail: currentUser.email || "",
+        lastCommentAt: serverTimestamp(),
+        commentCount: increment(1)
+      });
+    } catch {}
     await loadComments(selectedTicketId);
+    setMsg(commentMsg, "Comment sent. Notification email will follow.", "ok");
   } catch (e) {
     setMsg(commentMsg, `Comment error: ${e?.message || e}`, "err");
   }
