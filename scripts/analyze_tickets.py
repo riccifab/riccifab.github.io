@@ -699,18 +699,20 @@ def analyze_tickets(
     last_week = max(timeline_points + [current_week]) if timeline_points else current_week
 
     timeline_rows: list[dict[str, Any]] = []
-    cumulative_open = 0
+    cumulative_created = 0
+    cumulative_closed = 0
     while cursor <= last_week:
         created_count = created_week_counter.get(cursor, 0)
         closed_count = closed_week_counter.get(cursor, 0)
-        cumulative_open += created_count - closed_count
+        cumulative_created += created_count
+        cumulative_closed += closed_count
         timeline_rows.append(
             {
                 "week": cursor.isoformat(),
                 "label": cursor.strftime("%d %b"),
-                "created": created_count,
-                "closed": closed_count,
-                "open": max(cumulative_open, 0),
+                "created": cumulative_created,
+                "closed": cumulative_closed,
+                "open": max(cumulative_created - cumulative_closed, 0),
             }
         )
         cursor += dt.timedelta(days=7)
@@ -1021,9 +1023,11 @@ def render_line_chart_svg(
     series = [
         ("created", "Created", "#2563eb"),
         ("closed", "Closed", "#10b981"),
-        ("open", "Open backlog", "#f97316"),
+        ("open", "Open", "#f97316"),
     ]
-    max_value = max([1.0] + [safe_float(row.get(key)) for row in rows for key, _, _ in series])
+    raw_max = max([1.0] + [safe_float(row.get(key)) for row in rows for key, _, _ in series])
+    tick_step = max(1, math.ceil(raw_max / 4))
+    axis_max = tick_step * 4
     left_pad = 72
     right_pad = 34
     top_pad = 88 if subtitle else 68
@@ -1034,7 +1038,7 @@ def render_line_chart_svg(
 
     def point(index: int, value: float) -> tuple[float, float]:
         x = left_pad + (0 if len(rows) == 1 else index * step_x)
-        y = top_pad + chart_height - (value / max_value) * chart_height
+        y = top_pad + chart_height - (value / axis_max) * chart_height
         return (x, y)
 
     lines = [
@@ -1046,8 +1050,8 @@ def render_line_chart_svg(
         lines.append(f'<text x="26" y="62" fill="#475569" font-size="13" font-family="Arial, sans-serif">{html_escape(subtitle)}</text>')
 
     for tick in range(5):
-        value = max_value * tick / 4
-        y = top_pad + chart_height - (value / max_value) * chart_height
+        value = tick_step * tick
+        y = top_pad + chart_height - (value / axis_max) * chart_height
         lines.append(f'<line x1="{left_pad}" y1="{y:.1f}" x2="{width - right_pad}" y2="{y:.1f}" stroke="#dbe4f0" stroke-width="1" />')
         lines.append(
             f'<text x="{left_pad - 12}" y="{y + 4:.1f}" text-anchor="end" fill="#64748b" font-size="12" font-family="Arial, sans-serif">{html_escape(compact_number(value))}</text>'
@@ -1102,7 +1106,7 @@ def write_plot_svgs(plots_dir: Path, analysis: dict[str, Any]) -> list[dict[str,
             "file": "labs_share.svg",
             "title": "Tickets by lab",
             "subtitle": "How the full ticket load is split across labs.",
-            "span": "regular",
+            "span": "half",
             "svg": render_donut_chart_svg(
                 "Tickets by lab",
                 analysis["lab_distribution_rows"],
@@ -1115,7 +1119,7 @@ def write_plot_svgs(plots_dir: Path, analysis: dict[str, Any]) -> list[dict[str,
             "file": "categories_share.svg",
             "title": "Tickets by category",
             "subtitle": "Which kinds of requests arrive most often.",
-            "span": "regular",
+            "span": "half",
             "svg": render_donut_chart_svg(
                 "Tickets by category",
                 analysis["category_distribution_rows"],
@@ -1128,7 +1132,7 @@ def write_plot_svgs(plots_dir: Path, analysis: dict[str, Any]) -> list[dict[str,
             "file": "effort_share.svg",
             "title": "Tickets by effort",
             "subtitle": "Current effort sizing, including tickets still unsized.",
-            "span": "regular",
+            "span": "half",
             "svg": render_donut_chart_svg(
                 "Tickets by effort",
                 analysis["effort_distribution_rows"],
@@ -1141,7 +1145,7 @@ def write_plot_svgs(plots_dir: Path, analysis: dict[str, Any]) -> list[dict[str,
             "file": "status_share.svg",
             "title": "Tickets by status",
             "subtitle": "Where the current workload sits in the pipeline.",
-            "span": "regular",
+            "span": "half",
             "svg": render_donut_chart_svg(
                 "Tickets by status",
                 analysis["status_summary_rows"],
@@ -1153,20 +1157,20 @@ def write_plot_svgs(plots_dir: Path, analysis: dict[str, Any]) -> list[dict[str,
         },
         {
             "file": "ticket_flow_timeline.svg",
-            "title": "Created, closed, and still open",
-            "subtitle": "Weekly created tickets, weekly closed tickets, and the total backlog still open.",
+            "title": "Created, closed, and open",
+            "subtitle": "Cumulative totals over time, so the latest point matches the current snapshot.",
             "span": "wide",
             "svg": render_line_chart_svg(
-                "Created, closed, and still open",
+                "Created, closed, and open",
                 analysis["timeline_rows"],
-                subtitle="Closure uses updatedAt as the best available proxy.",
+                subtitle="The closed line uses the latest ticket update as the best available close date.",
             ),
         },
         {
             "file": "open_priority.svg",
             "title": "Open tickets by priority",
             "subtitle": "How urgent the current open queue is by assigned priority.",
-            "span": "regular",
+            "span": "half",
             "svg": render_horizontal_bar_chart_svg(
                 "Open tickets by priority",
                 analysis["open_priority_summary_rows"],
@@ -1180,7 +1184,7 @@ def write_plot_svgs(plots_dir: Path, analysis: dict[str, Any]) -> list[dict[str,
             "file": "comments_hotspots.svg",
             "title": "Most commented tickets",
             "subtitle": "Tickets that are generating the most back-and-forth.",
-            "span": "regular",
+            "span": "half",
             "svg": render_horizontal_bar_chart_svg(
                 "Most commented tickets",
                 top_comment_chart_rows,
@@ -1195,7 +1199,7 @@ def write_plot_svgs(plots_dir: Path, analysis: dict[str, Any]) -> list[dict[str,
             "file": "open_eta_buckets.svg",
             "title": "Open tickets by urgency",
             "subtitle": "How many open tickets are overdue, near-term, or further out.",
-            "span": "regular",
+            "span": "half",
             "svg": render_horizontal_bar_chart_svg(
                 "Open tickets by urgency",
                 analysis["open_eta_bucket_rows"],
@@ -1209,7 +1213,7 @@ def write_plot_svgs(plots_dir: Path, analysis: dict[str, Any]) -> list[dict[str,
             "file": "open_by_lab.svg",
             "title": "Labs with the most open tickets",
             "subtitle": "Where the unfinished workload is currently concentrated.",
-            "span": "regular",
+            "span": "half",
             "svg": render_horizontal_bar_chart_svg(
                 "Labs with the most open tickets",
                 open_by_lab_rows,
@@ -1280,11 +1284,7 @@ def render_stats_html(
         for label, value in cards
     )
     meta_items = (
-        [
-            f"Updated: {generated_label}",
-            f"Snapshot: {compact_number(summary['tickets_total'])} tickets",
-            f"Open right now: {compact_number(summary['open_tickets'])}",
-        ]
+        [f"Updated: {generated_label}"]
         if root_mode
         else [
             f"Source export: {source_label}",
@@ -1299,7 +1299,7 @@ def render_stats_html(
         else analysis["insights"]
     )
     plots_html = "".join(
-        f'<article class="plot-card {"wide" if item["span"] == "wide" else ""}">'
+        f'<article class="plot-card {"wide" if item["span"] == "wide" else "half"}">'
         f'<div class="plot-meta"><h3>{html_escape(item["title"])}</h3><p>{html_escape(item["subtitle"])}</p></div>'
         f'<img src="{html_escape(plot_base + "/" + item["file"])}" alt="{html_escape(item["title"])}" />'
         f"</article>"
@@ -1505,8 +1505,11 @@ def render_stats_html(
       margin-bottom: 18px;
     }}
     .plot-card {{
-      grid-column: span 4;
+      grid-column: span 6;
       overflow: hidden;
+    }}
+    .plot-card.half {{
+      grid-column: span 6;
     }}
     .plot-card.wide {{
       grid-column: span 12;
