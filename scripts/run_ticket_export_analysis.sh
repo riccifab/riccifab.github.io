@@ -4,6 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 VENV_PY="$ROOT_DIR/.venv/bin/python"
 ENV_FILE="$ROOT_DIR/.env.local"
+LOCAL_CREDENTIALS_DIR="$ROOT_DIR/local/credentials"
 
 if [[ ! -x "$VENV_PY" ]]; then
   echo "Missing local Python environment. Run:"
@@ -11,10 +12,11 @@ if [[ ! -x "$VENV_PY" ]]; then
   exit 1
 fi
 
-if [[ ! -f "$ENV_FILE" && -z "${GOOGLE_APPLICATION_CREDENTIALS:-}" && -z "${GCP_SA_KEY_B64:-}" ]]; then
+if [[ ! -f "$ENV_FILE" && -z "${GOOGLE_APPLICATION_CREDENTIALS:-}" && -z "${GCP_SA_KEY_B64:-}" && ! -f "$LOCAL_CREDENTIALS_DIR/service-account.json" ]]; then
   echo "Missing local credentials configuration."
-  echo "Copy .env.local.example to .env.local and set GOOGLE_APPLICATION_CREDENTIALS,"
-  echo "or export GOOGLE_APPLICATION_CREDENTIALS before running this script."
+  echo "Copy your JSON to:"
+  echo "  $LOCAL_CREDENTIALS_DIR/service-account.json"
+  echo "or copy .env.local.example to .env.local and set GOOGLE_APPLICATION_CREDENTIALS."
   exit 1
 fi
 

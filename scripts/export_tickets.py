@@ -29,6 +29,7 @@ except ModuleNotFoundError as exc:
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 PROJECT_ID_PATTERN = re.compile(r'projectId:\s*"([^"]+)"')
+LOCAL_CREDENTIALS_DIR = REPO_ROOT / "local" / "credentials"
 
 
 def load_local_env() -> None:
@@ -47,6 +48,23 @@ def load_local_env() -> None:
             if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
                 value = value[1:-1]
             os.environ[key] = value
+
+
+def discover_local_credentials_file() -> str:
+    preferred = LOCAL_CREDENTIALS_DIR / "service-account.json"
+    if preferred.exists():
+        return str(preferred)
+
+    candidates = sorted(path for path in LOCAL_CREDENTIALS_DIR.glob("*.json") if path.is_file())
+    if len(candidates) == 1:
+        return str(candidates[0])
+    if len(candidates) > 1:
+        raise SystemExit(
+            "Multiple JSON credential files found in "
+            f"{LOCAL_CREDENTIALS_DIR}. Keep only one, or rename the one you want to use to "
+            "'service-account.json'."
+        )
+    return ""
 
 
 def detect_project_id() -> str:
@@ -75,6 +93,10 @@ def load_credentials(credentials_file: str | None = None) -> service_account.Cre
     if env_credentials_file:
         return service_account.Credentials.from_service_account_file(env_credentials_file)
 
+    local_credentials_file = discover_local_credentials_file()
+    if local_credentials_file:
+        return service_account.Credentials.from_service_account_file(local_credentials_file)
+
     sa_b64 = os.getenv("GCP_SA_KEY_B64", "").strip()
     if sa_b64:
         info = json.loads(base64.b64decode(sa_b64).decode("utf-8"))
@@ -93,9 +115,10 @@ def load_db(project_id: str, credentials_file: str | None = None) -> firestore.C
         raise SystemExit(
             "Google credentials not found.\n"
             "Use one of these options:\n"
-            f"  1. {sys.executable} scripts/export_tickets.py --credentials-file /path/to/service-account.json\n"
-            "  2. export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json\n"
-            "  3. gcloud auth application-default login\n"
+            f"  1. Copy your JSON to {LOCAL_CREDENTIALS_DIR / 'service-account.json'}\n"
+            f"  2. {sys.executable} scripts/export_tickets.py --credentials-file /path/to/service-account.json\n"
+            "  3. export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json\n"
+            "  4. gcloud auth application-default login\n"
             "The credentials must have access to Firestore for this project."
         ) from exc
 

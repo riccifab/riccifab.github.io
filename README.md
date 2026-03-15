@@ -32,29 +32,29 @@ A lightweight, GitHub Pages–hosted ticketing website used to track lab/tech re
 
 ## Local export and analysis
 
-For local data export and reporting, keep your Google service-account JSON outside Git and point to it from a local env file.
+For local data export and reporting, the simplest path is to drop your Google service-account JSON into `local/credentials/service-account.json`.
 
-1. Create your local env file from the example:
+1. Put your JSON key here:
 
 ```bash
-cp .env.local.example .env.local
+cp /path/to/your/service-account.json local/credentials/service-account.json
 ```
 
-2. Edit `.env.local` and set `GOOGLE_APPLICATION_CREDENTIALS` to your local JSON path.
-
-3. Prepare the local Python environment:
+2. Prepare the local Python environment:
 
 ```bash
 ./scripts/setup_python_env.sh
 ```
 
-4. Export tickets and generate the analysis report:
+3. Export tickets and generate the analysis report:
 
 ```bash
 ./scripts/run_ticket_export_analysis.sh
 ```
 
 Outputs are written under `exports/tickets-*/` and `exports/tickets-*/analysis/`.
+
+If you prefer storing the JSON elsewhere on your machine, create `.env.local` from `.env.local.example` and set `GOOGLE_APPLICATION_CREDENTIALS` there instead.
 
 ---
 
