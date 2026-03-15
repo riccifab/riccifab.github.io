@@ -61,11 +61,23 @@ jobs:
 
       - name: Write back state to bot-state
         run: |
-          mkdir -p bot-state/state
-          cp state/last_run.json bot-state/state/last_run.json
-          cd bot-state
-          git config user.name "ticket-bot"
-          git config user.email "ticket-bot@users.noreply.github.com"
-          git add state/last_run.json
-          git commit -m "Update last_run" || echo "No changes"
-          git push origin bot-state || (git pull --rebase origin bot-state && git push origin bot-state)
+          git -C bot-state config user.name "ticket-bot"
+          git -C bot-state config user.email "ticket-bot@users.noreply.github.com"
+
+          for attempt in 1 2 3; do
+            git -C bot-state fetch origin bot-state
+            git -C bot-state reset --hard origin/bot-state
+
+            python scripts/merge_bot_state.py --source-dir state --target-dir bot-state/state
+
+            git -C bot-state add state/last_run.json
+            git -C bot-state commit -m "Update last_run" || echo "No changes"
+            git -C bot-state push origin HEAD:bot-state && break
+
+            if [ "$attempt" -eq 3 ]; then
+              echo "Failed to push bot-state after ${attempt} attempts" >&2
+              exit 1
+            fi
+
+            sleep 2
+          done
