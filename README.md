@@ -3,6 +3,7 @@
 [![Notify PI](https://github.com/riccifab/riccifab.github.io/actions/workflows/ticket_notify_pi.yml/badge.svg?branch=main)](https://github.com/riccifab/riccifab.github.io/actions/workflows/ticket_notify_pi.yml)
 [![Weekly digest](https://github.com/riccifab/riccifab.github.io/actions/workflows/weekly_ticket_digest.yml/badge.svg?branch=main)](https://github.com/riccifab/riccifab.github.io/actions/workflows/weekly_ticket_digest.yml)
 [![ticket-update-notify](https://github.com/riccifab/riccifab.github.io/actions/workflows/ticket_update.yml/badge.svg)](https://github.com/riccifab/riccifab.github.io/actions/workflows/ticket_update.yml)
+[![Daily ticket analysis](https://github.com/riccifab/riccifab.github.io/actions/workflows/daily_ticket_analysis.yml/badge.svg)](https://github.com/riccifab/riccifab.github.io/actions/workflows/daily_ticket_analysis.yml)
 
 <img width="840" height="374" alt="Screenshot 2026-02-13 alle 21 18 32" src="https://github.com/user-attachments/assets/6c868082-30ce-461f-80d8-9414cbebbff9" />
 
