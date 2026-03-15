@@ -403,7 +403,7 @@
       box-shadow: 0 0 8px rgba(248,113,113,0.8);
     }
 
-    /* WEEKLY TASKS (RIGHT, VIEW + EDIT) */
+    /* IN-PROGRESS TICKETS */
 
     .tasks-section {
       margin-top: 1rem;
@@ -432,30 +432,17 @@
       font-style: italic;
     }
 
-    .tasks-textarea {
-      width: 100%;
-      min-height: 120px;
-      resize: vertical;
-      border-radius: 12px;
-      border: 1px solid rgba(148,163,184,0.4);
-      padding: 0.55rem 0.7rem;
-      font-size: 0.84rem;
-      background: rgba(10,15,25,0.9);
-      color: var(--fg);
-      font-family: inherit;
-    }
-
-    .tasks-actions {
-      margin-top: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      flex-wrap: wrap;
-    }
-
     .tasks-status {
       font-size: 0.78rem;
       color: var(--muted);
+    }
+
+    .tasks-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-bottom: 0.8rem;
+      text-decoration: none;
     }
 
     .tasks-subsection {
@@ -468,6 +455,49 @@
       margin: 0 0 0.25rem 0;
       color: var(--fg);
       opacity: 0.9;
+    }
+
+    .tasks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .tasks-item {
+      border-radius: 10px;
+      border: 1px solid rgba(148,163,184,0.18);
+      background: rgba(15,23,42,0.88);
+      padding: 0.55rem 0.65rem;
+    }
+
+    .tasks-item-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.7rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .tasks-item-title {
+      font-size: 0.84rem;
+      font-weight: 550;
+      line-height: 1.35;
+      color: var(--fg);
+    }
+
+    .tasks-item-priority {
+      flex-shrink: 0;
+      font-size: 0.72rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.32);
+      color: var(--muted);
+    }
+
+    .tasks-item-meta {
+      font-size: 0.76rem;
+      color: var(--muted);
+      line-height: 1.35;
     }
         /* GUEST NOTE ("post-it") */
 
@@ -681,13 +711,13 @@
             <span id="auth-info">Locked</span>
           </div>
           <div>
-            <input id="pw-input" class="pw-input" type="password" placeholder="password" />
-            <button id="pw-btn" class="auth-btn">Unlock</button>
+            <input id="pw-input" class="pw-input" type="password" placeholder="password" autocomplete="current-password" />
+            <button id="pw-btn" class="auth-btn" type="button">Unlock</button>
           </div>
         </div>
 
         <p id="control-locked" class="helper-text">
-          Enter the password to enable state and task editing.
+          Enter the password to enable status control.
         </p>
 
         <div id="control-panel" class="hidden">
@@ -753,79 +783,20 @@
         </div>
 
         <div class="tasks-section">
-          <h3>Weekly tasks</h3>
+          <h3>Work in progress</h3>
           <p class="helper-text">
-            
+            Tickets with status <code>IN_PROGRESS</code>, grouped by PI and synced automatically from the ticket database.
           </p>
 
-          <!-- VIEW (public) -->
-          <div id="tasks-view">
-            <div class="tasks-subsection">
-              <div class="tasks-subheader">General</div>
-              <div id="tasks-view-general" class="tasks-view-box tasks-view-empty">
-                No tasks defined.
-              </div>
-            </div>
-
-            <div class="tasks-subsection">
-              <div class="tasks-subheader">Gozzi weekly tasks</div>
-              <div id="tasks-view-gozzi" class="tasks-view-box tasks-view-empty">
-                No tasks defined.
-              </div>
-            </div>
-
-            <div class="tasks-subsection">
-              <div class="tasks-subheader">Iurilli weekly tasks</div>
-              <div id="tasks-view-iurilli" class="tasks-view-box tasks-view-empty">
-                No tasks defined.
-              </div>
-            </div>
-
-            <div class="tasks-subsection">
-              <div class="tasks-subheader">Rossi weekly tasks</div>
-              <div id="tasks-view-rossi" class="tasks-view-box tasks-view-empty">
-                No tasks defined.
-              </div>
-            </div>
-          </div>
-
-          <!-- EDIT (owner) -->
-          <div id="tasks-edit" class="hidden">
-            <div class="tasks-subsection">
-              <div class="tasks-subheader">General</div>
-              <textarea id="tasks-textarea-general" class="tasks-textarea" placeholder="- Task 1
-- Task 2"></textarea>
-            </div>
-
-            <div class="tasks-subsection">
-              <div class="tasks-subheader">Gozzi weekly tasks</div>
-              <textarea id="tasks-textarea-gozzi" class="tasks-textarea" placeholder="- Task 1
-- Task 2"></textarea>
-            </div>
-
-            <div class="tasks-subsection">
-              <div class="tasks-subheader">Iurilli weekly tasks</div>
-              <textarea id="tasks-textarea-iurilli" class="tasks-textarea" placeholder="- Task 1
-- Task 2"></textarea>
-            </div>
-
-            <div class="tasks-subsection">
-              <div class="tasks-subheader">Rossi weekly tasks</div>
-              <textarea id="tasks-textarea-rossi" class="tasks-textarea" placeholder="- Task 1
-- Task 2"></textarea>
-            </div>
-
-            <div class="tasks-actions">
-              <button id="tasks-save-btn" class="auth-btn">Save tasks</button>
-              <span id="tasks-status" class="tasks-status"></span>
-            </div>
-          </div>
+          <a class="auth-btn tasks-cta" href="tickets.html">Open ticket portal</a>
+          <div id="tasks-groups"></div>
+          <div id="tasks-status" class="tasks-status">Waiting for sync…</div>
         </div>
 
            <div class="locked-note">
           <div class="locked-dot"></div>
           <div>
-            Backend: Firebase Realtime Database.
+            Backends: Firebase Realtime Database + Firestore sync.
           </div>
         </div>
       </section>
@@ -859,32 +830,9 @@
   };
 
   // --- Access control ---
-  const DECOY_PASSWORD  = "notripsforcats";    
-
-  const ALLOWED_IPS = [
-    "93.34.28.174",
-    "151.66.77.88",
-    "193.205.210.80"
-  ];
-
-  const DECOY_URL = "https://www.delicto.com/blogs/sex-ed/second-hand-sex-toys";
-
-  async function isIpAllowed() {
-    try {
-      const res  = await fetch("https://api.ipify.org?format=json");
-      const data = await res.json();
-      const ip   = data.ip;
-      return ALLOWED_IPS.includes(ip);
-    } catch (err) {
-      console.error("IP check failed", err);
-      // In caso di errore ti proteggo: tratto come IP non ammesso
-      return false;
-    }
-  }
-
-  function handleDecoyLogin() {
-    window.location.href = DECOY_URL;
-  }
+  // SHA-256("romolo")
+  const CONTROL_PASSWORD_SHA256 = "5318fc62bff7d4e626c1cf3654dff97cdd28f62776e13c63d5b6e67e4fdc0a39";
+  const SESSION_UNLOCK_KEY = "work_status_unlocked";
 
   // --- Firebase init ---
   const app = initializeApp(firebaseConfig);
@@ -903,18 +851,7 @@
   const controlLocked = document.getElementById("control-locked");
   const buttons       = document.querySelectorAll(".state-btn");
 
-  const tasksViewGeneral  = document.getElementById("tasks-view-general");
-  const tasksViewGozzi    = document.getElementById("tasks-view-gozzi");
-  const tasksViewIurilli  = document.getElementById("tasks-view-iurilli");
-  const tasksViewRossi    = document.getElementById("tasks-view-rossi");
-
-  const tasksTextareaGeneral = document.getElementById("tasks-textarea-general");
-  const tasksTextareaGozzi   = document.getElementById("tasks-textarea-gozzi");
-  const tasksTextareaIurilli = document.getElementById("tasks-textarea-iurilli");
-  const tasksTextareaRossi   = document.getElementById("tasks-textarea-rossi");
-
-  const tasksEdit     = document.getElementById("tasks-edit");
-  const tasksSaveBtn  = document.getElementById("tasks-save-btn");
+  const tasksGroups   = document.getElementById("tasks-groups");
   const tasksStatus   = document.getElementById("tasks-status");
 
   const tagSelect     = document.getElementById("tag-select");
@@ -929,6 +866,8 @@
   const noteLastMeta = document.getElementById("note-last-meta");
   const noteLastText = document.getElementById("note-last-text");
   let recentNotes = [];
+  let isUnlocked = false;
+  const PREFERRED_LABS = ["Gozzi", "Iurilli", "Rossi"];
 
   // --- Visual config ---
   const COLORS = {
@@ -948,7 +887,24 @@
     away:    "Away",
     x:       "Lab MRI"
   };
-  const SUPER_REAL_PASSWORD  = "romolo";   
+
+  async function sha256Hex(value) {
+    const data = new TextEncoder().encode(value);
+    const digest = await crypto.subtle.digest("SHA-256", data);
+    return Array.from(new Uint8Array(digest))
+      .map((byte) => byte.toString(16).padStart(2, "0"))
+      .join("");
+  }
+
+  function safeText(value) {
+    return (value ?? "").toString().replace(/[&<>"']/g, (char) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      "\"": "&quot;",
+      "'": "&#39;"
+    }[char] || char));
+  }
 
   function normalizeState(raw) {
     if (!raw) return "default";
@@ -1004,30 +960,135 @@
     });
   }
 
-  function updateTasksView(el, text) {
-    if (!el) return;
-    const value = (text || "").trim();
-    if (!value) {
-      el.textContent = "No tasks defined.";
-      el.classList.add("tasks-view-empty");
-    } else {
-      el.textContent = value;
-      el.classList.remove("tasks-view-empty");
-    }
+  function formatCompactTimestamp(ts) {
+    if (!ts) return "—";
+    const d = new Date(ts);
+    if (Number.isNaN(d.getTime())) return "—";
+    return d.toLocaleString(undefined, {
+      dateStyle: "short",
+      timeStyle: "short"
+    });
   }
 
   function unlockUi() {
+    isUnlocked = true;
+    sessionStorage.setItem(SESSION_UNLOCK_KEY, "1");
     authInfo.textContent = "Unlocked";
     controlPanel.classList.remove("hidden");
     controlLocked.classList.add("hidden");
-    tasksEdit.classList.remove("hidden");
+    pwInput.value = "";
   }
 
-  function lockUiWrongPassword() {
-    authInfo.textContent = "Wrong password";
+  function lockUi(message = "Locked") {
+    isUnlocked = false;
+    sessionStorage.removeItem(SESSION_UNLOCK_KEY);
+    authInfo.textContent = message;
     controlPanel.classList.add("hidden");
     controlLocked.classList.remove("hidden");
-    tasksEdit.classList.add("hidden");
+  }
+
+  function renderInProgressGroups(groups, syncedAt) {
+    let normalizedGroups = [];
+
+    if (Array.isArray(groups)) {
+      normalizedGroups = groups.map((group) => ({
+        lab: (group?.lab || "Unassigned").toString(),
+        items: Array.isArray(group?.items) ? group.items : []
+      }));
+    } else if (groups && typeof groups === "object") {
+      const extraLabs = Object.keys(groups).sort((a, b) => a.localeCompare(b));
+      normalizedGroups = extraLabs.map((lab) => ({
+        lab,
+        items: Array.isArray(groups[lab]) ? groups[lab] : []
+      }));
+    }
+
+    if (normalizedGroups.length === 0) {
+      normalizedGroups = PREFERRED_LABS.map((lab) => ({ lab, items: [] }));
+    }
+
+    let total = 0;
+
+    tasksGroups.innerHTML = "";
+
+    for (const group of normalizedGroups) {
+      const lab = group.lab || "Unassigned";
+      const items = Array.isArray(group.items) ? group.items : [];
+      total += items.length;
+
+      const section = document.createElement("div");
+      section.className = "tasks-subsection";
+
+      const header = document.createElement("div");
+      header.className = "tasks-subheader";
+      header.textContent = `${lab} (${items.length})`;
+      section.appendChild(header);
+
+      const box = document.createElement("div");
+      box.className = `tasks-view-box${items.length ? "" : " tasks-view-empty"}`;
+
+      if (items.length === 0) {
+        box.textContent = "No tickets in progress.";
+      } else {
+        box.innerHTML = `
+          <div class="tasks-list">
+            ${items.map((item) => {
+              const shortId = safeText((item.shortId || item.id || "").toString().slice(0, 8));
+              const title = safeText(item.title || "Untitled ticket");
+              const priority = safeText(item.priority || "-");
+              const expected = safeText(item.expectedDeliveryDate || "no ETA");
+              const category = safeText(item.category || "uncategorized");
+              return `
+                <div class="tasks-item">
+                  <div class="tasks-item-head">
+                    <div class="tasks-item-title">${title}</div>
+                    <div class="tasks-item-priority">${priority}</div>
+                  </div>
+                  <div class="tasks-item-meta">#${shortId} · ${category} · exp ${expected}</div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        `;
+      }
+
+      section.appendChild(box);
+      tasksGroups.appendChild(section);
+    }
+
+    if (syncedAt) {
+      tasksStatus.textContent = `Synced ${formatCompactTimestamp(syncedAt)} · ${total} ticket${total === 1 ? "" : "s"} in progress`;
+    } else {
+      tasksStatus.textContent = total
+        ? `${total} ticket${total === 1 ? "" : "s"} in progress`
+        : "Waiting for sync…";
+    }
+  }
+
+  async function tryUnlock() {
+    const value = (pwInput.value || "").trim();
+    if (!value) {
+      lockUi("Enter password");
+      return;
+    }
+
+    authInfo.textContent = "Checking…";
+    pwBtn.disabled = true;
+
+    try {
+      const hash = await sha256Hex(value);
+      if (hash === CONTROL_PASSWORD_SHA256) {
+        unlockUi();
+      } else {
+        lockUi("Wrong password");
+        pwInput.select();
+      }
+    } catch (err) {
+      console.error("Password check failed", err);
+      lockUi("Error");
+    } finally {
+      pwBtn.disabled = false;
+    }
   }
   function renderNotesList(notes) {
   if (!Array.isArray(notes) || notes.length === 0) {
@@ -1081,23 +1142,7 @@
     applyStatusVisual(data.status, tag);
     lastUpdateEl.textContent = formatTimestamp(data.last_update);
 
-    // weekly tasks
-    const wtGeneral = (typeof data.weekly_tasks_general === "string")
-      ? data.weekly_tasks_general
-      : (typeof data.weekly_tasks_text === "string" ? data.weekly_tasks_text : "");
-    const wtGozzi   = (typeof data.weekly_tasks_gozzi === "string")   ? data.weekly_tasks_gozzi   : "";
-    const wtIurilli = (typeof data.weekly_tasks_iurilli === "string") ? data.weekly_tasks_iurilli : "";
-    const wtRossi   = (typeof data.weekly_tasks_rossi === "string")   ? data.weekly_tasks_rossi   : "";
-
-    if (tasksTextareaGeneral) tasksTextareaGeneral.value = wtGeneral;
-    if (tasksTextareaGozzi)   tasksTextareaGozzi.value   = wtGozzi;
-    if (tasksTextareaIurilli) tasksTextareaIurilli.value = wtIurilli;
-    if (tasksTextareaRossi)   tasksTextareaRossi.value   = wtRossi;
-
-    updateTasksView(tasksViewGeneral, wtGeneral);
-    updateTasksView(tasksViewGozzi,   wtGozzi);
-    updateTasksView(tasksViewIurilli, wtIurilli);
-    updateTasksView(tasksViewRossi,   wtRossi);
+    renderInProgressGroups(data.in_progress_groups, data.in_progress_synced_at);
 
     // guest last note (QUI dentro, con data definito)
   // Guest notes: usa guest_notes (array) se c'è, altrimenti guest_last_note singola
@@ -1116,29 +1161,28 @@
     lastUpdateEl.textContent = "Last update: error";
   });
 
-  // --- Login con password + IP check ---
-  pwBtn.addEventListener("click", async () => {
-    const val = pwInput.value || "";
-
-    if (val === SUPER_REAL_PASSWORD) {
-      const allowed = await isIpAllowed();
-      if (allowed) {
-        unlockUi();          // tu, IP ok → pannello sbloccato
-      } else {
-        handleDecoyLogin();  // password giusta ma IP diverso → scherzo
-      }
-    } else if (val === DECOY_PASSWORD) {
-      // password-esca esplicita
-      handleDecoyLogin();
-    } else {
-      // qualunque altra password
-      lockUiWrongPassword();
+  // --- Login con password ---
+  pwBtn.addEventListener("click", tryUnlock);
+  pwInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      tryUnlock();
     }
   });
+
+  if (sessionStorage.getItem(SESSION_UNLOCK_KEY) === "1") {
+    unlockUi();
+  } else {
+    lockUi();
+  }
 
   // --- Bottoni stato ---
   buttons.forEach(btn => {
     btn.addEventListener("click", async () => {
+      if (!isUnlocked) {
+        lockUi();
+        return;
+      }
       const state = btn.getAttribute("data-state");
       try {
         await update(indicatorRef, {
@@ -1155,6 +1199,10 @@
   // --- Tag PI / project ---
   if (tagSelect) {
     tagSelect.addEventListener("change", async () => {
+      if (!isUnlocked) {
+        lockUi();
+        return;
+      }
       const newTag = tagSelect.value || "";
       currentTag = newTag;
       try {
@@ -1168,35 +1216,6 @@
       }
     });
   }
-
-  // --- Save weekly tasks ---
-  tasksSaveBtn.addEventListener("click", async () => {
-    const textGeneral  = (tasksTextareaGeneral?.value || "");
-    const textGozzi    = (tasksTextareaGozzi?.value   || "");
-    const textIurilli  = (tasksTextareaIurilli?.value || "");
-    const textRossi    = (tasksTextareaRossi?.value   || "");
-
-    tasksStatus.textContent = "Saving…";
-    try {
-      await update(indicatorRef, {
-        weekly_tasks_general:  textGeneral,
-        weekly_tasks_gozzi:    textGozzi,
-        weekly_tasks_iurilli:  textIurilli,
-        weekly_tasks_rossi:    textRossi
-      });
-
-      updateTasksView(tasksViewGeneral, textGeneral);
-      updateTasksView(tasksViewGozzi,   textGozzi);
-      updateTasksView(tasksViewIurilli, textIurilli);
-      updateTasksView(tasksViewRossi,   textRossi);
-
-      tasksStatus.textContent = "Saved";
-      setTimeout(() => { tasksStatus.textContent = ""; }, 2000);
-    } catch (err) {
-      console.error("Tasks write error", err);
-      tasksStatus.textContent = "Error saving";
-    }
-  });
 
  // Guest note send handler
 if (noteSendBtn) {
