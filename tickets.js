@@ -93,14 +93,10 @@ let currentLab = null;
 
 let ticketsCache = [];
 let selectedTicketId = null;
+let refreshNewTicketFormState = () => {};
 
 const STATUS = ["NEW","TRIAGE","APPROVED","REJECTED","IN_PROGRESS","WAITING_ON_PI","WAITING_ON_PROCUREMENT","BLOCKED","DONE","CLOSED"];
 const PRIORITY = ["P0","P1","P2","P3"];
-const IMPACT_LABELS = {
-  not_blocking: "normal",
-  blocks_week: "blocks this week",
-  blocks_today: "blocks today"
-};
 
 /* ========= Helpers ========= */
 function setPill(signedIn, text) {
@@ -119,7 +115,6 @@ function setMsg(el, text, type = "") {
   if (type) el.classList.add(type);
 }
 function safeText(s) { return (s ?? "").toString().replace(/[<>]/g, ""); }
-function formatImpact(s) { return IMPACT_LABELS[s] || safeText(s || "-"); }
 function fmtDateTime(ts) {
   if (!ts) return "-";
   try {
@@ -143,16 +138,25 @@ function bindAutoDatePickers(root = document) {
   });
 }
 
+function syncConditionalRequiredField(input, active) {
+  if (!input) return;
+  input.required = active;
+  const label = input.closest("label");
+  if (label) label.classList.toggle("required-field", active || label.querySelector("[required]") !== null);
+}
+
 function openModal() {
   modal.classList.remove("hidden");
   modal.setAttribute("aria-hidden", "false");
   setMsg(formMsg, "");
+  refreshNewTicketFormState();
 }
 function closeModal() {
   modal.classList.add("hidden");
   modal.setAttribute("aria-hidden", "true");
   ticketForm.reset();
   setMsg(formMsg, "");
+  refreshNewTicketFormState();
 }
 
 /* ========= Modal wiring ========= */
@@ -405,7 +409,7 @@ function renderDetails(t) {
       <div><div class="muted small">Commercial link</div><div class="code">${t.commercialLink ? `<a href="${safeText(t.commercialLink)}" target="_blank" rel="noreferrer">${safeText(t.commercialLink)}</a>` : "-"}</div></div>
       <div><div class="muted small">Deferred</div><div class="code">${safeText(t.canBeDeferred || "-")}${t.deferTo ? " • "+safeText(t.deferTo):""}</div></div>
       <div><div class="muted small">Why not deferred</div><div class="code">${safeText(t.whyNotDeferredCode || "-")}${t.whyNotDeferredText ? " • "+safeText(t.whyNotDeferredText):""}</div></div>
-      <div><div class="muted small">Impact / Effort</div><div class="code">${formatImpact(t.impact)} • ${safeText(t.effortGuess || "-")}</div></div>
+      <div><div class="muted small">Effort</div><div class="code">${safeText(t.effortGuess || "-")}</div></div>
       <div><div class="muted small">Tags</div><div class="code">${safeText(tags || "-")}</div></div>
     </div>
 
@@ -516,14 +520,17 @@ function bindNewTicketDynamicLogic() {
   function apply() {
     if (tHardDeadline.value === "yes") tHardDeadlineDate.disabled = false;
     else { tHardDeadlineDate.value = ""; tHardDeadlineDate.disabled = true; }
+    syncConditionalRequiredField(tHardDeadlineDate, tHardDeadline.value === "yes");
 
     if (tCommercially.value === "yes") tCommercialLink.disabled = false;
     else { tCommercialLink.value = ""; tCommercialLink.disabled = true; }
+    syncConditionalRequiredField(tCommercialLink, tCommercially.value === "yes");
 
     if (tDeferred.value === "yes") {
       tDeferTo.disabled = false;
       tWhyNotCode.disabled = true;
       tWhyNotText.disabled = true;
+      tWhyNotCode.value = "skills";
       tWhyNotText.value = "";
     } else {
       tDeferTo.value = "";
@@ -531,12 +538,16 @@ function bindNewTicketDynamicLogic() {
       tWhyNotCode.disabled = false;
       tWhyNotText.disabled = false;
     }
+    syncConditionalRequiredField(tDeferTo, tDeferred.value === "yes");
+    syncConditionalRequiredField(tWhyNotCode, tDeferred.value !== "yes");
+    syncConditionalRequiredField(tWhyNotText, tDeferred.value !== "yes");
   }
 
   [tHardDeadline, tCommercially, tDeferred].forEach(el => el.addEventListener("change", apply));
   apply();
+  return apply;
 }
-bindNewTicketDynamicLogic();
+refreshNewTicketFormState = bindNewTicketDynamicLogic();
 
 ticketForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -567,7 +578,6 @@ ticketForm.addEventListener("submit", async (e) => {
   const whyNotDeferredCode = $("tWhyNotCode").value;
   const whyNotDeferredText = ($("tWhyNotText").value || "").trim();
 
-  const impact = $("tImpact").value;
   const effortGuess = $("tEffort").value;
 
   const tags = ($("tTags").value || "").split(",").map(x => x.trim()).filter(Boolean).slice(0, 12);
@@ -599,7 +609,6 @@ ticketForm.addEventListener("submit", async (e) => {
       deferTo: canBeDeferred === "yes" ? deferTo : "",
       whyNotDeferredCode: canBeDeferred === "no" ? whyNotDeferredCode : "",
       whyNotDeferredText: canBeDeferred === "no" ? whyNotDeferredText : "",
-      impact,
       effortGuess,
       tags,
       createdByUid: currentUser.uid,

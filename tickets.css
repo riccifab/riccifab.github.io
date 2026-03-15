@@ -96,6 +96,21 @@ small { opacity: 0.78; font-size: 0.84rem; color: var(--muted); }
 
 label { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.82rem; color: var(--muted); }
 
+.label-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+}
+
+.required-field {
+  color: #d8dee9;
+}
+
+.required-mark {
+  color: #fb7185;
+  font-weight: 700;
+}
+
 input, select, textarea {
   width: 100%;
   border: 1px solid var(--border);
@@ -117,6 +132,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(0.92) brightness(1.1);
   opacity: 0.95;
   cursor: pointer;
+}
+
+.required-field :is(input, select, textarea) {
+  border-color: rgba(251,113,133,0.42);
+  box-shadow: inset 0 0 0 1px rgba(251,113,133,0.05);
 }
 
 .btn {

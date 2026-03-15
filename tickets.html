@@ -178,14 +178,16 @@
         </div>
 
         <form id="ticketForm">
+          <p class="muted small">Required fields are highlighted.</p>
+
           <div class="grid2">
-            <label>
-              Lab (group)
+            <label class="required-field">
+              <span class="label-text">Lab (group) <span class="required-mark">*</span></span>
               <input id="tLab" type="text" placeholder="Iurilli / Rossi / Gozzi..." required />
             </label>
 
-            <label>
-              Category
+            <label class="required-field">
+              <span class="label-text">Category <span class="required-mark">*</span></span>
               <select id="tCategory" required>
                 <option value="electronics">electronics</option>
                 <option value="mechanics">mechanics</option>
@@ -196,8 +198,8 @@
               </select>
             </label>
 
-            <label>
-              Priority
+            <label class="required-field">
+              <span class="label-text">Priority <span class="required-mark">*</span></span>
               <select id="tPriority" required>
                 <option value="P2">P2 (normal)</option>
                 <option value="P1">P1 (high)</option>
@@ -206,30 +208,30 @@
               </select>
             </label>
 
-            <label>
-              Desired ETA
+            <label class="required-field">
+              <span class="label-text">Desired ETA <span class="required-mark">*</span></span>
               <input id="tExpected" type="date" required />
             </label>
           </div>
 
-          <label>
-            Title
+          <label class="required-field">
+            <span class="label-text">Title <span class="required-mark">*</span></span>
             <input id="tTitle" type="text" placeholder="Short, concrete" required />
           </label>
 
-          <label>
-            Description
+          <label class="required-field">
+            <span class="label-text">Description <span class="required-mark">*</span></span>
             <textarea id="tDescription" rows="5" placeholder="Context + what you need + constraints" required></textarea>
           </label>
 
-          <label>
-            Definition of done (2–5 bullets)
+          <label class="required-field">
+            <span class="label-text">Definition of done (2–5 bullets) <span class="required-mark">*</span></span>
             <textarea id="tDoD" rows="3" placeholder="- Works when...\n- Tested on...\n- Deliverable: file/part/commit" required></textarea>
           </label>
 
           <div class="grid2">
-            <label>
-              Hard deadline?
+            <label class="required-field">
+              <span class="label-text">Hard deadline? <span class="required-mark">*</span></span>
               <select id="tHardDeadline" required>
                 <option value="no">no</option>
                 <option value="yes">yes</option>
@@ -245,8 +247,8 @@
           <hr class="sep"/>
 
           <div class="grid2">
-            <label>
-              Commercially available?
+            <label class="required-field">
+              <span class="label-text">Commercially available? <span class="required-mark">*</span></span>
               <select id="tCommercially" required>
                 <option value="unknown">unknown</option>
                 <option value="yes">yes</option>
@@ -264,8 +266,8 @@
               <input id="tCost" type="number" min="0" step="1" placeholder="e.g. 250" />
             </label>
 
-            <label>
-              Procurement needed?
+            <label class="required-field">
+              <span class="label-text">Procurement needed? <span class="required-mark">*</span></span>
               <select id="tProcurement" required>
                 <option value="unknown">unknown</option>
                 <option value="yes">yes</option>
@@ -275,8 +277,8 @@
           </div>
 
           <div class="grid2">
-            <label>
-              Can be deferred to someone in the lab?
+            <label class="required-field">
+              <span class="label-text">Can be deferred to someone in the lab? <span class="required-mark">*</span></span>
               <select id="tDeferred" required>
                 <option value="no">no</option>
                 <option value="yes">yes</option>
@@ -290,8 +292,8 @@
           </div>
 
           <div class="grid2">
-            <label>
-              If no: why not? (reason)
+            <label class="required-field">
+              <span class="label-text">If no: why not? (reason) <span class="required-mark">*</span></span>
               <select id="tWhyNotCode" required>
                 <option value="skills">Requires specific skills</option>
                 <option value="tools">Requires access to tools/lab</option>
@@ -308,17 +310,8 @@
           </div>
 
           <div class="grid2">
-            <label>
-              Impact
-              <select id="tImpact" required>
-                <option value="not_blocking">normal</option>
-                <option value="blocks_week">blocks this week</option>
-                <option value="blocks_today">blocks today</option>
-              </select>
-            </label>
-
-            <label>
-              Effort guess
+            <label class="required-field">
+              <span class="label-text">Effort guess <span class="required-mark">*</span></span>
               <select id="tEffort" required>
                 <option value="S">S</option>
                 <option value="M" selected>M</option>
@@ -344,6 +337,6 @@
     <footer class="footer">IIT Neurotech.</footer>
   </div>
 
-  <script type="module" src="tickets.js?v=20260315b"></script>
+  <script type="module" src="tickets.js?v=20260315c"></script>
 </body>
 </html>
