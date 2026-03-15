@@ -1656,7 +1656,7 @@ def render_stats_html(
     <section class="hero">
       <div class="eyebrow">{html_escape(root_badge)}</div>
       <h1>{html_escape(page_title)}</h1>
-      <p>This page gives a quick view of which labs are busiest, which categories are filling up, how large requests are, and where work is getting delayed or discussed the most.</p>
+      <p>This page gives a quick view of which labs are sending the most tickets, which categories are filling up, how large requests are, and where work is getting delayed or discussed the most.</p>
       <div class="hero-links">{hero_links_html}</div>
       <div class="meta">{meta_html}</div>
       <section class="kpis">{cards_html}</section>
