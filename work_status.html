@@ -867,7 +867,7 @@
   const noteLastText = document.getElementById("note-last-text");
   let recentNotes = [];
   let isUnlocked = false;
-  const PREFERRED_LABS = ["Gozzi", "Iurilli", "Rossi"];
+  const PREFERRED_LABS = ["General", "Gozzi", "Iurilli", "Rossi"];
 
   // --- Visual config ---
   const COLORS = {
@@ -992,7 +992,7 @@
 
     if (Array.isArray(groups)) {
       normalizedGroups = groups.map((group) => ({
-        lab: (group?.lab || "Unassigned").toString(),
+        lab: (group?.lab || "General").toString(),
         items: Array.isArray(group?.items) ? group.items : []
       }));
     } else if (groups && typeof groups === "object") {
@@ -1012,7 +1012,7 @@
     tasksGroups.innerHTML = "";
 
     for (const group of normalizedGroups) {
-      const lab = group.lab || "Unassigned";
+      const lab = group.lab || "General";
       const items = Array.isArray(group.items) ? group.items : [];
       total += items.length;
 
@@ -1038,13 +1038,15 @@
               const priority = safeText(item.priority || "-");
               const expected = safeText(item.expectedDeliveryDate || "no ETA");
               const category = safeText(item.category || "uncategorized");
+              const sourceLab = safeText(item.lab || lab);
+              const sourceLabMeta = sourceLab && sourceLab !== lab ? ` · lab ${sourceLab}` : "";
               return `
                 <div class="tasks-item">
                   <div class="tasks-item-head">
                     <div class="tasks-item-title">${title}</div>
                     <div class="tasks-item-priority">${priority}</div>
                   </div>
-                  <div class="tasks-item-meta">#${shortId} · ${category} · exp ${expected}</div>
+                  <div class="tasks-item-meta">#${shortId} · ${category} · exp ${expected}${sourceLabMeta}</div>
                 </div>
               `;
             }).join("")}

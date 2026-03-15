@@ -23,6 +23,7 @@ SCOPES = [
     "https://www.googleapis.com/auth/userinfo.email",
 ]
 PRIORITY_ORDER = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
+DEFAULT_GROUP = os.getenv("WORKSTATUS_FALLBACK_GROUP") or "General"
 
 
 PROJECT_ID = os.environ["FIREBASE_PROJECT_ID"]
@@ -33,6 +34,7 @@ KNOWN_LABS = [
     for lab in (os.getenv("WORKSTATUS_PI_LABS") or "Gozzi,Iurilli,Rossi").split(",")
     if lab.strip()
 ]
+LAB_ALIASES = {" ".join(lab.split()).casefold(): lab for lab in KNOWN_LABS}
 
 
 def load_credentials() -> service_account.Credentials:
@@ -97,19 +99,35 @@ def ticket_sort_key(ticket: dict[str, Any]) -> tuple[int, str, float, str]:
     return (priority, expected, updated_key, title)
 
 
+def normalize_lab_name(value: Any) -> str:
+    return " ".join((value or "").strip().split())
+
+
+def resolve_group_lab(value: Any) -> str:
+    normalized = normalize_lab_name(value)
+    if not normalized:
+        return DEFAULT_GROUP
+
+    return LAB_ALIASES.get(normalized.casefold(), DEFAULT_GROUP)
+
+
 def fetch_in_progress(db: firestore.Client) -> dict[str, list[dict[str, Any]]]:
-    grouped: dict[str, list[dict[str, Any]]] = {lab: [] for lab in KNOWN_LABS}
+    grouped: dict[str, list[dict[str, Any]]] = {DEFAULT_GROUP: []}
+    for lab in KNOWN_LABS:
+        grouped.setdefault(lab, [])
     query = db.collection(TICKETS_COLLECTION).where("status", "==", "IN_PROGRESS").limit(500)
 
     for doc in query.stream():
         ticket = doc.to_dict() or {}
-        lab = (ticket.get("lab") or "Unassigned").strip() or "Unassigned"
-        grouped.setdefault(lab, [])
-        grouped[lab].append(
+        source_lab = normalize_lab_name(ticket.get("lab"))
+        group_lab = resolve_group_lab(ticket.get("lab"))
+        grouped.setdefault(group_lab, [])
+        grouped[group_lab].append(
             {
                 "id": doc.id,
                 "shortId": doc.id[:8],
                 "title": (ticket.get("title") or "").strip(),
+                "lab": source_lab or DEFAULT_GROUP,
                 "priority": (ticket.get("priority") or "").strip(),
                 "category": (ticket.get("category") or "").strip(),
                 "expectedDeliveryDate": (ticket.get("expectedDeliveryDate") or "").strip(),
@@ -124,7 +142,7 @@ def fetch_in_progress(db: firestore.Client) -> dict[str, list[dict[str, Any]]]:
 
 
 def build_group_list(grouped: dict[str, list[dict[str, Any]]]) -> list[dict[str, Any]]:
-    ordered_labs: list[str] = []
+    ordered_labs: list[str] = [DEFAULT_GROUP]
 
     for lab in KNOWN_LABS:
         if lab not in ordered_labs:
