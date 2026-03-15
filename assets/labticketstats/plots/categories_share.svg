@@ -1,28 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520" role="img">
 <rect width="100%" height="100%" rx="28" fill="#f8fafc" />
-<text x="28" y="38" fill="#0f172a" font-size="24" font-family="Arial, sans-serif" font-weight="700">Tickets by category</text>
-<text x="28" y="62" fill="#475569" font-size="13" font-family="Arial, sans-serif">Total requests by category.</text>
-<path d="M 220.000 136.000 A 144 144 0 0 1 328.828 374.300 L 280.460 332.389 A 80 80 0 0 0 220.000 200.000 Z" fill="#2563eb" />
-<path d="M 328.828 374.300 A 144 144 0 0 1 77.466 300.493 L 140.814 291.385 A 80 80 0 0 0 280.460 332.389 Z" fill="#0f766e" />
-<path d="M 77.466 300.493 A 144 144 0 0 1 89.013 220.180 L 147.229 246.767 A 80 80 0 0 0 140.814 291.385 Z" fill="#f97316" />
-<path d="M 89.013 220.180 A 144 144 0 0 1 142.148 158.859 L 176.749 212.700 A 80 80 0 0 0 147.229 246.767 Z" fill="#8b5cf6" />
-<path d="M 142.148 158.859 A 144 144 0 0 1 220.000 136.000 L 220.000 200.000 A 80 80 0 0 0 176.749 212.700 Z" fill="#ec4899" />
-<circle cx="220" cy="280" r="78" fill="#ffffff" />
-<text x="220" y="270" text-anchor="middle" fill="#64748b" font-size="14" font-family="Arial, sans-serif">Total</text>
-<text x="220" y="302" text-anchor="middle" fill="#0f172a" font-size="34" font-family="Arial, sans-serif" font-weight="700">11</text>
-<circle cx="430" cy="152" r="9" fill="#2563eb" />
-<text x="448" y="148" fill="#0f172a" font-size="15" font-family="Arial, sans-serif" font-weight="600">mechanics</text>
-<text x="448" y="170" fill="#475569" font-size="13" font-family="Arial, sans-serif">4 tickets • 36%</text>
-<circle cx="430" cy="204" r="9" fill="#0f766e" />
-<text x="448" y="200" fill="#0f172a" font-size="15" font-family="Arial, sans-serif" font-weight="600">electronics</text>
-<text x="448" y="222" fill="#475569" font-size="13" font-family="Arial, sans-serif">4 tickets • 36%</text>
-<circle cx="430" cy="256" r="9" fill="#f97316" />
-<text x="448" y="252" fill="#0f172a" font-size="15" font-family="Arial, sans-serif" font-weight="600">software</text>
-<text x="448" y="274" fill="#475569" font-size="13" font-family="Arial, sans-serif">1 tickets • 9%</text>
-<circle cx="430" cy="308" r="9" fill="#8b5cf6" />
-<text x="448" y="304" fill="#0f172a" font-size="15" font-family="Arial, sans-serif" font-weight="600">procurement</text>
-<text x="448" y="326" fill="#475569" font-size="13" font-family="Arial, sans-serif">1 tickets • 9%</text>
-<circle cx="430" cy="360" r="9" fill="#ec4899" />
-<text x="448" y="356" fill="#0f172a" font-size="15" font-family="Arial, sans-serif" font-weight="600">other</text>
-<text x="448" y="378" fill="#475569" font-size="13" font-family="Arial, sans-serif">1 tickets • 9%</text>
+<path d="M 252.000 112.000 A 168 168 0 0 1 378.966 390.017 L 324.552 342.867 A 96 96 0 0 0 252.000 184.000 Z" fill="#2563eb" />
+<path d="M 378.966 390.017 A 168 168 0 0 1 85.710 303.909 L 156.977 293.662 A 96 96 0 0 0 324.552 342.867 Z" fill="#0f766e" />
+<path d="M 85.710 303.909 A 168 168 0 0 1 99.182 210.210 L 164.675 240.120 A 96 96 0 0 0 156.977 293.662 Z" fill="#f97316" />
+<path d="M 99.182 210.210 A 168 168 0 0 1 161.172 138.669 L 200.098 199.240 A 96 96 0 0 0 164.675 240.120 Z" fill="#8b5cf6" />
+<path d="M 161.172 138.669 A 168 168 0 0 1 252.000 112.000 L 252.000 184.000 A 96 96 0 0 0 200.098 199.240 Z" fill="#ec4899" />
+<circle cx="252" cy="280" r="94" fill="#ffffff" />
+<text x="252" y="268" text-anchor="middle" fill="#64748b" font-size="15" font-family="Arial, sans-serif">Total</text>
+<text x="252" y="304" text-anchor="middle" fill="#0f172a" font-size="40" font-family="Arial, sans-serif" font-weight="700">11</text>
+<circle cx="500" cy="118" r="10" fill="#2563eb" />
+<text x="520" y="114" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">mechanics</text>
+<text x="520" y="138" fill="#475569" font-size="14" font-family="Arial, sans-serif">4 tickets • 36%</text>
+<circle cx="500" cy="178" r="10" fill="#0f766e" />
+<text x="520" y="174" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">electronics</text>
+<text x="520" y="198" fill="#475569" font-size="14" font-family="Arial, sans-serif">4 tickets • 36%</text>
+<circle cx="500" cy="238" r="10" fill="#f97316" />
+<text x="520" y="234" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">software</text>
+<text x="520" y="258" fill="#475569" font-size="14" font-family="Arial, sans-serif">1 tickets • 9%</text>
+<circle cx="500" cy="298" r="10" fill="#8b5cf6" />
+<text x="520" y="294" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">procurement</text>
+<text x="520" y="318" fill="#475569" font-size="14" font-family="Arial, sans-serif">1 tickets • 9%</text>
+<circle cx="500" cy="358" r="10" fill="#ec4899" />
+<text x="520" y="354" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">other</text>
+<text x="520" y="378" fill="#475569" font-size="14" font-family="Arial, sans-serif">1 tickets • 9%</text>
 </svg>

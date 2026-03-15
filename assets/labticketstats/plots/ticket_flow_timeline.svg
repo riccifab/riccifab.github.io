@@ -1,53 +1,45 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1040" height="520" viewBox="0 0 1040 520" role="img">
 <rect width="100%" height="100%" rx="28" fill="#f8fafc" />
-<text x="26" y="38" fill="#0f172a" font-size="24" font-family="Arial, sans-serif" font-weight="700">Created, closed, and open</text>
-<text x="26" y="62" fill="#475569" font-size="13" font-family="Arial, sans-serif">The closed line uses the latest ticket update as the best available close date.</text>
-<line x1="72" y1="456.0" x2="1006" y2="456.0" stroke="#dbe4f0" stroke-width="1" />
-<text x="60" y="460.0" text-anchor="end" fill="#64748b" font-size="12" font-family="Arial, sans-serif">0</text>
-<line x1="72" y1="364.0" x2="1006" y2="364.0" stroke="#dbe4f0" stroke-width="1" />
-<text x="60" y="368.0" text-anchor="end" fill="#64748b" font-size="12" font-family="Arial, sans-serif">3</text>
-<line x1="72" y1="272.0" x2="1006" y2="272.0" stroke="#dbe4f0" stroke-width="1" />
-<text x="60" y="276.0" text-anchor="end" fill="#64748b" font-size="12" font-family="Arial, sans-serif">6</text>
-<line x1="72" y1="180.0" x2="1006" y2="180.0" stroke="#dbe4f0" stroke-width="1" />
-<text x="60" y="184.0" text-anchor="end" fill="#64748b" font-size="12" font-family="Arial, sans-serif">9</text>
-<line x1="72" y1="88.0" x2="1006" y2="88.0" stroke="#dbe4f0" stroke-width="1" />
-<text x="60" y="92.0" text-anchor="end" fill="#64748b" font-size="12" font-family="Arial, sans-serif">12</text>
-<text x="72.0" y="496" text-anchor="middle" fill="#64748b" font-size="12" font-family="Arial, sans-serif">09 Feb</text>
-<text x="305.5" y="496" text-anchor="middle" fill="#64748b" font-size="12" font-family="Arial, sans-serif">16 Feb</text>
-<text x="539.0" y="496" text-anchor="middle" fill="#64748b" font-size="12" font-family="Arial, sans-serif">23 Feb</text>
-<text x="772.5" y="496" text-anchor="middle" fill="#64748b" font-size="12" font-family="Arial, sans-serif">02 Mar</text>
-<text x="1006.0" y="496" text-anchor="middle" fill="#64748b" font-size="12" font-family="Arial, sans-serif">09 Mar</text>
-<rect x="720" y="28" width="14" height="14" rx="4" fill="#2563eb" />
-<text x="740" y="39" fill="#334155" font-size="13" font-family="Arial, sans-serif">Created</text>
-<rect x="820" y="28" width="14" height="14" rx="4" fill="#10b981" />
-<text x="840" y="39" fill="#334155" font-size="13" font-family="Arial, sans-serif">Closed</text>
-<rect x="920" y="28" width="14" height="14" rx="4" fill="#f97316" />
-<text x="940" y="39" fill="#334155" font-size="13" font-family="Arial, sans-serif">Open</text>
-<polyline fill="none" stroke="#2563eb" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="72.00,394.67 305.50,210.67 539.00,210.67 772.50,180.00 1006.00,118.67" />
-<circle cx="72.00" cy="394.67" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
-<circle cx="305.50" cy="210.67" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
-<circle cx="539.00" cy="210.67" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
-<circle cx="772.50" cy="180.00" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
-<circle cx="1006.00" cy="118.67" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
-<polyline fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="72.00,456.00 305.50,425.33 539.00,394.67 772.50,364.00 1006.00,364.00" />
-<circle cx="72.00" cy="456.00" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
-<circle cx="305.50" cy="425.33" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
-<circle cx="539.00" cy="394.67" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
-<circle cx="772.50" cy="364.00" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
-<circle cx="1006.00" cy="364.00" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
-<polyline fill="none" stroke="#f97316" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="72.00,394.67 305.50,241.33 539.00,272.00 772.50,272.00 1006.00,210.67" />
-<circle cx="72.00" cy="394.67" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
-<circle cx="305.50" cy="241.33" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
-<circle cx="539.00" cy="272.00" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
-<circle cx="772.50" cy="272.00" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
-<circle cx="1006.00" cy="210.67" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
-<rect x="896" y="105.7" width="114" height="26" rx="13" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" />
-<circle cx="910" cy="118.7" r="5" fill="#2563eb" />
-<text x="922" y="122.7" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Created 11</text>
-<rect x="896" y="197.7" width="114" height="26" rx="13" fill="#ffffff" stroke="#f97316" stroke-width="1.5" />
-<circle cx="910" cy="210.7" r="5" fill="#f97316" />
-<text x="922" y="214.7" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Open 8</text>
-<rect x="896" y="351.0" width="114" height="26" rx="13" fill="#ffffff" stroke="#10b981" stroke-width="1.5" />
-<circle cx="910" cy="364.0" r="5" fill="#10b981" />
-<text x="922" y="368.0" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Closed 3</text>
+<line x1="60" y1="462.0" x2="886" y2="462.0" stroke="#dbe4f0" stroke-width="1" />
+<text x="48" y="466.0" text-anchor="end" fill="#64748b" font-size="12" font-family="Arial, sans-serif">0</text>
+<line x1="60" y1="355.0" x2="886" y2="355.0" stroke="#dbe4f0" stroke-width="1" />
+<text x="48" y="359.0" text-anchor="end" fill="#64748b" font-size="12" font-family="Arial, sans-serif">3</text>
+<line x1="60" y1="248.0" x2="886" y2="248.0" stroke="#dbe4f0" stroke-width="1" />
+<text x="48" y="252.0" text-anchor="end" fill="#64748b" font-size="12" font-family="Arial, sans-serif">6</text>
+<line x1="60" y1="141.0" x2="886" y2="141.0" stroke="#dbe4f0" stroke-width="1" />
+<text x="48" y="145.0" text-anchor="end" fill="#64748b" font-size="12" font-family="Arial, sans-serif">9</text>
+<line x1="60" y1="34.0" x2="886" y2="34.0" stroke="#dbe4f0" stroke-width="1" />
+<text x="48" y="38.0" text-anchor="end" fill="#64748b" font-size="12" font-family="Arial, sans-serif">12</text>
+<text x="60.0" y="502" text-anchor="middle" fill="#64748b" font-size="12" font-family="Arial, sans-serif">09 Feb</text>
+<text x="266.5" y="502" text-anchor="middle" fill="#64748b" font-size="12" font-family="Arial, sans-serif">16 Feb</text>
+<text x="473.0" y="502" text-anchor="middle" fill="#64748b" font-size="12" font-family="Arial, sans-serif">23 Feb</text>
+<text x="679.5" y="502" text-anchor="middle" fill="#64748b" font-size="12" font-family="Arial, sans-serif">02 Mar</text>
+<text x="886.0" y="502" text-anchor="middle" fill="#64748b" font-size="12" font-family="Arial, sans-serif">09 Mar</text>
+<polyline fill="none" stroke="#2563eb" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="60.00,390.67 266.50,176.67 473.00,176.67 679.50,141.00 886.00,69.67" />
+<circle cx="60.00" cy="390.67" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
+<circle cx="266.50" cy="176.67" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
+<circle cx="473.00" cy="176.67" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
+<circle cx="679.50" cy="141.00" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
+<circle cx="886.00" cy="69.67" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
+<polyline fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="60.00,462.00 266.50,426.33 473.00,390.67 679.50,355.00 886.00,355.00" />
+<circle cx="60.00" cy="462.00" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
+<circle cx="266.50" cy="426.33" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
+<circle cx="473.00" cy="390.67" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
+<circle cx="679.50" cy="355.00" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
+<circle cx="886.00" cy="355.00" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
+<polyline fill="none" stroke="#f97316" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="60.00,390.67 266.50,212.33 473.00,248.00 679.50,248.00 886.00,176.67" />
+<circle cx="60.00" cy="390.67" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
+<circle cx="266.50" cy="212.33" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
+<circle cx="473.00" cy="248.00" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
+<circle cx="679.50" cy="248.00" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
+<circle cx="886.00" cy="176.67" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
+<rect x="904" y="56.7" width="112" height="26" rx="13" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" />
+<circle cx="918" cy="69.7" r="5" fill="#2563eb" />
+<text x="930" y="73.7" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Created 11</text>
+<rect x="904" y="163.7" width="112" height="26" rx="13" fill="#ffffff" stroke="#f97316" stroke-width="1.5" />
+<circle cx="918" cy="176.7" r="5" fill="#f97316" />
+<text x="930" y="180.7" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Open 8</text>
+<rect x="904" y="342.0" width="112" height="26" rx="13" fill="#ffffff" stroke="#10b981" stroke-width="1.5" />
+<circle cx="918" cy="355.0" r="5" fill="#10b981" />
+<text x="930" y="359.0" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Closed 3</text>
 </svg>

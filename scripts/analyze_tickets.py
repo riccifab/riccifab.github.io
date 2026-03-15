@@ -919,17 +919,14 @@ def render_donut_chart_svg(
 ) -> str:
     rows = compress_rows_for_pie(rows, label_key, value_key, max_items=max_items)
     total = sum(safe_float(row.get(value_key)) for row in rows)
-    cx, cy = 220, 280
-    outer_r = 144
-    inner_r = 80
+    cx, cy = 252, 280
+    outer_r = 168
+    inner_r = 96
 
     lines = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img">',
         '<rect width="100%" height="100%" rx="28" fill="#f8fafc" />',
-        f'<text x="28" y="38" fill="#0f172a" font-size="24" font-family="Arial, sans-serif" font-weight="700">{html_escape(title)}</text>',
     ]
-    if subtitle:
-        lines.append(f'<text x="28" y="62" fill="#475569" font-size="13" font-family="Arial, sans-serif">{html_escape(subtitle)}</text>')
 
     if total <= 0:
         lines.append(f'<circle cx="{cx}" cy="{cy}" r="{outer_r}" fill="#e2e8f0" />')
@@ -946,14 +943,14 @@ def render_donut_chart_svg(
     lines.extend(
         [
             f'<circle cx="{cx}" cy="{cy}" r="{inner_r - 2}" fill="#ffffff" />',
-            f'<text x="{cx}" y="{cy - 10}" text-anchor="middle" fill="#64748b" font-size="14" font-family="Arial, sans-serif">Total</text>',
-            f'<text x="{cx}" y="{cy + 22}" text-anchor="middle" fill="#0f172a" font-size="34" font-family="Arial, sans-serif" font-weight="700">{int(total) if total.is_integer() else total:.0f}</text>',
+            f'<text x="{cx}" y="{cy - 12}" text-anchor="middle" fill="#64748b" font-size="15" font-family="Arial, sans-serif">Total</text>',
+            f'<text x="{cx}" y="{cy + 24}" text-anchor="middle" fill="#0f172a" font-size="40" font-family="Arial, sans-serif" font-weight="700">{int(total) if total.is_integer() else total:.0f}</text>',
         ]
     )
 
-    legend_x = 430
-    legend_y = 152
-    gap = 52
+    legend_x = 500
+    legend_y = 118
+    gap = 60
     for index, row in enumerate(rows):
         value = safe_float(row.get(value_key))
         label = str(row.get(label_key, "") or "-")
@@ -961,9 +958,9 @@ def render_donut_chart_svg(
         y = legend_y + index * gap
         lines.extend(
             [
-                f'<circle cx="{legend_x}" cy="{y}" r="9" fill="{color_for_index(index)}" />',
-                f'<text x="{legend_x + 18}" y="{y - 4}" fill="#0f172a" font-size="15" font-family="Arial, sans-serif" font-weight="600">{html_escape(label)}</text>',
-                f'<text x="{legend_x + 18}" y="{y + 18}" fill="#475569" font-size="13" font-family="Arial, sans-serif">{html_escape(compact_number(value))} tickets • {pct:.0f}%</text>',
+                f'<circle cx="{legend_x}" cy="{y}" r="10" fill="{color_for_index(index)}" />',
+                f'<text x="{legend_x + 20}" y="{y - 4}" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">{html_escape(label)}</text>',
+                f'<text x="{legend_x + 20}" y="{y + 20}" fill="#475569" font-size="14" font-family="Arial, sans-serif">{html_escape(compact_number(value))} tickets • {pct:.0f}%</text>',
             ]
         )
 
@@ -989,22 +986,19 @@ def render_horizontal_bar_chart_svg(
     labels = [str(row.get(label_key, "") or "-") for row in rows]
     values = [safe_float(row.get(value_key)) for row in rows]
     max_value = max(values) if values else 0.0
-    left_pad = min(300, max(150, max(len(label) for label in labels) * 8))
-    right_pad = 90
-    top_pad = 84 if subtitle else 62
-    bar_height = 24
-    gap = 18
-    bottom_pad = 28
+    left_pad = min(340, max(168, max(len(label) for label in labels) * 8))
+    right_pad = 74
+    top_pad = 34
+    bar_height = 28
+    gap = 20
+    bottom_pad = 24
     chart_width = width - left_pad - right_pad
     height = top_pad + len(rows) * (bar_height + gap) + bottom_pad
 
     lines = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img">',
         '<rect width="100%" height="100%" rx="28" fill="#f8fafc" />',
-        f'<text x="24" y="36" fill="#0f172a" font-size="24" font-family="Arial, sans-serif" font-weight="700">{html_escape(title)}</text>',
     ]
-    if subtitle:
-        lines.append(f'<text x="24" y="60" fill="#475569" font-size="13" font-family="Arial, sans-serif">{html_escape(subtitle)}</text>')
 
     for index, row in enumerate(rows):
         label = str(row.get(label_key, "") or "-")
@@ -1013,10 +1007,10 @@ def render_horizontal_bar_chart_svg(
         bar_width = 0 if max_value <= 0 else (value / max_value) * chart_width
         lines.extend(
             [
-                f'<text x="24" y="{y + 17}" fill="#0f172a" font-size="13" font-family="Arial, sans-serif">{html_escape(label)}</text>',
+                f'<text x="24" y="{y + 19}" fill="#0f172a" font-size="14" font-family="Arial, sans-serif">{html_escape(label)}</text>',
                 f'<rect x="{left_pad}" y="{y}" width="{chart_width}" height="{bar_height}" rx="10" fill="#e2e8f0" />',
                 f'<rect x="{left_pad}" y="{y}" width="{bar_width:.1f}" height="{bar_height}" rx="10" fill="{bar_color}" />',
-                f'<text x="{left_pad + chart_width + 12}" y="{y + 17}" fill="#0f172a" font-size="13" font-family="Arial, sans-serif">{html_escape(compact_number(value))}</text>',
+                f'<text x="{left_pad + chart_width + 10}" y="{y + 19}" fill="#0f172a" font-size="14" font-family="Arial, sans-serif" font-weight="700">{html_escape(compact_number(value))}</text>',
             ]
         )
 
@@ -1043,10 +1037,10 @@ def render_line_chart_svg(
     raw_max = max([1.0] + [safe_float(row.get(key)) for row in rows for key, _, _ in series])
     tick_step = max(1, math.ceil(raw_max / 4))
     axis_max = tick_step * 4
-    left_pad = 72
-    right_pad = 34
-    top_pad = 88 if subtitle else 68
-    bottom_pad = 64
+    left_pad = 60
+    right_pad = 154
+    top_pad = 34
+    bottom_pad = 58
     chart_width = width - left_pad - right_pad
     chart_height = height - top_pad - bottom_pad
     step_x = chart_width / max(1, len(rows) - 1)
@@ -1059,10 +1053,7 @@ def render_line_chart_svg(
     lines = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img">',
         '<rect width="100%" height="100%" rx="28" fill="#f8fafc" />',
-        f'<text x="26" y="38" fill="#0f172a" font-size="24" font-family="Arial, sans-serif" font-weight="700">{html_escape(title)}</text>',
     ]
-    if subtitle:
-        lines.append(f'<text x="26" y="62" fill="#475569" font-size="13" font-family="Arial, sans-serif">{html_escape(subtitle)}</text>')
 
     for tick in range(5):
         value = tick_step * tick
@@ -1077,14 +1068,7 @@ def render_line_chart_svg(
         if index % x_label_step != 0 and index != len(rows) - 1:
             continue
         x = left_pad + (0 if len(rows) == 1 else index * step_x)
-        lines.append(f'<text x="{x:.1f}" y="{height - 24}" text-anchor="middle" fill="#64748b" font-size="12" font-family="Arial, sans-serif">{html_escape(str(row.get("label", "")))}</text>')
-
-    legend_x = width - 320
-    legend_y = 38
-    for index, (_, label, color) in enumerate(series):
-        x = legend_x + index * 100
-        lines.append(f'<rect x="{x}" y="{legend_y - 10}" width="14" height="14" rx="4" fill="{color}" />')
-        lines.append(f'<text x="{x + 20}" y="{legend_y + 1}" fill="#334155" font-size="13" font-family="Arial, sans-serif">{html_escape(label)}</text>')
+        lines.append(f'<text x="{x:.1f}" y="{height - 18}" text-anchor="middle" fill="#64748b" font-size="12" font-family="Arial, sans-serif">{html_escape(str(row.get("label", "")))}</text>')
 
     for key, _, color in series:
         points = [point(index, safe_float(row.get(key))) for index, row in enumerate(rows)]
@@ -1105,10 +1089,10 @@ def render_line_chart_svg(
         if end_labels[index]["y"] - end_labels[index - 1]["y"] < min_gap:
             end_labels[index]["y"] = end_labels[index - 1]["y"] + min_gap
 
-    label_x = width - 144
+    label_x = width - 136
     for item in end_labels:
-        y = max(96, min(height - 36, item["y"]))
-        lines.append(f'<rect x="{label_x}" y="{y - 13:.1f}" width="114" height="26" rx="13" fill="#ffffff" stroke="{item["color"]}" stroke-width="1.5" />')
+        y = max(48, min(height - 36, item["y"]))
+        lines.append(f'<rect x="{label_x}" y="{y - 13:.1f}" width="112" height="26" rx="13" fill="#ffffff" stroke="{item["color"]}" stroke-width="1.5" />')
         lines.append(f'<circle cx="{label_x + 14}" cy="{y:.1f}" r="5" fill="{item["color"]}" />')
         lines.append(
             f'<text x="{label_x + 26}" y="{y + 4:.1f}" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">'
