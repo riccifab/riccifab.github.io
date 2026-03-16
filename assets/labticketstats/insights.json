@@ -4,19 +4,11 @@
     "title": "Largest backlog"
   },
   {
-    "detail": "#janxP8gW in Rossi is late by 4 days (Laser UPS installation).",
-    "title": "Most overdue request"
-  },
-  {
-    "detail": "#janxP8gW has been open for 32 days (Laser UPS installation).",
+    "detail": "#lFaxlDUY has been open for 31 days (New screen VR with reward and lickometer).",
     "title": "Oldest open ticket"
   },
   {
     "detail": "#90ATtOV4 collected 2 comments and is in status IN_PROGRESS.",
     "title": "Comment hotspot"
-  },
-  {
-    "detail": "These tickets were created before we started saving the original request separately, so requested-vs-final effort and ETA comparisons are still limited here.",
-    "title": "Older tickets note"
   }
 ]
