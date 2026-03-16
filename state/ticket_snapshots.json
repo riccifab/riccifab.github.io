@@ -165,6 +165,7 @@
     "whyNotDeferredText": "Fabio has designed the prior prototype and has a plan what needs to be changed"
   },
   "NyGcOp3egpMIixDY1DR6": {
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "procurement",
@@ -176,6 +177,7 @@
     "deferTo": "",
     "definitionOfDone": "Done when delivered to lab.",
     "description": "Please modify the \"USS Enterprise\" version of the Allen headframe to thin the walls to 1mm (from 2mm). Please print 20x in titanium from the Chinese supplier.",
+    "effortAdmin": "S",
     "effortGuess": "S",
     "estimatedCostEUR": 250,
     "expectedDeliveryDate": "2026-04-06",
@@ -185,12 +187,35 @@
     "lab": "Gozzi",
     "priority": "P2",
     "procurementNeeded": "yes",
-    "status": "NEW",
+    "requesterSubmission": {
+      "canBeDeferred": "no",
+      "category": "procurement",
+      "commercialLink": "",
+      "commerciallyAvailable": "no",
+      "deferTo": "",
+      "definitionOfDone": "Done when delivered to lab.",
+      "description": "Please modify the \"USS Enterprise\" version of the Allen headframe to thin the walls to 1mm (from 2mm). Please print 20x in titanium from the Chinese supplier.",
+      "effortGuess": "S",
+      "estimatedCostEUR": 250,
+      "expectedDeliveryDate": "2026-04-06",
+      "hardDeadline": false,
+      "hardDeadlineDate": "",
+      "lab": "Gozzi",
+      "priority": "P2",
+      "procurementNeeded": "yes",
+      "tags": [
+        "headframe"
+      ],
+      "title": "Thin-wall Allen headframe variant",
+      "whyNotDeferredCode": "tools",
+      "whyNotDeferredText": "Fabio's design and contacts for titanium printing"
+    },
+    "status": "IN_PROGRESS",
     "tags": [
       "headframe"
     ],
     "title": "Thin-wall Allen headframe variant",
-    "updatedAt": "2026-03-11T11:36:34.099000+00:00",
+    "updatedAt": "2026-03-16T14:25:22.915000+00:00",
     "whyNotDeferredCode": "tools",
     "whyNotDeferredText": "Fabio's design and contacts for titanium printing"
   },
@@ -416,7 +441,7 @@
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "mechanics",
-    "commercialLink": "",
+    "commercialLink": "https://www.edmundoptics.com/p/022quot-travel-x-axis-extended-travel-micro-series/13286/",
     "commerciallyAvailable": "no",
     "createdAt": "2026-02-18T20:19:42.244000+00:00",
     "createdByEmail": "eric.press@iit.it",
@@ -424,7 +449,7 @@
     "deferTo": "",
     "definitionOfDone": "Works when securely holds 2 headstage + CamNT probes and attaches to the MPM rig.",
     "description": "I'd like to test out the dual-probe holder you designed for a previous study. Despite needing ~3mm inter-probe distance for future experiments with Neuropixels, I would like to test the current design with the probes we have in the lab for which I should only need ~7.5mm of separation to reach my targets.\nThe mounting post that connects to the MPM manipulator should be 2mm in diameter OR contain a 2mm bore hole with a set screw for attachment to a 2mm diameter calibration rod - perhaps the second option is better. 3D printed with rigid plastic is sufficient for now.",
-    "effortAdmin": "",
+    "effortAdmin": "M",
     "effortGuess": "M",
     "estimatedCostEUR": 500,
     "expectedDeliveryDate": "2026-03-23",
@@ -433,13 +458,36 @@
     "impact": "not_blocking",
     "lab": "Gozzi",
     "priority": "P2",
-    "procurementNeeded": "unknown",
+    "procurementNeeded": "yes",
+    "requesterSubmission": {
+      "canBeDeferred": "no",
+      "category": "mechanics",
+      "commercialLink": "",
+      "commerciallyAvailable": "no",
+      "deferTo": "",
+      "definitionOfDone": "Works when securely holds 2 headstage + CamNT probes and attaches to the MPM rig.",
+      "description": "I'd like to test out the dual-probe holder you designed for a previous study. Despite needing ~3mm inter-probe distance for future experiments with Neuropixels, I would like to test the current design with the probes we have in the lab for which I should only need ~7.5mm of separation to reach my targets.\nThe mounting post that connects to the MPM manipulator should be 2mm in diameter OR contain a 2mm bore hole with a set screw for attachment to a 2mm diameter calibration rod - perhaps the second option is better. 3D printed with rigid plastic is sufficient for now.",
+      "effortGuess": "M",
+      "estimatedCostEUR": 500,
+      "expectedDeliveryDate": "2026-03-23",
+      "hardDeadline": false,
+      "hardDeadlineDate": "",
+      "lab": "Gozzi",
+      "priority": "P2",
+      "procurementNeeded": "unknown",
+      "tags": [
+        "3d printer"
+      ],
+      "title": "Dual-probe holder for electrophysiology",
+      "whyNotDeferredCode": "skills",
+      "whyNotDeferredText": "It's Fabio's design, he knows how to modify and print it for best precision"
+    },
     "status": "WAITING_ON_PROCUREMENT",
     "tags": [
       "3d printer"
     ],
     "title": "Dual-probe holder for electrophysiology",
-    "updatedAt": "2026-03-14T10:07:21.057000+00:00",
+    "updatedAt": "2026-03-16T14:26:34.139000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "It's Fabio's design, he knows how to modify and print it for best precision"
   },
