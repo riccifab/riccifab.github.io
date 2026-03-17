@@ -175,7 +175,7 @@ def get_ticket_creator_email(doc: Dict[str, Any]) -> Optional[str]:
 
 def get_ticket_updated_at(doc: Dict[str, Any]) -> Optional[dt.datetime]:
     """Try multiple field names for the updated timestamp."""
-    for k in ("updatedAt", "lastUpdatedAt", "modifiedAt", "lastModifiedAt"):
+    for k in ("updatedAt", "lastUpdatedAt", "modifiedAt", "lastModifiedAt", "lastCommentAt"):
         ts = parse_firestore_timestamp(doc.get(k))
         if ts is not None:
             return ts
@@ -187,6 +187,45 @@ def get_ticket_updated_at(doc: Dict[str, Any]) -> Optional[dt.datetime]:
             return ts
 
     return None
+
+
+def collect_recent_comment_ticket_ids(cfg: Config, db: firestore.Client, since: dt.datetime) -> set[str]:
+    ticket_ids: set[str] = set()
+    try:
+        query = (
+            db.collection_group("comments")
+            .where("createdAt", ">=", since)
+            .order_by("createdAt")
+        )
+        for snap in query.stream():
+            parent = snap.reference.parent.parent
+            if parent and parent.id:
+                ticket_ids.add(parent.id)
+    except Exception as exc:
+        debug(cfg, f"comment-scan failed: {exc}")
+    return ticket_ids
+
+
+def load_comment_metadata(cfg: Config, db: firestore.Client, tickets_collection: str, ticket_id: str) -> Dict[str, Any]:
+    comments = list(db.collection(tickets_collection).document(ticket_id).collection("comments").stream())
+    if not comments:
+        return {}
+
+    latest_payload: Dict[str, Any] = {}
+    latest_at: Optional[dt.datetime] = None
+    for snap in comments:
+        payload = snap.to_dict() or {}
+        created_at = parse_firestore_timestamp(payload.get("createdAt"))
+        if latest_at is None or (created_at is not None and created_at >= latest_at):
+            latest_at = created_at
+            latest_payload = payload
+
+    return {
+        "commentCount": len(comments),
+        "lastComment": str(latest_payload.get("text") or latest_payload.get("comment") or "").strip(),
+        "lastCommentAuthorEmail": str(latest_payload.get("authorEmail") or latest_payload.get("email") or "").strip(),
+        "lastCommentAt": latest_at,
+    }
 
 
 def canonicalize_for_snapshot(obj: Any) -> Any:
@@ -425,15 +464,37 @@ def main() -> int:
     )
 
     docs = list(query.stream())
-    debug(cfg, f"last_run={_to_iso(last_run)} since={_to_iso(since)} docs={len(docs)}")
+    comment_ticket_ids = collect_recent_comment_ticket_ids(cfg, db, since)
+    debug(
+        cfg,
+        f"last_run={_to_iso(last_run)} since={_to_iso(since)} docs={len(docs)} comment_tickets={len(comment_ticket_ids)}",
+    )
+
+    candidate_ids: List[str] = []
+    candidate_docs: Dict[str, Dict[str, Any]] = {}
+    for snap in docs:
+        candidate_ids.append(snap.id)
+        candidate_docs[snap.id] = snap.to_dict() or {}
+
+    for ticket_id in sorted(comment_ticket_ids):
+        if ticket_id in candidate_docs:
+            continue
+        snap = db.collection(cfg.tickets_collection).document(ticket_id).get()
+        if not snap.exists:
+            debug(cfg, f"SKIP: comment-linked ticket={ticket_id} no longer exists")
+            continue
+        candidate_ids.append(ticket_id)
+        candidate_docs[ticket_id] = snap.to_dict() or {}
 
     sent = 0
     scanned = 0
 
-    for snap in docs:
+    for ticket_id in candidate_ids:
         scanned += 1
-        ticket_id = snap.id
-        doc = snap.to_dict() or {}
+        doc = dict(candidate_docs.get(ticket_id) or {})
+
+        if ticket_id in comment_ticket_ids:
+            doc.update(load_comment_metadata(cfg, db, cfg.tickets_collection, ticket_id))
 
         updated_at = get_ticket_updated_at(doc)
         if updated_at is None:

@@ -741,6 +741,7 @@ btnAddComment.onclick = async () => {
       createdAt: serverTimestamp()
     });
 
+    let metadataUpdateFailed = false;
     try {
       await updateDoc(doc(db, "tickets", selectedTicketId), {
         updatedAt: serverTimestamp(),
@@ -749,9 +750,16 @@ btnAddComment.onclick = async () => {
         lastCommentAt: serverTimestamp(),
         commentCount: increment(1)
       });
-    } catch {}
+    } catch (metaError) {
+      metadataUpdateFailed = true;
+      console.warn("Comment metadata update failed", metaError);
+    }
     await loadComments(selectedTicketId);
-    setMsg(commentMsg, "Comment sent. Notification email will follow.", "ok");
+    if (metadataUpdateFailed) {
+      setMsg(commentMsg, "Comment saved, but ticket metadata update failed. Email notification may be delayed.", "err");
+    } else {
+      setMsg(commentMsg, "Comment sent. Notification email will follow.", "ok");
+    }
   } catch (e) {
     setMsg(commentMsg, `Comment error: ${e?.message || e}`, "err");
   }
