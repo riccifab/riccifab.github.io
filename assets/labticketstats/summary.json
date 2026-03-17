@@ -1,18 +1,18 @@
 {
   "approx_resolution_days_average": 14.7,
   "approx_resolution_days_median": 12.9,
-  "average_comment_count": 0.7,
+  "average_comment_count": 0.8,
   "done_tickets": 4,
   "effort_changes": 1,
   "eta_changes": 0,
-  "generated_at": "2026-03-16T10:04:39.769942+00:00",
+  "generated_at": "2026-03-17T06:49:06.053052+00:00",
   "median_comment_count": 0.0,
   "open_tickets": 7,
   "overdue_open_tickets": 0,
   "priority_changes": 0,
   "tickets_total": 11,
-  "tickets_with_comments": 4,
-  "tickets_with_requester_snapshot": 2,
+  "tickets_with_comments": 5,
+  "tickets_with_requester_snapshot": 4,
   "top_categories": [
     [
       "electronics",
