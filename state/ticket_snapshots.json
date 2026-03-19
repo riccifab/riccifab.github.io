@@ -1,9 +1,10 @@
 {
   "4RoHOKUgYNEB6K0TmLiK": {
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "electronics",
-    "commercialLink": "",
+    "commercialLink": "https://ca.rs-online.com/product/dwyer-instruments/ms-111-lcd/70328554/?srsltid=AfmBOooxwj-p_-L7jj5vwD207Yio05TGwugNPydW0QQJI4pn2C1R_nqT",
     "commerciallyAvailable": "no",
     "createdAt": "2026-03-05T13:38:49.318000+00:00",
     "createdByEmail": "alberto.galbusera@iit.it",
@@ -11,6 +12,7 @@
     "deferTo": "",
     "definitionOfDone": "Perform test, provide feedback and measure to Alberto",
     "description": "Ventilated Cabinet motor works full speed unresponsive to input. Company technician provide feedback remotely and ask additional test to isolate the problem and help find the solution.\nThe idea is only to verify two things:\n1.\tPower supply of the transmitter, Measure between +24V and GND, Expected value: approximately 24 V DC\n2.\tOutput signal of the transmitter, Measure between SIGNAL OUT and GND\nWe are not looking for a precise calibrated value. What we need to know is simply:\n•\tif the signal is present and changing slightly while the cabinet is running (normal behavior), or\n•\tif the signal remains completely fixed or close to 0 V, which would strongly indicate that the pressure transmitter is faulty.\nLink -> https://istitutoitalianotecnologia-my.sharepoint.com/:i:/r/personal/alberto_galbusera_iit_it/Documents/Documenti/Ventilated-Cabinet_test.png?csf=1&web=1&e=AsMT1w",
+    "effortAdmin": "S",
     "effortGuess": "M",
     "estimatedCostEUR": 0,
     "expectedDeliveryDate": "2026-03-31",
@@ -20,12 +22,35 @@
     "lab": "Gozzi",
     "priority": "P2",
     "procurementNeeded": "no",
-    "status": "NEW",
+    "requesterSubmission": {
+      "canBeDeferred": "no",
+      "category": "electronics",
+      "commercialLink": "",
+      "commerciallyAvailable": "no",
+      "deferTo": "",
+      "definitionOfDone": "Perform test, provide feedback and measure to Alberto",
+      "description": "Ventilated Cabinet motor works full speed unresponsive to input. Company technician provide feedback remotely and ask additional test to isolate the problem and help find the solution.\nThe idea is only to verify two things:\n1.\tPower supply of the transmitter, Measure between +24V and GND, Expected value: approximately 24 V DC\n2.\tOutput signal of the transmitter, Measure between SIGNAL OUT and GND\nWe are not looking for a precise calibrated value. What we need to know is simply:\n•\tif the signal is present and changing slightly while the cabinet is running (normal behavior), or\n•\tif the signal remains completely fixed or close to 0 V, which would strongly indicate that the pressure transmitter is faulty.\nLink -> https://istitutoitalianotecnologia-my.sharepoint.com/:i:/r/personal/alberto_galbusera_iit_it/Documents/Documenti/Ventilated-Cabinet_test.png?csf=1&web=1&e=AsMT1w",
+      "effortGuess": "M",
+      "estimatedCostEUR": 0,
+      "expectedDeliveryDate": "2026-03-31",
+      "hardDeadline": false,
+      "hardDeadlineDate": "",
+      "lab": "Gozzi",
+      "priority": "P2",
+      "procurementNeeded": "no",
+      "tags": [
+        "Capex maintenance"
+      ],
+      "title": "Malfunctioning Mouse Ventilated Cabinet - MRI Lab - Multimeter test",
+      "whyNotDeferredCode": "tools",
+      "whyNotDeferredText": "Skill missing"
+    },
+    "status": "CLOSED",
     "tags": [
       "Capex maintenance"
     ],
     "title": "Malfunctioning Mouse Ventilated Cabinet - MRI Lab - Multimeter test",
-    "updatedAt": "2026-03-05T13:38:49.318000+00:00",
+    "updatedAt": "2026-03-19T10:21:33.609000+00:00",
     "whyNotDeferredCode": "tools",
     "whyNotDeferredText": "Skill missing"
   },
