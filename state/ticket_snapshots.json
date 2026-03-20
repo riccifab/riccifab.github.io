@@ -87,7 +87,7 @@
   },
   "90ATtOV4zQpED5FNPiOR": {
     "adminEtaDate": "2026-03-17",
-    "adminNotes": "Ready to discuss this",
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "yes",
     "category": "other",
@@ -103,7 +103,7 @@
     "effortAdmin": "M",
     "effortGuess": "S",
     "estimatedCostEUR": null,
-    "expectedDeliveryDate": "2026-03-17",
+    "expectedDeliveryDate": "2026-04-01",
     "hardDeadline": false,
     "hardDeadlineDate": "",
     "impact": "not_blocking",
@@ -112,8 +112,34 @@
     "lastCommentAt": "2026-03-18T10:36:23.790000+00:00",
     "lastCommentAuthorEmail": "fabio.ricci@iit.it",
     "priority": "P3",
-    "procurementNeeded": "unknown",
-    "status": "IN_PROGRESS",
+    "procurementNeeded": "yes",
+    "requesterSubmission": {
+      "canBeDeferred": "yes",
+      "category": "other",
+      "commercialLink": "",
+      "commerciallyAvailable": "no",
+      "deferTo": "myself",
+      "definitionOfDone": "- when a) the parts are 3D printed, b) they are tested with a mouse and fUSI probe.",
+      "description": "I want to modify the mouse holder to include 2 slits for the legs (as seen in a paper) - hopefully this can reduce struggling and motion artifacts because the mouse won't be able to push down. \n\nI also want to modify the cover so that it completely covers the mouse head and body, leaving only a space for the fUSI probe (making it similar darkness to the inside of the MRI bore). I want to fill any empty gaps between the mouse body and the holder/covr with foam, so the cover needs to be securely attached. I've been trying to work on this myself in fusion, but it's going very slowly and I'm not confident that I will be able to implement it as I want.",
+      "effortGuess": "S",
+      "estimatedCostEUR": null,
+      "expectedDeliveryDate": "2026-03-17",
+      "hardDeadline": false,
+      "hardDeadlineDate": "",
+      "lab": "Gozzi",
+      "priority": "P3",
+      "procurementNeeded": "unknown",
+      "tags": [
+        "autodesk fusion",
+        "3D modeling",
+        "fUSI",
+        "mouse holder"
+      ],
+      "title": "3D modeling: modify mouse holder in fusion",
+      "whyNotDeferredCode": "",
+      "whyNotDeferredText": ""
+    },
+    "status": "WAITING_ON_PROCUREMENT",
     "tags": [
       "autodesk fusion",
       "3D modeling",
@@ -121,7 +147,7 @@
       "mouse holder"
     ],
     "title": "3D modeling: modify mouse holder in fusion",
-    "updatedAt": "2026-03-18T10:36:23.790000+00:00",
+    "updatedAt": "2026-03-20T09:25:53.060000+00:00",
     "whyNotDeferredCode": "",
     "whyNotDeferredText": ""
   },
