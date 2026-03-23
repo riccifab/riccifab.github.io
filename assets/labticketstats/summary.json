@@ -1,18 +1,18 @@
 {
   "approx_resolution_days_average": 14.5,
   "approx_resolution_days_median": 13.9,
-  "average_comment_count": 0.9,
+  "average_comment_count": 0.8,
   "done_tickets": 5,
   "effort_changes": 3,
   "eta_changes": 1,
-  "generated_at": "2026-03-23T06:55:54.019172+00:00",
+  "generated_at": "2026-03-23T13:28:52.014083+00:00",
   "median_comment_count": 0.0,
-  "open_tickets": 6,
+  "open_tickets": 7,
   "overdue_open_tickets": 0,
   "priority_changes": 0,
-  "tickets_total": 11,
+  "tickets_total": 12,
   "tickets_with_comments": 5,
-  "tickets_with_requester_snapshot": 6,
+  "tickets_with_requester_snapshot": 7,
   "top_categories": [
     [
       "electronics",
@@ -23,15 +23,15 @@
       3
     ],
     [
+      "other",
+      2
+    ],
+    [
       "software",
       1
     ],
     [
       "procurement",
-      1
-    ],
-    [
-      "other",
       1
     ]
   ],
@@ -42,7 +42,7 @@
     ],
     [
       "Rossi",
-      2
+      3
     ],
     [
       "Lombardo",
