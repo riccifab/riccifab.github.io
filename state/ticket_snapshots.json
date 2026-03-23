@@ -90,7 +90,7 @@
     "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "yes",
-    "category": "other",
+    "category": "mechanics",
     "commentCount": 1,
     "commercialLink": "",
     "commerciallyAvailable": "no",
@@ -147,7 +147,7 @@
       "mouse holder"
     ],
     "title": "3D modeling: modify mouse holder in fusion",
-    "updatedAt": "2026-03-20T09:25:53.060000+00:00",
+    "updatedAt": "2026-03-23T13:34:22.729000+00:00",
     "whyNotDeferredCode": "",
     "whyNotDeferredText": ""
   },
