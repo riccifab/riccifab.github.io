@@ -5,10 +5,10 @@
   "done_tickets": 5,
   "effort_changes": 3,
   "eta_changes": 1,
-  "generated_at": "2026-03-23T13:28:52.014083+00:00",
+  "generated_at": "2026-03-24T06:49:49.246485+00:00",
   "median_comment_count": 0.0,
   "open_tickets": 7,
-  "overdue_open_tickets": 0,
+  "overdue_open_tickets": 1,
   "priority_changes": 0,
   "tickets_total": 12,
   "tickets_with_comments": 5,
@@ -20,11 +20,7 @@
     ],
     [
       "mechanics",
-      3
-    ],
-    [
-      "other",
-      2
+      4
     ],
     [
       "software",
@@ -32,6 +28,10 @@
     ],
     [
       "procurement",
+      1
+    ],
+    [
+      "other",
       1
     ]
   ],
