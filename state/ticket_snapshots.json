@@ -186,6 +186,7 @@
     "whyNotDeferredText": ""
   },
   "Eqkg5zfMhcapUabCITZm": {
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "mechanics",
@@ -197,6 +198,7 @@
     "deferTo": "",
     "definitionOfDone": "- there is an updated design that accounts for MRI-compatibility and placement of the bifurcated cable + mirrors\n- there is a 3D print of the animal cradle, ready to use",
     "description": "We need an updated version of the WFI/MRI headpiece prototype that accounts for the placement of a bifurcated fiber bundle and 2 additional 90° mirrors. In addition the fastening system between lower and upper part should be changed to an MRI-compatible locking solution instead of the magnet solution we have now, so we can start testing the compatibility of all the intended components used at the headpiece. \nAnother point to consider is, that currently we are always imaging with a slight angle (achieved with layers of tape) so we don't get glare from the implanted glass. For the future it could be helpful to have a way to adjust the angle if necessary? (But this is not a requirement, only if its easy to implement)",
+    "effortAdmin": "M",
     "effortGuess": "M",
     "estimatedCostEUR": 50,
     "expectedDeliveryDate": "2026-04-01",
@@ -206,7 +208,34 @@
     "lab": "Gozzi",
     "priority": "P2",
     "procurementNeeded": "unknown",
-    "status": "NEW",
+    "requesterSubmission": {
+      "canBeDeferred": "no",
+      "category": "mechanics",
+      "commercialLink": "",
+      "commerciallyAvailable": "no",
+      "deferTo": "",
+      "definitionOfDone": "- there is an updated design that accounts for MRI-compatibility and placement of the bifurcated cable + mirrors\n- there is a 3D print of the animal cradle, ready to use",
+      "description": "We need an updated version of the WFI/MRI headpiece prototype that accounts for the placement of a bifurcated fiber bundle and 2 additional 90° mirrors. In addition the fastening system between lower and upper part should be changed to an MRI-compatible locking solution instead of the magnet solution we have now, so we can start testing the compatibility of all the intended components used at the headpiece. \nAnother point to consider is, that currently we are always imaging with a slight angle (achieved with layers of tape) so we don't get glare from the implanted glass. For the future it could be helpful to have a way to adjust the angle if necessary? (But this is not a requirement, only if its easy to implement)",
+      "effortGuess": "M",
+      "estimatedCostEUR": 50,
+      "expectedDeliveryDate": "2026-04-01",
+      "hardDeadline": false,
+      "hardDeadlineDate": "",
+      "lab": "Gozzi",
+      "priority": "P2",
+      "procurementNeeded": "unknown",
+      "tags": [
+        "WFI",
+        "headpiece",
+        "animal cradle",
+        "MRI-compatibiity",
+        "placement of bifurcated fiber bundle"
+      ],
+      "title": "Animal cradle / Headpiece for WFI/MRI",
+      "whyNotDeferredCode": "integration",
+      "whyNotDeferredText": "Fabio has designed the prior prototype and has a plan what needs to be changed"
+    },
+    "status": "IN_PROGRESS",
     "tags": [
       "WFI",
       "headpiece",
@@ -215,7 +244,7 @@
       "placement of bifurcated fiber bundle"
     ],
     "title": "Animal cradle / Headpiece for WFI/MRI",
-    "updatedAt": "2026-03-11T14:46:33.831000+00:00",
+    "updatedAt": "2026-03-25T11:08:02.110000+00:00",
     "whyNotDeferredCode": "integration",
     "whyNotDeferredText": "Fabio has designed the prior prototype and has a plan what needs to be changed"
   },
@@ -309,6 +338,7 @@
     "whyNotDeferredText": "skills only Fabio has"
   },
   "Y5BFyoBbS5Z28dXyKjEd": {
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "other",
@@ -320,6 +350,7 @@
     "deferTo": "",
     "definitionOfDone": "Attendance and feedback providede",
     "description": "5 candidates over 5 weeks. Attend 1h talk + attend 30min 1-on-1 meeting. Provide short feedback on their practical skills.",
+    "effortAdmin": "",
     "effortGuess": "S",
     "estimatedCostEUR": null,
     "expectedDeliveryDate": "2026-04-30",
@@ -350,10 +381,10 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-03-23T10:07:32.818000+00:00",
-    "status": "NEW",
+    "status": "IN_PROGRESS",
     "tags": [],
     "title": "Feedback on post-doc interviews",
-    "updatedAt": "2026-03-23T10:07:32.818000+00:00",
+    "updatedAt": "2026-03-25T11:05:01.079000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": ""
   },
