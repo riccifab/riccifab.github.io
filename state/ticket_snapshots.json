@@ -506,7 +506,7 @@
   },
   "lFaxlDUYRNv7ugr7w220": {
     "adminEtaDate": "",
-    "adminNotes": "",
+    "adminNotes": "Throlabs posts and Big syringe missing",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "electronics",
@@ -527,14 +527,38 @@
     "impact": "not_blocking",
     "lab": "Rossi",
     "priority": "P2",
-    "procurementNeeded": "unknown",
-    "status": "IN_PROGRESS",
+    "procurementNeeded": "yes",
+    "requesterSubmission": {
+      "canBeDeferred": "no",
+      "category": "electronics",
+      "commercialLink": "",
+      "commerciallyAvailable": "unknown",
+      "deferTo": "",
+      "definitionOfDone": "-Assemble on free optic table with existing components + 3D printed supports\n-Test functionality and luminance when flickered with Teensy. \n-Integrate reward delivery and lickometer within Harp DAC (liaise with Heather)",
+      "description": "Build 3 screens system driven by new Adafruits (Hunter's) boards, controlled by Teensy program to flicker screens at 16KHz. Add to the system reward delivery and lickometer, held with a fisso arm, or more sophisticated manipulator if design already exists.",
+      "effortGuess": "M",
+      "estimatedCostEUR": 0,
+      "expectedDeliveryDate": "2026-04-01",
+      "hardDeadline": false,
+      "hardDeadlineDate": "",
+      "lab": "Rossi",
+      "priority": "P2",
+      "procurementNeeded": "unknown",
+      "tags": [
+        "Screens",
+        "teensy"
+      ],
+      "title": "New screen VR with reward and lickometer",
+      "whyNotDeferredCode": "skills",
+      "whyNotDeferredText": "Requires knowledge of electronics, and implementation of designs already done by Fabio already"
+    },
+    "status": "WAITING_ON_PROCUREMENT",
     "tags": [
       "Screens",
       "teensy"
     ],
     "title": "New screen VR with reward and lickometer",
-    "updatedAt": "2026-02-17T15:04:13.876000+00:00",
+    "updatedAt": "2026-03-26T07:22:11.768000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "Requires knowledge of electronics, and implementation of designs already done by Fabio already"
   },
