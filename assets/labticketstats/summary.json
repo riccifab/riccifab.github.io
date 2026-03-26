@@ -5,14 +5,14 @@
   "done_tickets": 5,
   "effort_changes": 3,
   "eta_changes": 1,
-  "generated_at": "2026-03-25T06:48:37.450316+00:00",
+  "generated_at": "2026-03-26T06:54:52.540935+00:00",
   "median_comment_count": 0.0,
   "open_tickets": 7,
   "overdue_open_tickets": 1,
   "priority_changes": 0,
   "tickets_total": 12,
   "tickets_with_comments": 5,
-  "tickets_with_requester_snapshot": 7,
+  "tickets_with_requester_snapshot": 8,
   "top_categories": [
     [
       "electronics",
