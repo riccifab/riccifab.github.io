@@ -139,7 +139,7 @@
       "whyNotDeferredCode": "",
       "whyNotDeferredText": ""
     },
-    "status": "IN_PROGRESS",
+    "status": "CLOSED",
     "tags": [
       "autodesk fusion",
       "3D modeling",
@@ -147,7 +147,7 @@
       "mouse holder"
     ],
     "title": "3D modeling: modify mouse holder in fusion",
-    "updatedAt": "2026-03-30T09:53:08.598000+00:00",
+    "updatedAt": "2026-03-30T10:48:25.006000+00:00",
     "whyNotDeferredCode": "",
     "whyNotDeferredText": ""
   },
