@@ -1,18 +1,18 @@
 [
   {
-    "detail": "Gozzi holds 4 open tickets out of 8 total.",
+    "detail": "Gozzi holds 3 open tickets out of 8 total.",
     "title": "Largest backlog"
   },
   {
-    "detail": "#u9dlqr6g in Gozzi is late by 7 days (Dual-probe holder for electrophysiology).",
+    "detail": "#u9dlqr6g in Gozzi is late by 8 days (Dual-probe holder for electrophysiology).",
     "title": "Most overdue request"
   },
   {
-    "detail": "#lFaxlDUY has been open for 45 days (New screen VR with reward and lickometer).",
+    "detail": "#lFaxlDUY has been open for 46 days (New screen VR with reward and lickometer).",
     "title": "Oldest open ticket"
   },
   {
-    "detail": "#90ATtOV4 collected 3 comments and is in status WAITING_ON_PROCUREMENT.",
+    "detail": "#NyGcOp3e collected 1 comments and is in status WAITING_ON_PROCUREMENT.",
     "title": "Comment hotspot"
   }
 ]

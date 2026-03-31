@@ -27,7 +27,7 @@
 <circle cx="650.00" cy="69.67" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
 <circle cx="768.00" cy="34.00" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
 <circle cx="886.00" cy="34.00" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
-<polyline fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="60.00,462.00 178.00,426.33 296.00,390.67 414.00,355.00 532.00,355.00 650.00,283.67 768.00,283.67 886.00,283.67" />
+<polyline fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="60.00,462.00 178.00,426.33 296.00,390.67 414.00,355.00 532.00,355.00 650.00,283.67 768.00,283.67 886.00,248.00" />
 <circle cx="60.00" cy="462.00" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
 <circle cx="178.00" cy="426.33" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
 <circle cx="296.00" cy="390.67" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
@@ -35,8 +35,8 @@
 <circle cx="532.00" cy="355.00" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
 <circle cx="650.00" cy="283.67" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
 <circle cx="768.00" cy="283.67" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
-<circle cx="886.00" cy="283.67" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
-<polyline fill="none" stroke="#f97316" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="60.00,390.67 178.00,212.33 296.00,248.00 414.00,248.00 532.00,176.67 650.00,248.00 768.00,212.33 886.00,212.33" />
+<circle cx="886.00" cy="248.00" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
+<polyline fill="none" stroke="#f97316" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="60.00,390.67 178.00,212.33 296.00,248.00 414.00,248.00 532.00,176.67 650.00,248.00 768.00,212.33 886.00,248.00" />
 <circle cx="60.00" cy="390.67" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
 <circle cx="178.00" cy="212.33" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
 <circle cx="296.00" cy="248.00" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
@@ -44,14 +44,14 @@
 <circle cx="532.00" cy="176.67" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
 <circle cx="650.00" cy="248.00" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
 <circle cx="768.00" cy="212.33" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
-<circle cx="886.00" cy="212.33" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
+<circle cx="886.00" cy="248.00" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
 <rect x="904" y="35.0" width="112" height="26" rx="13" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" />
 <circle cx="918" cy="48.0" r="5" fill="#2563eb" />
 <text x="930" y="52.0" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Created 12</text>
-<rect x="904" y="199.3" width="112" height="26" rx="13" fill="#ffffff" stroke="#f97316" stroke-width="1.5" />
-<circle cx="918" cy="212.3" r="5" fill="#f97316" />
-<text x="930" y="216.3" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Open 7</text>
-<rect x="904" y="270.7" width="112" height="26" rx="13" fill="#ffffff" stroke="#10b981" stroke-width="1.5" />
-<circle cx="918" cy="283.7" r="5" fill="#10b981" />
-<text x="930" y="287.7" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Closed 5</text>
+<rect x="904" y="235.0" width="112" height="26" rx="13" fill="#ffffff" stroke="#10b981" stroke-width="1.5" />
+<circle cx="918" cy="248.0" r="5" fill="#10b981" />
+<text x="930" y="252.0" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Closed 6</text>
+<rect x="904" y="263.0" width="112" height="26" rx="13" fill="#ffffff" stroke="#f97316" stroke-width="1.5" />
+<circle cx="918" cy="276.0" r="5" fill="#f97316" />
+<text x="930" y="280.0" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Open 6</text>
 </svg>
