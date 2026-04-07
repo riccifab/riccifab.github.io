@@ -631,7 +631,7 @@
     "effortAdmin": "M",
     "effortGuess": "M",
     "estimatedCostEUR": null,
-    "expectedDeliveryDate": "2026-04-10",
+    "expectedDeliveryDate": "2026-04-11",
     "hardDeadline": false,
     "hardDeadlineDate": "",
     "lab": "Gozzi",
@@ -672,7 +672,7 @@
       "fMRI"
     ],
     "title": "IR illumination with laser for pupillometry",
-    "updatedAt": "2026-04-07T09:35:31.157000+00:00",
+    "updatedAt": "2026-04-07T09:37:26.296000+00:00",
     "whyNotDeferredCode": "safety",
     "whyNotDeferredText": ""
   },
