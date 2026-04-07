@@ -239,7 +239,7 @@
       "whyNotDeferredCode": "integration",
       "whyNotDeferredText": "Fabio has designed the prior prototype and has a plan what needs to be changed"
     },
-    "status": "IN_PROGRESS",
+    "status": "BLOCKED",
     "tags": [
       "WFI",
       "headpiece",
@@ -248,7 +248,7 @@
       "placement of bifurcated fiber bundle"
     ],
     "title": "Animal cradle / Headpiece for WFI/MRI",
-    "updatedAt": "2026-04-01T14:44:27.503000+00:00",
+    "updatedAt": "2026-04-07T12:08:04.793000+00:00",
     "whyNotDeferredCode": "integration",
     "whyNotDeferredText": "Fabio has designed the prior prototype and has a plan what needs to be changed"
   },
