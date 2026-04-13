@@ -816,9 +816,10 @@
     "whyNotDeferredText": "It's Fabio's design, he knows how to modify and print it for best precision"
   },
   "uY7WQZZDkl4lBcmZxlhe": {
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
-    "category": "other",
+    "category": "mechanics",
     "commercialLink": "",
     "commerciallyAvailable": "unknown",
     "createdAt": "2026-04-13T15:39:21.771000+00:00",
@@ -827,6 +828,7 @@
     "deferTo": "",
     "definitionOfDone": "- works when it fits to our wells \n- works when it doesn't degrade with the chemicals we use for immunostaining",
     "description": "As previously discussed, we need 20 3D-printed strainers compatible with the well size of our 12-well plates. They can be of any color, the gray one we saw together works well.\n\nIf I understood correctly, in order to do so we need to buy one bobina for Federico Rossi since we're going to use his 3D printer",
+    "effortAdmin": "S",
     "effortGuess": "S",
     "estimatedCostEUR": 40,
     "expectedDeliveryDate": "2026-04-14",
@@ -857,10 +859,10 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-04-13T15:39:21.771000+00:00",
-    "status": "NEW",
+    "status": "IN_PROGRESS",
     "tags": [],
     "title": "Strainers for immunos in 12-well plates",
-    "updatedAt": "2026-04-13T15:39:21.771000+00:00",
+    "updatedAt": "2026-04-13T16:08:06.534000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": ""
   },
