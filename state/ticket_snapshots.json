@@ -667,7 +667,7 @@
     "whyNotDeferredText": "Requires knowledge of electronics, and implementation of designs already done by Fabio already"
   },
   "pMktLaihvFsPXBUHb3ZZ": {
-    "adminNotes": "Even if not perfect is done, reopen in future",
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "optics",
@@ -715,7 +715,7 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-04-02T12:19:09.810000+00:00",
-    "status": "CLOSED",
+    "status": "IN_PROGRESS",
     "tags": [
       "pupillometry",
       "IR",
@@ -723,7 +723,7 @@
       "fMRI"
     ],
     "title": "IR illumination with laser for pupillometry",
-    "updatedAt": "2026-04-13T09:59:37.758000+00:00",
+    "updatedAt": "2026-04-13T10:58:04.190000+00:00",
     "whyNotDeferredCode": "safety",
     "whyNotDeferredText": ""
   },
