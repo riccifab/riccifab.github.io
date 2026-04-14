@@ -679,7 +679,7 @@
     "deferTo": "",
     "definitionOfDone": "- Working on the bench\n- Working in the fMRI scanner during EPI\n- Better quality pupillometry recording than regular contrast\n- Reduced hassle to setup and reduce reflection artefacts",
     "description": "We need IR laser illumination to get inverted contrast for pupillometry in the scanner. Objectives/steps are the following:\n- test on the bench that IR laser illumination can be used to get good quality pupillometry signal in implanted mice in the craddle with the MRI compatible camera\n- put the setup inside the scanner",
-    "effortAdmin": "M",
+    "effortAdmin": "S",
     "effortGuess": "M",
     "estimatedCostEUR": null,
     "expectedDeliveryDate": "2026-04-17",
@@ -715,7 +715,7 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-04-02T12:19:09.810000+00:00",
-    "status": "IN_PROGRESS",
+    "status": "CLOSED",
     "tags": [
       "pupillometry",
       "IR",
@@ -723,7 +723,7 @@
       "fMRI"
     ],
     "title": "IR illumination with laser for pupillometry",
-    "updatedAt": "2026-04-13T10:58:04.190000+00:00",
+    "updatedAt": "2026-04-14T14:30:50.258000+00:00",
     "whyNotDeferredCode": "safety",
     "whyNotDeferredText": ""
   },
