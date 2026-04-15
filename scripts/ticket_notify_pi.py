@@ -5,7 +5,7 @@ import re
 from datetime import datetime, timezone, timedelta
 from typing import Any
 
-import requests
+from brevo_mail import send_brevo_email
 from google.cloud import firestore
 from google.oauth2 import service_account
 
@@ -143,7 +143,7 @@ def load_state() -> datetime:
     except FileNotFoundError:
         return datetime(1970, 1, 1, tzinfo=timezone.utc)
     except Exception as e:
-        # se il file è corrotto non bloccare il workflow
+        # se il file e corrotto non bloccare il workflow
         print(f"WARNING: cannot read state ({STATE_PATH}): {e}")
         return datetime(1970, 1, 1, tzinfo=timezone.utc)
 
@@ -154,33 +154,6 @@ def save_state(dt: datetime) -> None:
     os.makedirs(os.path.dirname(STATE_PATH), exist_ok=True)
     with open(STATE_PATH, "w", encoding="utf-8") as f:
         json.dump(obj, f)
-
-
-# ----------------------------
-# SendGrid
-# ----------------------------
-def send_sendgrid(sendgrid_api_key: str, mail_from: str, to_list: list[str], subject: str, body: str) -> None:
-    url = "https://api.sendgrid.com/v3/mail/send"
-    headers = {
-        "Authorization": f"Bearer {sendgrid_api_key}",
-        "Content-Type": "application/json",
-    }
-
-    personalization: dict[str, Any] = {"to": [{"email": e} for e in to_list]}
-    if ALWAYS_CC:
-        personalization["cc"] = [{"email": e} for e in ALWAYS_CC]
-
-    payload = {
-        "personalizations": [personalization],
-        "from": {"email": mail_from},
-        "subject": subject,
-        "content": [{"type": "text/plain", "value": body}],
-        "tracking_settings": {"click_tracking": {"enable": False, "enable_text": False}},
-    }
-
-    r = requests.post(url, headers=headers, json=payload, timeout=30)
-    if r.status_code >= 300:
-        raise RuntimeError(f"SendGrid error {r.status_code}: {r.text}")
 
 
 def build_stats_link(site_url: str) -> str:
@@ -204,7 +177,7 @@ def main() -> None:
     project_id = os.environ["FIREBASE_PROJECT_ID"]
     site_url = os.environ.get("SITE_URL", "").rstrip("/")
 
-    sendgrid_api_key = os.environ["SENDGRID_API_KEY"]
+    brevo_api_key = os.environ["BREVO_API_KEY"]
     mail_from = os.environ["MAIL_FROM"]
 
     lab_pi_map_json = os.environ.get("LAB_PI_MAP", "{}").strip()
@@ -252,7 +225,6 @@ def main() -> None:
             continue
         # Evita doppi invii (LOOKBACK)
         if created_dt <= last_run:
-            
             continue
 
         # Prendi lab in modo robusto
@@ -282,7 +254,7 @@ def main() -> None:
         exp = t.get("expectedDeliveryDate", "-")
         by = t.get("createdByEmail", "-")
 
-        subject = f"[Ticket] New ({lab_disp or lab_key}) — {title}".strip()
+        subject = f"[Ticket] New ({lab_disp or lab_key}) - {title}".strip()
         link = f"{site_url}" if site_url else "(SITE_URL not set)"
         stats_link = build_stats_link(site_url)
 
@@ -299,11 +271,11 @@ def main() -> None:
                 f"Created by: {by}",
                 "",
                 f"Tickets page: {link}",
-                *( [f"Stats page: {stats_link}"] if stats_link else [] ),
+                *([f"Stats page: {stats_link}"] if stats_link else []),
             ]
         )
 
-        send_sendgrid(sendgrid_api_key, mail_from, to_list, subject, body)
+        send_brevo_email(brevo_api_key, mail_from, to_list, subject, body, cc_list=ALWAYS_CC)
         sent += 1
         print(f"SENT: ticket={tid} to={to_list} lab_key={lab_key} createdAt={created_dt.isoformat()}")
 

@@ -10,7 +10,7 @@ Design goals:
 Required env vars:
 - FIREBASE_PROJECT_ID
 - GCP_SA_KEY_B64  (base64-encoded service account JSON)
-- SENDGRID_API_KEY
+- BREVO_API_KEY
 - MAIL_FROM
 
 Optional env vars:
@@ -32,19 +32,16 @@ import re
 import sys
 from typing import Any, Dict, List, Optional, Tuple
 
-import requests
 from google.cloud import firestore
 from google.oauth2 import service_account
-
-
-SENDGRID_API = "https://api.sendgrid.com/v3/mail/send"
+from brevo_mail import send_brevo_email
 
 
 @dataclasses.dataclass
 class Config:
     project_id: str
     sa_key_b64: str
-    sendgrid_api_key: str
+    brevo_api_key: str
     mail_from: str
     mail_cc: str
     site_url: str
@@ -64,7 +61,7 @@ def load_config() -> Config:
     return Config(
         project_id=_env("FIREBASE_PROJECT_ID", required=True),
         sa_key_b64=_env("GCP_SA_KEY_B64", required=True),
-        sendgrid_api_key=_env("SENDGRID_API_KEY", required=True),
+        brevo_api_key=_env("BREVO_API_KEY", required=True),
         mail_from=_env("MAIL_FROM", required=True),
         mail_cc=_env("MAIL_CC", default=""),
         site_url=_env("SITE_URL", default="").rstrip("/") + ("" if _env("SITE_URL", default="").strip() else ""),
@@ -383,37 +380,17 @@ def parse_recipients(value: str) -> List[str]:
 
 
 def send_email(cfg: Config, to_email: str, subject: str, text_body: str) -> None:
-    personalization: Dict[str, Any] = {"to": [{"email": to_email}]}
-
     cc_list = parse_recipients(cfg.mail_cc)
-    # Avoid duplicating the primary recipient in CC
     cc_list = [e for e in cc_list if e.lower() != to_email.lower()]
-    if cc_list:
-        personalization["cc"] = [{"email": e} for e in cc_list]
 
-    payload = {
-        "personalizations": [personalization],
-        "from": {"email": cfg.mail_from},
-        "subject": subject,
-        "content": [{"type": "text/plain", "value": text_body}],
-        # Prevent SendGrid from rewriting links (you want to see the real SITE_URL in the email)
-        "tracking_settings": {
-            "click_tracking": {"enable": False, "enable_text": False}
-        },
-    }
-
-    r = requests.post(
-        SENDGRID_API,
-        headers={
-            "Authorization": f"Bearer {cfg.sendgrid_api_key}",
-            "Content-Type": "application/json",
-        },
-        json=payload,
-        timeout=20,
+    send_brevo_email(
+        api_key=cfg.brevo_api_key,
+        mail_from=cfg.mail_from,
+        to_list=[to_email],
+        subject=subject,
+        body=text_body,
+        cc_list=cc_list,
     )
-
-    if r.status_code >= 300:
-        raise RuntimeError(f"SendGrid error {r.status_code}: {r.text}")
 
 
 def build_ticket_link(cfg: Config, ticket_id: str) -> str:
