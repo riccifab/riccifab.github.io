@@ -8,7 +8,7 @@
 
 <img width="840" height="374" alt="Screenshot 2026-02-13 alle 21 18 32" src="https://github.com/user-attachments/assets/6c868082-30ce-461f-80d8-9414cbebbff9" />
 
-A lightweight, GitHub Pages–hosted ticketing website used to track lab/tech requests and keep stakeholders in the loop via automated email notifications.
+A lightweight, GitHub Pages-hosted ticketing website used to track lab/tech requests and keep stakeholders in the loop via automated email notifications.
 
 ---
 
@@ -16,7 +16,7 @@ A lightweight, GitHub Pages–hosted ticketing website used to track lab/tech re
 
 - **Frontend:** static website served from GitHub Pages.
 - **Backend:** Google **Firestore** used as the ticket database.
-- **Automation:** GitHub Actions + Python scripts send emails (SendGrid) and keep bot state in a dedicated branch.
+- **Automation:** GitHub Actions + Python scripts send emails via Brevo and keep bot state in a dedicated branch.
 
 ---
 
@@ -24,11 +24,22 @@ A lightweight, GitHub Pages–hosted ticketing website used to track lab/tech re
 
 - Create and manage tickets (status, due date, notes, etc.)
 - Automated notifications:
-  - **New ticket → PI notification** (based on lab key)
-  - **Ticket updated → requester notification** (diff-style “what changed”)
+  - **New ticket -> PI notification** (based on lab key)
+  - **Ticket updated -> requester notification** (diff-style "what changed")
   - **Weekly digest** (summary email)
 - Bot state persisted in a separate branch (`bot-state`) so scheduled workflows are deterministic
 <img width="464" height="647" alt="Screenshot 2026-02-13 alle 21 23 18" src="https://github.com/user-attachments/assets/fdb06d8c-114f-4c58-9f6a-f439913aa9e9" />
+
+---
+
+## Email setup
+
+Configure these secrets where email jobs run:
+
+- `BREVO_API_KEY`
+- `MAIL_FROM`
+
+The Firebase scheduled function in `functions/index.js` also expects `BREVO_API_KEY` in its deployed environment.
 
 ---
 
@@ -60,13 +71,12 @@ If you prefer storing the JSON elsewhere on your machine, create `.env.local` fr
 
 ---
 
-
 ## License
 
 This project is released under the **MIT License**.
 
 - You can use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software.
-- The software is provided **“as is”**, without warranty of any kind.
+- The software is provided **"as is"**, without warranty of any kind.
 
 ---
 
