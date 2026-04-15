@@ -353,6 +353,7 @@
     "whyNotDeferredText": "I have tried to solve it and instead made it worse"
   },
   "Ib4ZUIJlM4FIDjAGaFwz": {
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "electronics",
@@ -364,6 +365,7 @@
     "deferTo": "",
     "definitionOfDone": "- Resistors are changed such that the current going to the screens is doubled\n- Screens do not explode",
     "description": "As discussed: order resistors to replace those currently on the driver boards.",
+    "effortAdmin": "",
     "effortGuess": "S",
     "estimatedCostEUR": 1,
     "expectedDeliveryDate": "2026-04-17",
@@ -394,10 +396,10 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-04-15T14:45:26.199000+00:00",
-    "status": "NEW",
+    "status": "WAITING_ON_PROCUREMENT",
     "tags": [],
     "title": "Modify screen driver boards to increase brightness",
-    "updatedAt": "2026-04-15T14:45:26.199000+00:00",
+    "updatedAt": "2026-04-15T15:58:32.098000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": ""
   },
