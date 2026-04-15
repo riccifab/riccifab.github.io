@@ -27,7 +27,7 @@
 <circle cx="702.44" cy="87.50" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
 <circle cx="794.22" cy="60.75" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
 <circle cx="886.00" cy="34.00" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
-<polyline fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="60.00,462.00 151.78,435.25 243.56,408.50 335.33,381.75 427.11,381.75 518.89,328.25 610.67,328.25 702.44,301.50 794.22,274.75 886.00,274.75" />
+<polyline fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="60.00,462.00 151.78,435.25 243.56,408.50 335.33,381.75 427.11,381.75 518.89,328.25 610.67,328.25 702.44,301.50 794.22,274.75 886.00,248.00" />
 <circle cx="60.00" cy="462.00" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
 <circle cx="151.78" cy="435.25" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
 <circle cx="243.56" cy="408.50" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
@@ -37,8 +37,8 @@
 <circle cx="610.67" cy="328.25" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
 <circle cx="702.44" cy="301.50" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
 <circle cx="794.22" cy="274.75" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
-<circle cx="886.00" cy="274.75" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
-<polyline fill="none" stroke="#f97316" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="60.00,408.50 151.78,274.75 243.56,301.50 335.33,301.50 427.11,248.00 518.89,301.50 610.67,274.75 702.44,248.00 794.22,248.00 886.00,221.25" />
+<circle cx="886.00" cy="248.00" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
+<polyline fill="none" stroke="#f97316" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="60.00,408.50 151.78,274.75 243.56,301.50 335.33,301.50 427.11,248.00 518.89,301.50 610.67,274.75 702.44,248.00 794.22,248.00 886.00,248.00" />
 <circle cx="60.00" cy="408.50" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
 <circle cx="151.78" cy="274.75" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
 <circle cx="243.56" cy="301.50" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
@@ -48,14 +48,14 @@
 <circle cx="610.67" cy="274.75" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
 <circle cx="702.44" cy="248.00" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
 <circle cx="794.22" cy="248.00" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
-<circle cx="886.00" cy="221.25" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
+<circle cx="886.00" cy="248.00" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
 <rect x="904" y="35.0" width="112" height="26" rx="13" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" />
 <circle cx="918" cy="48.0" r="5" fill="#2563eb" />
 <text x="930" y="52.0" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Created 16</text>
-<rect x="904" y="208.2" width="112" height="26" rx="13" fill="#ffffff" stroke="#f97316" stroke-width="1.5" />
-<circle cx="918" cy="221.2" r="5" fill="#f97316" />
-<text x="930" y="225.2" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Open 9</text>
-<rect x="904" y="261.8" width="112" height="26" rx="13" fill="#ffffff" stroke="#10b981" stroke-width="1.5" />
-<circle cx="918" cy="274.8" r="5" fill="#10b981" />
-<text x="930" y="278.8" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Closed 7</text>
+<rect x="904" y="235.0" width="112" height="26" rx="13" fill="#ffffff" stroke="#10b981" stroke-width="1.5" />
+<circle cx="918" cy="248.0" r="5" fill="#10b981" />
+<text x="930" y="252.0" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Closed 8</text>
+<rect x="904" y="263.0" width="112" height="26" rx="13" fill="#ffffff" stroke="#f97316" stroke-width="1.5" />
+<circle cx="918" cy="276.0" r="5" fill="#f97316" />
+<text x="930" y="280.0" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Open 8</text>
 </svg>
