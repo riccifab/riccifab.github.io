@@ -1,20 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520" role="img">
 <rect width="100%" height="100%" rx="28" fill="#f8fafc" />
-<path d="M 252.000 112.000 A 168 168 0 0 1 370.794 398.794 L 319.882 347.882 A 96 96 0 0 0 252.000 184.000 Z" fill="#2563eb" />
-<path d="M 370.794 398.794 A 168 168 0 0 1 84.000 280.000 L 156.000 280.000 A 96 96 0 0 0 319.882 347.882 Z" fill="#0f766e" />
-<path d="M 84.000 280.000 A 168 168 0 0 1 96.788 215.709 L 163.308 243.262 A 96 96 0 0 0 156.000 280.000 Z" fill="#f97316" />
-<path d="M 96.788 215.709 A 168 168 0 0 1 133.206 161.206 L 184.118 212.118 A 96 96 0 0 0 163.308 243.262 Z" fill="#8b5cf6" />
-<path d="M 133.206 161.206 A 168 168 0 0 1 187.709 124.788 L 215.262 191.308 A 96 96 0 0 0 184.118 212.118 Z" fill="#ec4899" />
-<path d="M 187.709 124.788 A 168 168 0 0 1 252.000 112.000 L 252.000 184.000 A 96 96 0 0 0 215.262 191.308 Z" fill="#14b8a6" />
+<path d="M 252.000 112.000 A 168 168 0 0 1 340.441 422.836 L 302.537 361.621 A 96 96 0 0 0 252.000 184.000 Z" fill="#2563eb" />
+<path d="M 340.441 422.836 A 168 168 0 0 1 84.717 264.499 L 156.410 271.142 A 96 96 0 0 0 302.537 361.621 Z" fill="#0f766e" />
+<path d="M 84.717 264.499 A 168 168 0 0 1 101.613 205.116 L 166.064 237.209 A 96 96 0 0 0 156.410 271.142 Z" fill="#f97316" />
+<path d="M 101.613 205.116 A 168 168 0 0 1 138.819 155.847 L 187.325 209.055 A 96 96 0 0 0 166.064 237.209 Z" fill="#8b5cf6" />
+<path d="M 138.819 155.847 A 168 168 0 0 1 191.311 123.345 L 217.321 190.483 A 96 96 0 0 0 187.325 209.055 Z" fill="#ec4899" />
+<path d="M 191.311 123.345 A 168 168 0 0 1 252.000 112.000 L 252.000 184.000 A 96 96 0 0 0 217.321 190.483 Z" fill="#14b8a6" />
 <circle cx="252" cy="280" r="94" fill="#ffffff" />
 <text x="252" y="268" text-anchor="middle" fill="#64748b" font-size="15" font-family="Arial, sans-serif">Total</text>
-<text x="252" y="304" text-anchor="middle" fill="#0f172a" font-size="40" font-family="Arial, sans-serif" font-weight="700">16</text>
+<text x="252" y="304" text-anchor="middle" fill="#0f172a" font-size="40" font-family="Arial, sans-serif" font-weight="700">17</text>
 <circle cx="500" cy="118" r="10" fill="#2563eb" />
-<text x="520" y="114" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">mechanics</text>
-<text x="520" y="138" fill="#475569" font-size="14" font-family="Arial, sans-serif">6 tickets • 38%</text>
+<text x="520" y="114" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">electronics</text>
+<text x="520" y="138" fill="#475569" font-size="14" font-family="Arial, sans-serif">7 tickets • 41%</text>
 <circle cx="500" cy="178" r="10" fill="#0f766e" />
-<text x="520" y="174" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">electronics</text>
-<text x="520" y="198" fill="#475569" font-size="14" font-family="Arial, sans-serif">6 tickets • 38%</text>
+<text x="520" y="174" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">mechanics</text>
+<text x="520" y="198" fill="#475569" font-size="14" font-family="Arial, sans-serif">6 tickets • 35%</text>
 <circle cx="500" cy="238" r="10" fill="#f97316" />
 <text x="520" y="234" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">software</text>
 <text x="520" y="258" fill="#475569" font-size="14" font-family="Arial, sans-serif">1 tickets • 6%</text>
