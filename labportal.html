@@ -133,6 +133,80 @@
 			width: 100%
 		}
 
+		.hero-visual-composition {
+			max-width: 640px;
+			margin: 0 auto;
+			padding: 32px 0 28px 84px;
+			position: relative
+		}
+
+		.hero-preview-card,
+		.hero-meme-card {
+			border: 1px solid rgba(221, 221, 223, 0.20);
+			background: rgba(5, 7, 18, 0.58);
+			backdrop-filter: blur(14px);
+			box-shadow: 0 26px 60px rgba(0, 0, 0, 0.30)
+		}
+
+		.hero-preview-card {
+			border-radius: 30px;
+			padding: 16px
+		}
+
+		.hero-preview-card img {
+			border-radius: 22px;
+			border: 1px solid rgba(221, 221, 223, 0.18)
+		}
+
+		.hero-meme-card {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: min(220px, 42%);
+			padding: 12px;
+			border-radius: 24px;
+			transform: rotate(-4deg);
+			z-index: 2
+		}
+
+		.hero-meme-card img {
+			border-radius: 16px;
+			border: 1px solid rgba(221, 221, 223, 0.16)
+		}
+
+		.hero-meme-caption {
+			padding-top: 10px;
+			color: rgba(221, 221, 223, 0.78);
+			font-size: 13px;
+			line-height: 140%;
+			text-align: left
+		}
+
+		.tool-card {
+			padding: 28px !important;
+			flex-direction: column;
+			justify-content: flex-start !important
+		}
+
+		.tool-card .bee-block-1 {
+			padding: 0 0 14px !important;
+			text-align: left !important;
+			width: auto !important
+		}
+
+		.tool-card .bee-block-2 {
+			padding: 0 0 10px !important;
+			width: 100% !important
+		}
+
+		.tool-card .bee-block-3 {
+			padding: 0 0 18px !important
+		}
+
+		.tool-card .bee-block-4 {
+			padding: 0 !important
+		}
+
 		.bee-menu .bee-hamburger-controls {
 			cursor: pointer;
 			display: inline-block;
@@ -426,6 +500,41 @@
 			font-size: 18px;
 			font-weight: 300;
 			line-height: 150%
+		}
+
+		.physics-media-card {
+			width: 100%;
+			max-width: 980px;
+			margin: 0 auto;
+			padding: 18px;
+			border-radius: 28px;
+			border: 1px solid rgba(221, 221, 223, 0.20);
+			background:
+				radial-gradient(420px 260px at 18% 12%, rgba(96, 165, 250, 0.12), transparent 58%),
+				linear-gradient(150deg, rgba(5, 7, 18, 0.94), rgba(11, 18, 32, 0.86));
+			box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28)
+		}
+
+		.physics-video-frame {
+			display: block;
+			width: 100%;
+			aspect-ratio: 16 / 9;
+			border: 0;
+			border-radius: 20px;
+			background: #000
+		}
+
+		.physics-media-meta {
+			padding-top: 14px;
+			color: rgba(221, 221, 223, 0.78);
+			font-size: 14px;
+			line-height: 145%;
+			text-align: center
+		}
+
+		.physics-media-meta a {
+			color: #8ec5ff;
+			text-decoration: underline
 		}
 
 		/* Tools grid cards */
@@ -733,8 +842,27 @@
 				padding: 10px 0 30px !important
 			}
 
+			.hero-visual-composition {
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 18px
+			}
+
+			.hero-meme-card {
+				position: static;
+				width: 100%;
+				max-width: 320px;
+				transform: none;
+				margin: 0 auto
+			}
+
 			.bee-row-3 .bee-col-2 {
 				padding: 15px 0 !important
+			}
+
+			.physics-media-card {
+				padding: 14px
 			}
 
 			.bee-row-2 .bee-col-1 .bee-block-1 h1 {
@@ -877,44 +1005,36 @@
 				</div>
 				<div class="bee-col bee-col-2 bee-col-w6">
 					<div class="bee-block bee-block-1 bee-image">
-						<img alt="Ticketing portal preview" class="bee-center bee-autowidth" src="assets/hero-ticketing.png" style="max-width:640px; border-radius:24px; border:1px solid rgba(221,221,223,0.20);" title="Ticketing portal preview" />
+						<div class="hero-visual-composition">
+							<div class="hero-preview-card">
+								<img alt="Ticketing portal preview" class="bee-center bee-autowidth" src="assets/hero-ticketing.png" style="max-width:100%;" title="Ticketing portal preview" />
+							</div>
+							<div class="hero-meme-card">
+								<img alt="A comic about the real cost of building things yourself" class="bee-center bee-autowidth" src="assets/diy-cost-meme.jpg" style="max-width:100%;" title="DIY reality check" />
+								<div class="hero-meme-caption">
+									<p>A very accurate reminder that “I’ll just make it myself” is rarely the cheap option.</p>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<!-- Why tickets -->
+		<!-- Electromagnetism -->
 		<div class="bee-row bee-row-3">
-			<div class="bee-row-content" style="gap:20px;">
-				<div class="bee-col bee-col-1 bee-col-w6">
-					<div class="bee-block bee-block-1 bee-image">
-						<img alt="Workflow" class="bee-fixedwidth" src="assets/section-workflow.png" style="max-width:660px; border-radius:24px; border:1px solid rgba(221,221,223,0.20);" title="Workflow" />
-					</div>
-				</div>
-				<div class="bee-col bee-col-2 bee-col-w6">
+			<div class="bee-row-content">
+				<div class="bee-col bee-col-1 bee-col-w12">
 					<div class="bee-block bee-block-1 bee-paragraph">
-						<p>WHY THIS EXISTS</p>
-					</div>
-					<div class="bee-block bee-block-2 bee-heading">
-						<h2>No more trench warfare.</h2>
-					</div>
-					<div class="bee-block bee-block-3 bee-paragraph">
-						<p>
-							Until now, handling requests has often felt like a small war: scattered messages, missing information, shifting priorities, and constant interruptions.
-							The ticket is my way to stop fighting fires and move to a clear, defensible process.
-							It forces the essentials upfront (scope, priority, delivery date), keeps a single source of truth, and avoids endless back-and-forth.
-							Every update stays visible, and the requester gets a short email summary when something changes.
-						</p>
-					</div>
-					<div class="bee-block bee-block-4 bee-button">
-						<a class="bee-button-content" href="work_status.html" style="font-size: 18px; display: inline-block;" target="_self">
-							<span style="word-break: break-word; font-size: 18px; line-height: 200%; letter-spacing: normal;">Check work status</span>
-						</a>
-					</div>
-					<div class="bee-block bee-block-4 bee-button" style="padding-top:12px;">
-						<a class="bee-button-content" href="labticketstats.html" style="font-size: 18px; display: inline-block;" target="_self">
-							<span style="word-break: break-word; font-size: 18px; line-height: 200%; letter-spacing: normal;">Open lab ticket stats</span>
-						</a>
+							<div class="physics-media-card">
+								<video class="physics-video-frame" controls playsinline preload="metadata">
+									<source src="assets/feynman-electromagnetism-clean.mp4" type="video/mp4" />
+								</video>
+								<div class="physics-media-meta">
+									<p>Richard Feynman talks about light and the electromagnetic field.</p>
+									<p><a href="https://www.feynmanlectures.caltech.edu" target="_blank" rel="noreferrer">Feynman Lectures →</a></p>
+								</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -937,7 +1057,7 @@
 		<!-- Tools grid row 1 -->
 		<div class="bee-row bee-row-8">
 			<div class="bee-row-content" style="gap:20px;">
-				<div class="bee-col bee-col-1 bee-col-w6">
+				<div class="bee-col bee-col-1 bee-col-w6 tool-card">
 					<div class="bee-block bee-block-1 bee-image">
 						<img alt="Ticket icon" class="bee-fixedwidth" src="assets/icon-ticket.png" style="max-width:56px;" title="Ticket" />
 					</div>
@@ -954,7 +1074,7 @@
 						<p style="margin-top:12px;"><a href="tickets.html" target="_self" style="text-decoration: underline;">Open ticketing portal →</a></p>
 					</div>
 				</div>
-				<div class="bee-col bee-col-2 bee-col-w6" style="padding-top:28px;">
+				<div class="bee-col bee-col-2 bee-col-w6 tool-card">
 					<div class="bee-block bee-block-1 bee-image">
 						<img alt="Status icon" class="bee-fixedwidth" src="assets/icon-status.png" style="max-width:56px;" title="Status" />
 					</div>
@@ -976,7 +1096,7 @@
 
 		<div class="bee-row bee-row-9">
 			<div class="bee-row-content" style="gap:20px; padding-top:10px;">
-				<div class="bee-col bee-col-1 bee-col-w6" style="padding-top:28px;">
+				<div class="bee-col bee-col-1 bee-col-w6 tool-card">
 					<div class="bee-block bee-block-1 bee-image">
 						<img alt="Stats icon" class="bee-fixedwidth" src="assets/icon-status.png" style="max-width:56px;" title="Stats" />
 					</div>
@@ -993,7 +1113,7 @@
 						<p style="margin-top:12px;"><a href="labticketstats.html" target="_self" style="text-decoration: underline;">Open lab ticket stats →</a></p>
 					</div>
 				</div>
-				<div class="bee-col bee-col-2 bee-col-w6" style="padding-top:28px;">
+				<div class="bee-col bee-col-2 bee-col-w6 tool-card">
 					<div class="bee-block bee-block-1 bee-image">
 						<img alt="Assistant icon" class="bee-fixedwidth" src="assets/icon-rag.png" style="max-width:56px;" title="Assistant" />
 					</div>
@@ -1015,7 +1135,7 @@
 		<!-- Tools grid row 2 -->
 		<div class="bee-row bee-row-9">
 			<div class="bee-row-content" style="gap:20px; padding-top:10px;">
-				<div class="bee-col bee-col-1 bee-col-w6" style="padding-top:28px;">
+				<div class="bee-col bee-col-1 bee-col-w6 tool-card">
 					<div class="bee-block bee-block-1 bee-image">
 						<img alt="RAG icon" class="bee-fixedwidth" src="assets/icon-rag.png" style="max-width:56px;" title="Assistant" />
 					</div>
@@ -1031,7 +1151,7 @@
 						</p>
 					</div>
 				</div>
-				<div class="bee-col bee-col-2 bee-col-w6">
+				<div class="bee-col bee-col-2 bee-col-w6 tool-card">
 					<div class="bee-block bee-block-1 bee-image">
 						<img alt="Repo icon" class="bee-fixedwidth" src="assets/icon-github.png" style="max-width:56px;" title="GitHub" />
 					</div>
