@@ -396,10 +396,10 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-04-15T14:45:26.199000+00:00",
-    "status": "WAITING_ON_PROCUREMENT",
+    "status": "IN_PROGRESS",
     "tags": [],
     "title": "Modify screen driver boards to increase brightness",
-    "updatedAt": "2026-04-15T16:46:55.363000+00:00",
+    "updatedAt": "2026-04-17T11:39:14.233000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": ""
   },
@@ -910,10 +910,10 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-04-13T15:39:21.771000+00:00",
-    "status": "IN_PROGRESS",
+    "status": "CLOSED",
     "tags": [],
     "title": "Strainers for immunos in 12-well plates",
-    "updatedAt": "2026-04-13T16:08:06.534000+00:00",
+    "updatedAt": "2026-04-17T11:38:44.500000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": ""
   },
