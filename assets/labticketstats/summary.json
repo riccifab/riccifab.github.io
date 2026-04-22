@@ -5,22 +5,22 @@
   "done_tickets": 9,
   "effort_changes": 6,
   "eta_changes": 6,
-  "generated_at": "2026-04-21T07:19:03.824999+00:00",
+  "generated_at": "2026-04-22T07:17:23.373283+00:00",
   "median_comment_count": 0.0,
-  "open_tickets": 8,
+  "open_tickets": 9,
   "overdue_open_tickets": 2,
   "priority_changes": 0,
-  "tickets_total": 17,
+  "tickets_total": 18,
   "tickets_with_comments": 6,
-  "tickets_with_requester_snapshot": 14,
+  "tickets_with_requester_snapshot": 15,
   "top_categories": [
     [
-      "electronics",
+      "mechanics",
       7
     ],
     [
-      "mechanics",
-      6
+      "electronics",
+      7
     ],
     [
       "software",
@@ -38,7 +38,7 @@
   "top_labs": [
     [
       "Gozzi",
-      11
+      12
     ],
     [
       "Rossi",
