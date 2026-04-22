@@ -152,6 +152,7 @@
     "whyNotDeferredText": ""
   },
   "AXXhO6OARKg0kp9T0hby": {
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "mechanics",
@@ -163,6 +164,7 @@
     "deferTo": "",
     "definitionOfDone": "- Having a new camera holder where the camera is fixed\n- being able to adapt focus with one degree of freedom = translation along anteroposterior axis\n- reduced vibrations of the camera",
     "description": "We need a new holder for the camera in the pupillometry setup\nend goal: new simplified holder (optic path parallel to the bore axis) + reduced vibration",
+    "effortAdmin": "M",
     "effortGuess": "M",
     "estimatedCostEUR": null,
     "expectedDeliveryDate": "2026-05-01",
@@ -170,7 +172,7 @@
     "hardDeadlineDate": "",
     "lab": "Gozzi",
     "priority": "P2",
-    "procurementNeeded": "unknown",
+    "procurementNeeded": "no",
     "requesterSubmission": {
       "canBeDeferred": "no",
       "category": "mechanics",
@@ -197,14 +199,14 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-04-21T17:57:57.172000+00:00",
-    "status": "NEW",
+    "status": "IN_PROGRESS",
     "tags": [
       "pupillometry",
       "camera",
       "fMRI"
     ],
     "title": "Camera holder for pupillometry setup",
-    "updatedAt": "2026-04-21T17:57:57.172000+00:00",
+    "updatedAt": "2026-04-22T12:17:47.712000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": ""
   },
