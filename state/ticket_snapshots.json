@@ -363,6 +363,7 @@
     "whyNotDeferredText": "Fabio has designed the prior prototype and has a plan what needs to be changed"
   },
   "GrequpR3trvjrbpqVaD4": {
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "electronics",
@@ -374,6 +375,7 @@
     "deferTo": "",
     "definitionOfDone": "- We want to understand what could have gone wrong and if it could happen again with other pip boards\n- LED drivers to be fixed if easy, or if not, at least we should know if the rest of the board is safe to use",
     "description": "On one pip board, multiple LED drivers (at least 1 and 3, not sure about 2) have stopped working and are in fact breaking LEDs. We have extra boards so this is low priority to fix/understand.",
+    "effortAdmin": "",
     "effortGuess": "S",
     "estimatedCostEUR": null,
     "expectedDeliveryDate": "2026-04-30",
@@ -404,10 +406,10 @@
       "whyNotDeferredText": "I have tried to solve it and instead made it worse"
     },
     "requesterSubmittedAt": "2026-03-31T07:45:56.386000+00:00",
-    "status": "NEW",
+    "status": "BLOCKED",
     "tags": [],
     "title": "Pip board malfunction",
-    "updatedAt": "2026-03-31T07:45:56.386000+00:00",
+    "updatedAt": "2026-04-23T12:58:32.045000+00:00",
     "whyNotDeferredCode": "other",
     "whyNotDeferredText": "I have tried to solve it and instead made it worse"
   },
@@ -416,6 +418,7 @@
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "electronics",
+    "commentCount": 1,
     "commercialLink": "",
     "commerciallyAvailable": "unknown",
     "createdAt": "2026-04-15T14:45:26.199000+00:00",
@@ -431,6 +434,9 @@
     "hardDeadline": true,
     "hardDeadlineDate": "2026-04-22",
     "lab": "Rossi",
+    "lastComment": "Heather is telling me the screen brightness did'nt improve, resistor were 15k they become 6.8k",
+    "lastCommentAt": "2026-04-23T12:41:31.078000+00:00",
+    "lastCommentAuthorEmail": "fabio.ricci@iit.it",
     "priority": "P2",
     "procurementNeeded": "yes",
     "requesterSubmission": {
@@ -455,10 +461,10 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-04-15T14:45:26.199000+00:00",
-    "status": "IN_PROGRESS",
+    "status": "CLOSED",
     "tags": [],
     "title": "Modify screen driver boards to increase brightness",
-    "updatedAt": "2026-04-17T11:39:14.233000+00:00",
+    "updatedAt": "2026-04-23T12:41:31.078000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": ""
   },
