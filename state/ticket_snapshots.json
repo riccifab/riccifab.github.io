@@ -199,14 +199,14 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-04-21T17:57:57.172000+00:00",
-    "status": "IN_PROGRESS",
+    "status": "CLOSED",
     "tags": [
       "pupillometry",
       "camera",
       "fMRI"
     ],
     "title": "Camera holder for pupillometry setup",
-    "updatedAt": "2026-04-22T12:17:47.712000+00:00",
+    "updatedAt": "2026-04-27T18:37:01.057000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": ""
   },
