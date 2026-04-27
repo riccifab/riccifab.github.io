@@ -514,12 +514,12 @@
       "whyNotDeferredCode": "tools",
       "whyNotDeferredText": "Fabio's design and contacts for titanium printing"
     },
-    "status": "WAITING_ON_PROCUREMENT",
+    "status": "CLOSED",
     "tags": [
       "headframe"
     ],
     "title": "Thin-wall Allen headframe variant",
-    "updatedAt": "2026-04-01T07:50:53.248000+00:00",
+    "updatedAt": "2026-04-27T07:57:04.503000+00:00",
     "whyNotDeferredCode": "tools",
     "whyNotDeferredText": "Fabio's design and contacts for titanium printing"
   },
