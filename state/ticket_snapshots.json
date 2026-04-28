@@ -844,7 +844,7 @@
     "whyNotDeferredText": ""
   },
   "rrWktNxBeg5e22K6sZ4c": {
-    "adminNotes": "First try with the teensy",
+    "adminNotes": "waiting for this to break",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "electronics",
@@ -868,7 +868,7 @@
     "lastCommentAt": "2026-04-28T11:37:48.418000+00:00",
     "lastCommentAuthorEmail": "fabio.ricci@iit.it",
     "priority": "P1",
-    "procurementNeeded": "unknown",
+    "procurementNeeded": "yes",
     "requesterSubmission": {
       "canBeDeferred": "no",
       "category": "electronics",
@@ -893,12 +893,12 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-04-27T21:42:16.011000+00:00",
-    "status": "IN_PROGRESS",
+    "status": "TRIAGE",
     "tags": [
       "2P"
     ],
     "title": "Buffer for PMT gating",
-    "updatedAt": "2026-04-28T11:37:48.418000+00:00",
+    "updatedAt": "2026-04-28T11:53:41.409000+00:00",
     "whyNotDeferredCode": "tools",
     "whyNotDeferredText": ""
   },
