@@ -848,7 +848,7 @@
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "electronics",
-    "commentCount": 1,
+    "commentCount": 2,
     "commercialLink": "",
     "commerciallyAvailable": "no",
     "createdAt": "2026-04-27T21:42:16.011000+00:00",
@@ -864,8 +864,8 @@
     "hardDeadline": false,
     "hardDeadlineDate": "",
     "lab": "Rossi",
-    "lastComment": "Il segnale a 10V non risolve, di base dipende dalla resistenza d uscita del segnale e dalla corrente erogabile del segnale stesso",
-    "lastCommentAt": "2026-04-28T06:22:29.211000+00:00",
+    "lastComment": "Decisione sbagliata quella di giocare coi voltaggi cosi senza controllare i datasheet",
+    "lastCommentAt": "2026-04-28T11:37:48.418000+00:00",
     "lastCommentAuthorEmail": "fabio.ricci@iit.it",
     "priority": "P1",
     "procurementNeeded": "unknown",
@@ -898,7 +898,7 @@
       "2P"
     ],
     "title": "Buffer for PMT gating",
-    "updatedAt": "2026-04-28T07:24:33.087000+00:00",
+    "updatedAt": "2026-04-28T11:37:48.418000+00:00",
     "whyNotDeferredCode": "tools",
     "whyNotDeferredText": ""
   },
