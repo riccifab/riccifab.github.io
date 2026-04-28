@@ -844,9 +844,11 @@
     "whyNotDeferredText": ""
   },
   "rrWktNxBeg5e22K6sZ4c": {
+    "adminNotes": "First try with the teensy",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "electronics",
+    "commentCount": 1,
     "commercialLink": "",
     "commerciallyAvailable": "no",
     "createdAt": "2026-04-27T21:42:16.011000+00:00",
@@ -855,12 +857,16 @@
     "deferTo": "",
     "definitionOfDone": "Both PMT gated simultaneously",
     "description": "Buffer to resolve issue with impedance of PMT gating. Needed to gate 2 PMTs with a single 5V input from a BNC from microscope VDAQ.\n\nnote: I just remembered that maybe we can output 10V from the microscope vdaq. Would this solve it?",
+    "effortAdmin": "S",
     "effortGuess": "M",
     "estimatedCostEUR": null,
     "expectedDeliveryDate": "2026-05-04",
     "hardDeadline": false,
     "hardDeadlineDate": "",
     "lab": "Rossi",
+    "lastComment": "Il segnale a 10V non risolve, di base dipende dalla resistenza d uscita del segnale e dalla corrente erogabile del segnale stesso",
+    "lastCommentAt": "2026-04-28T06:22:29.211000+00:00",
+    "lastCommentAuthorEmail": "fabio.ricci@iit.it",
     "priority": "P1",
     "procurementNeeded": "unknown",
     "requesterSubmission": {
@@ -887,12 +893,12 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-04-27T21:42:16.011000+00:00",
-    "status": "NEW",
+    "status": "IN_PROGRESS",
     "tags": [
       "2P"
     ],
     "title": "Buffer for PMT gating",
-    "updatedAt": "2026-04-27T21:42:16.011000+00:00",
+    "updatedAt": "2026-04-28T07:24:33.087000+00:00",
     "whyNotDeferredCode": "tools",
     "whyNotDeferredText": ""
   },
