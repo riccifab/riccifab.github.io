@@ -726,7 +726,7 @@
   },
   "lFaxlDUYRNv7ugr7w220": {
     "adminEtaDate": "",
-    "adminNotes": "Throlabs posts and Big syringe missing",
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "electronics",
@@ -772,13 +772,13 @@
       "whyNotDeferredCode": "skills",
       "whyNotDeferredText": "Requires knowledge of electronics, and implementation of designs already done by Fabio already"
     },
-    "status": "WAITING_ON_PROCUREMENT",
+    "status": "IN_PROGRESS",
     "tags": [
       "Screens",
       "teensy"
     ],
     "title": "New screen VR with reward and lickometer",
-    "updatedAt": "2026-03-26T07:22:11.768000+00:00",
+    "updatedAt": "2026-04-29T14:07:45.838000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "Requires knowledge of electronics, and implementation of designs already done by Fabio already"
   },
