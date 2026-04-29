@@ -21,6 +21,6 @@
 <text x="520" y="294" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">WAITING_ON_PI</text>
 <text x="520" y="318" fill="#475569" font-size="14" font-family="Arial, sans-serif">1 tickets • 5%</text>
 <circle cx="500" cy="358" r="10" fill="#ec4899" />
-<text x="520" y="354" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">IN_PROGRESS</text>
+<text x="520" y="354" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">TRIAGE</text>
 <text x="520" y="378" fill="#475569" font-size="14" font-family="Arial, sans-serif">1 tickets • 5%</text>
 </svg>

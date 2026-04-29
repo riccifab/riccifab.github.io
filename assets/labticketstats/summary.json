@@ -1,11 +1,11 @@
 {
   "approx_resolution_days_average": 15.6,
   "approx_resolution_days_median": 10.4,
-  "average_comment_count": 0.7,
+  "average_comment_count": 0.8,
   "done_tickets": 12,
   "effort_changes": 7,
   "eta_changes": 6,
-  "generated_at": "2026-04-28T08:01:06.288185+00:00",
+  "generated_at": "2026-04-29T07:55:53.779431+00:00",
   "median_comment_count": 0.0,
   "open_tickets": 7,
   "overdue_open_tickets": 3,
