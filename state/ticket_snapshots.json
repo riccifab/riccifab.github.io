@@ -1043,7 +1043,7 @@
   },
   "wlc70YQ6BlUtAwqxo0DL": {
     "adminEtaDate": "",
-    "adminNotes": "moving the expected delivery date for procurement reasons",
+    "adminNotes": "51-54",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "electronics",
@@ -1058,7 +1058,7 @@
     "effortAdmin": "M",
     "effortGuess": "S",
     "estimatedCostEUR": 0,
-    "expectedDeliveryDate": "2026-04-30",
+    "expectedDeliveryDate": "2026-05-08",
     "hardDeadline": false,
     "hardDeadlineDate": "",
     "impact": "not_blocking",
@@ -1086,10 +1086,10 @@
       "whyNotDeferredCode": "skills",
       "whyNotDeferredText": "servono specifici strumenti e qualcuno che sappia cosa fare"
     },
-    "status": "WAITING_ON_PROCUREMENT",
+    "status": "IN_PROGRESS",
     "tags": [],
     "title": "Cuffie eeg",
-    "updatedAt": "2026-04-01T07:51:27.567000+00:00",
+    "updatedAt": "2026-05-04T05:39:01.618000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "servono specifici strumenti e qualcuno che sappia cosa fare"
   },
