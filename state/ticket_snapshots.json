@@ -936,7 +936,7 @@
   },
   "u9dlqr6gjAo69BRG8Q65": {
     "adminEtaDate": "",
-    "adminNotes": "moving the expected delivery date for procurement reasons",
+    "adminNotes": "Swamped next 3 weeks, try to do it yourself",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "mechanics",
@@ -981,12 +981,12 @@
       "whyNotDeferredCode": "skills",
       "whyNotDeferredText": "It's Fabio's design, he knows how to modify and print it for best precision"
     },
-    "status": "WAITING_ON_PROCUREMENT",
+    "status": "BLOCKED",
     "tags": [
       "3d printer"
     ],
     "title": "Dual-probe holder for electrophysiology",
-    "updatedAt": "2026-04-01T07:50:03.994000+00:00",
+    "updatedAt": "2026-05-05T14:32:50.547000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "It's Fabio's design, he knows how to modify and print it for best precision"
   },
