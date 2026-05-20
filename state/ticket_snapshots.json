@@ -570,7 +570,7 @@
     "deferTo": "",
     "definitionOfDone": "Attendance and feedback providede",
     "description": "5 candidates over 5 weeks. Attend 1h talk + attend 30min 1-on-1 meeting. Provide short feedback on their practical skills.",
-    "effortAdmin": "",
+    "effortAdmin": "S",
     "effortGuess": "S",
     "estimatedCostEUR": null,
     "expectedDeliveryDate": "2026-04-30",
@@ -601,10 +601,10 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-03-23T10:07:32.818000+00:00",
-    "status": "WAITING_ON_PI",
+    "status": "CLOSED",
     "tags": [],
     "title": "Feedback on post-doc interviews",
-    "updatedAt": "2026-03-30T09:52:52.682000+00:00",
+    "updatedAt": "2026-05-20T08:22:36.696000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": ""
   },
