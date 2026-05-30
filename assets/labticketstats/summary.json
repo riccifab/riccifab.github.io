@@ -5,22 +5,22 @@
   "done_tickets": 13,
   "effort_changes": 8,
   "eta_changes": 7,
-  "generated_at": "2026-05-29T09:00:45.854432+00:00",
+  "generated_at": "2026-05-30T08:12:34.087147+00:00",
   "median_comment_count": 0.0,
-  "open_tickets": 6,
+  "open_tickets": 7,
   "overdue_open_tickets": 5,
   "priority_changes": 0,
-  "tickets_total": 19,
+  "tickets_total": 20,
   "tickets_with_comments": 8,
-  "tickets_with_requester_snapshot": 16,
+  "tickets_with_requester_snapshot": 17,
   "top_categories": [
     [
-      "electronics",
+      "mechanics",
       8
     ],
     [
-      "mechanics",
-      7
+      "electronics",
+      8
     ],
     [
       "software",
@@ -42,7 +42,7 @@
     ],
     [
       "Rossi",
-      6
+      7
     ],
     [
       "Lombardo",
