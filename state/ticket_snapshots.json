@@ -296,7 +296,7 @@
     "whyNotDeferredText": ""
   },
   "Eqkg5zfMhcapUabCITZm": {
-    "adminNotes": "",
+    "adminNotes": "Fixing the mirrors angle and reprint",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "mechanics",
@@ -312,7 +312,7 @@
     "effortAdmin": "L",
     "effortGuess": "M",
     "estimatedCostEUR": 50,
-    "expectedDeliveryDate": "2026-04-24",
+    "expectedDeliveryDate": "2026-06-30",
     "hardDeadline": false,
     "hardDeadlineDate": "",
     "impact": "not_blocking",
@@ -358,7 +358,7 @@
       "placement of bifurcated fiber bundle"
     ],
     "title": "Animal cradle / Headpiece for WFI/MRI",
-    "updatedAt": "2026-05-12T10:37:51.741000+00:00",
+    "updatedAt": "2026-06-05T10:02:12.675000+00:00",
     "whyNotDeferredCode": "integration",
     "whyNotDeferredText": "Fabio has designed the prior prototype and has a plan what needs to be changed"
   },
@@ -378,7 +378,7 @@
     "effortAdmin": "",
     "effortGuess": "S",
     "estimatedCostEUR": null,
-    "expectedDeliveryDate": "2026-04-30",
+    "expectedDeliveryDate": "",
     "hardDeadline": false,
     "hardDeadlineDate": "",
     "lab": "Rossi",
@@ -409,7 +409,7 @@
     "status": "BLOCKED",
     "tags": [],
     "title": "Pip board malfunction",
-    "updatedAt": "2026-04-23T12:58:32.045000+00:00",
+    "updatedAt": "2026-06-05T10:05:20.072000+00:00",
     "whyNotDeferredCode": "other",
     "whyNotDeferredText": "I have tried to solve it and instead made it worse"
   },
@@ -1096,7 +1096,7 @@
   },
   "wlc70YQ6BlUtAwqxo0DL": {
     "adminEtaDate": "",
-    "adminNotes": "51-54",
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "electronics",
@@ -1111,7 +1111,7 @@
     "effortAdmin": "M",
     "effortGuess": "S",
     "estimatedCostEUR": 0,
-    "expectedDeliveryDate": "2026-05-08",
+    "expectedDeliveryDate": "2026-10-01",
     "hardDeadline": false,
     "hardDeadlineDate": "",
     "impact": "not_blocking",
@@ -1139,10 +1139,10 @@
       "whyNotDeferredCode": "skills",
       "whyNotDeferredText": "servono specifici strumenti e qualcuno che sappia cosa fare"
     },
-    "status": "IN_PROGRESS",
+    "status": "WAITING_ON_PROCUREMENT",
     "tags": [],
     "title": "Cuffie eeg",
-    "updatedAt": "2026-05-04T05:39:01.618000+00:00",
+    "updatedAt": "2026-06-05T09:59:54.142000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "servono specifici strumenti e qualcuno che sappia cosa fare"
   },
