@@ -1,18 +1,18 @@
 {
   "approx_resolution_days_average": 18.9,
   "approx_resolution_days_median": 12.1,
-  "average_comment_count": 0.8,
+  "average_comment_count": 0.6,
   "done_tickets": 13,
-  "effort_changes": 8,
+  "effort_changes": 7,
   "eta_changes": 7,
-  "generated_at": "2026-06-05T09:00:38.470363+00:00",
+  "generated_at": "2026-06-06T08:20:11.705505+00:00",
   "median_comment_count": 0.0,
-  "open_tickets": 7,
-  "overdue_open_tickets": 6,
+  "open_tickets": 6,
+  "overdue_open_tickets": 2,
   "priority_changes": 0,
-  "tickets_total": 20,
-  "tickets_with_comments": 8,
-  "tickets_with_requester_snapshot": 17,
+  "tickets_total": 19,
+  "tickets_with_comments": 7,
+  "tickets_with_requester_snapshot": 16,
   "top_categories": [
     [
       "mechanics",
@@ -20,7 +20,7 @@
     ],
     [
       "electronics",
-      8
+      7
     ],
     [
       "software",
@@ -42,7 +42,7 @@
     ],
     [
       "Rossi",
-      7
+      6
     ],
     [
       "Lombardo",

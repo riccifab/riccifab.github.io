@@ -1,18 +1,18 @@
 [
   {
-    "detail": "Rossi holds 4 open tickets out of 7 total.",
+    "detail": "Rossi holds 3 open tickets out of 6 total.",
     "title": "Largest backlog"
   },
   {
-    "detail": "#u9dlqr6g in Gozzi is late by 43 days (Dual-probe holder for electrophysiology).",
+    "detail": "#u9dlqr6g in Gozzi is late by 44 days (Dual-probe holder for electrophysiology).",
     "title": "Most overdue request"
   },
   {
-    "detail": "#lFaxlDUY has been open for 112 days (New screen VR with reward and lickometer).",
+    "detail": "#lFaxlDUY has been open for 113 days (New screen VR with reward and lickometer).",
     "title": "Oldest open ticket"
   },
   {
-    "detail": "#rrWktNxB collected 3 comments and is in status TRIAGE.",
+    "detail": "#Eqkg5zfM collected 1 comments and is in status IN_PROGRESS.",
     "title": "Comment hotspot"
   }
 ]
