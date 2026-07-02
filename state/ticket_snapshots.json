@@ -524,6 +524,7 @@
     "whyNotDeferredText": "Fabio's design and contacts for titanium printing"
   },
   "P0wvWZiN20TBGlbdUYBo": {
+    "adminNotes": "First try with screws, then braces",
     "assigneeEmail": "",
     "canBeDeferred": "yes",
     "category": "mechanics",
@@ -535,6 +536,7 @@
     "deferTo": "Work on it with Heather",
     "definitionOfDone": "Stable imaging",
     "description": "Brace to stabilise the column holding the mouse under the 2p. First 3D design and 3D print, then commission to workshop for metal parts.",
+    "effortAdmin": "S",
     "effortGuess": "M",
     "estimatedCostEUR": null,
     "expectedDeliveryDate": "2026-06-08",
@@ -542,7 +544,7 @@
     "hardDeadlineDate": "",
     "lab": "Rossi",
     "priority": "P1",
-    "procurementNeeded": "no",
+    "procurementNeeded": "yes",
     "requesterSubmission": {
       "canBeDeferred": "yes",
       "category": "mechanics",
@@ -567,12 +569,12 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-05-29T14:54:08.022000+00:00",
-    "status": "NEW",
+    "status": "IN_PROGRESS",
     "tags": [
       "2P"
     ],
     "title": "Brace for 2P mouse holder",
-    "updatedAt": "2026-05-29T14:54:08.022000+00:00",
+    "updatedAt": "2026-07-02T09:42:42.721000+00:00",
     "whyNotDeferredCode": "",
     "whyNotDeferredText": ""
   },
