@@ -261,6 +261,13 @@
       color: var(--muted);
     }
 
+    .auth-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 0.45rem;
+    }
+
     .pw-input {
       padding: 0.35rem 0.7rem;
       border-radius: var(--btn-radius);
@@ -269,6 +276,10 @@
       color: var(--fg);
       font-size: 0.8rem;
       min-width: 140px;
+    }
+
+    .email-input {
+      min-width: 190px;
     }
 
     .auth-btn {
@@ -708,7 +719,7 @@
       <section class="card">
         <h2>
           Control
-          <span class="label">owner (password)</span>
+          <span class="label">owner (Firebase Auth)</span>
         </h2>
 
         <div class="auth-row">
@@ -716,14 +727,15 @@
             <strong>Access</strong>
             <span id="auth-info">Locked</span>
           </div>
-          <div>
+          <div class="auth-controls">
+            <input id="email-input" class="pw-input email-input" type="email" placeholder="email" autocomplete="email" />
             <input id="pw-input" class="pw-input" type="password" placeholder="password" autocomplete="current-password" />
-            <button id="pw-btn" class="auth-btn" type="button">Unlock</button>
+            <button id="auth-btn" class="auth-btn" type="button">Sign in</button>
           </div>
         </div>
 
         <p id="control-locked" class="helper-text">
-          Enter the password to enable status control.
+          Sign in with an authorized Firebase account to enable status control.
         </p>
 
         <div id="control-panel" class="hidden">
@@ -824,8 +836,21 @@
     getDatabase,
     ref,
     onValue,
-    update
+    get,
+    update,
+    push,
+    set,
+    query,
+    orderByChild,
+    limitToLast
   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  import {
+    getAuth,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    signInAnonymously,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
   // --- Firebase config ---
   const firebaseConfig = {
@@ -839,23 +864,21 @@
     measurementId: "G-60KPLB1GDG"
   };
 
-  // --- Access control ---
-  // SHA-256("romolo")
-  const CONTROL_PASSWORD_SHA256 = "5318fc62bff7d4e626c1cf3654dff97cdd28f62776e13c63d5b6e67e4fdc0a39";
-  const SESSION_UNLOCK_KEY = "work_status_unlocked";
-
   // --- Firebase init ---
   const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
   const db  = getDatabase(app);
   const indicatorRef = ref(db, "indicator");
+  const guestNotesRef = ref(db, "guest_notes");
 
   // --- DOM refs ---
   const statusDisplay = document.getElementById("status-display");
   const statusLabel   = document.getElementById("status-label");
   const lastUpdateEl  = document.getElementById("last-update");
 
+  const emailInput    = document.getElementById("email-input");
   const pwInput       = document.getElementById("pw-input");
-  const pwBtn         = document.getElementById("pw-btn");
+  const authBtn       = document.getElementById("auth-btn");
   const authInfo      = document.getElementById("auth-info");
   const controlPanel  = document.getElementById("control-panel");
   const controlLocked = document.getElementById("control-locked");
@@ -897,14 +920,6 @@
     away:    "Away",
     x:       "Lab MRI"
   };
-
-  async function sha256Hex(value) {
-    const data = new TextEncoder().encode(value);
-    const digest = await crypto.subtle.digest("SHA-256", data);
-    return Array.from(new Uint8Array(digest))
-      .map((byte) => byte.toString(16).padStart(2, "0"))
-      .join("");
-  }
 
   function safeText(value) {
     return (value ?? "").toString().replace(/[&<>"']/g, (char) => ({
@@ -980,10 +995,16 @@
     });
   }
 
-  function unlockUi() {
+  function setAuthFieldsVisible(visible) {
+    emailInput.classList.toggle("hidden", !visible);
+    pwInput.classList.toggle("hidden", !visible);
+  }
+
+  function unlockUi(user) {
     isUnlocked = true;
-    sessionStorage.setItem(SESSION_UNLOCK_KEY, "1");
-    authInfo.textContent = "Unlocked";
+    authInfo.textContent = user?.email ? `Signed in as ${user.email}` : "Unlocked";
+    authBtn.textContent = "Sign out";
+    setAuthFieldsVisible(false);
     controlPanel.classList.remove("hidden");
     controlLocked.classList.add("hidden");
     pwInput.value = "";
@@ -991,10 +1012,16 @@
 
   function lockUi(message = "Locked") {
     isUnlocked = false;
-    sessionStorage.removeItem(SESSION_UNLOCK_KEY);
     authInfo.textContent = message;
     controlPanel.classList.add("hidden");
     controlLocked.classList.remove("hidden");
+    if (auth.currentUser && !auth.currentUser.isAnonymous) {
+      authBtn.textContent = "Sign out";
+      setAuthFieldsVisible(false);
+    } else {
+      authBtn.textContent = "Sign in";
+      setAuthFieldsVisible(true);
+    }
   }
 
   function renderInProgressGroups(groups, syncedAt) {
@@ -1077,72 +1104,114 @@
     }
   }
 
-  async function tryUnlock() {
-    const value = (pwInput.value || "").trim();
-    if (!value) {
-      lockUi("Enter password");
+  async function isAdminUser(user) {
+    if (!user || user.isAnonymous) return false;
+    const snapshot = await get(ref(db, `admins/${user.uid}`));
+    return snapshot.val() === true;
+  }
+
+  async function handleAuthState(user) {
+    if (!user) {
+      lockUi();
+      return;
+    }
+    if (user.isAnonymous) {
+      lockUi("Guest mode");
       return;
     }
 
-    authInfo.textContent = "Checking…";
-    pwBtn.disabled = true;
+    authInfo.textContent = "Checking account…";
+    authBtn.textContent = "Sign out";
+    setAuthFieldsVisible(false);
 
     try {
-      const hash = await sha256Hex(value);
-      if (hash === CONTROL_PASSWORD_SHA256) {
-        unlockUi();
+      if (await isAdminUser(user)) {
+        unlockUi(user);
       } else {
-        lockUi("Wrong password");
-        pwInput.select();
+        lockUi("Not authorized");
       }
     } catch (err) {
-      console.error("Password check failed", err);
-      lockUi("Error");
-    } finally {
-      pwBtn.disabled = false;
+      console.error("Admin check failed", err);
+      lockUi("Cannot verify admin");
     }
   }
-  function renderNotesList(notes) {
-  if (!Array.isArray(notes) || notes.length === 0) {
-    noteLastBox.classList.add("hidden");
-    noteLastMeta.textContent = "";
-    noteLastText.textContent = "No notes yet.";
-    return;
+
+  async function handleAuthAction() {
+    if (auth.currentUser && !auth.currentUser.isAnonymous) {
+      await signOut(auth);
+      return;
+    }
+
+    const email = (emailInput.value || "").trim();
+    const password = pwInput.value || "";
+
+    if (!email || !password) {
+      lockUi("Enter email and password");
+      return;
+    }
+
+    authInfo.textContent = "Signing in…";
+    authBtn.disabled = true;
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      pwInput.value = "";
+    } catch (err) {
+      console.error("Sign-in failed", err);
+      lockUi("Sign-in failed");
+      pwInput.select();
+    } finally {
+      authBtn.disabled = false;
+    }
   }
 
-  // ordina per timestamp (più recente prima)
-  const sorted = notes
-    .filter(n => n && typeof n.text === "string")
-    .sort((a, b) => {
-      const ta = typeof a.ts === "number" ? a.ts : 0;
-      const tb = typeof b.ts === "number" ? b.ts : 0;
-      return tb - ta; // desc
+  async function ensureGuestAuth() {
+    if (auth.currentUser) return auth.currentUser;
+    const credential = await signInAnonymously(auth);
+    return credential.user;
+  }
+
+  function renderNotesList(notes) {
+    if (!Array.isArray(notes) || notes.length === 0) {
+      noteLastBox.classList.add("hidden");
+      noteLastMeta.textContent = "";
+      noteLastText.textContent = "No notes yet.";
+      return;
+    }
+
+    // ordina per timestamp (più recente prima)
+    const sorted = notes
+      .filter(n => n && typeof n.text === "string")
+      .sort((a, b) => {
+        const ta = typeof a.ts === "number" ? a.ts : 0;
+        const tb = typeof b.ts === "number" ? b.ts : 0;
+        return tb - ta; // desc
+      });
+
+    const display = sorted.slice(0, 5); // prendiamo solo le 5 più recenti
+
+    noteLastBox.classList.remove("hidden");
+    noteLastMeta.textContent = `Showing last ${display.length} note${display.length > 1 ? "s" : ""}`;
+
+    const lines = display.map(n => {
+      const who = (n.name && n.name.trim()) ? n.name.trim() : "anonymous";
+      let when = "";
+      if (n.ts) {
+        const d = new Date(n.ts);
+        if (!isNaN(d.getTime())) {
+          when = d.toLocaleString(undefined, {
+            dateStyle: "short",
+            timeStyle: "short"
+          });
+        }
+      }
+      const header = when ? `[${when}] ${who}` : who;
+      return `${header}\n${n.text}`;
     });
 
-  const display = sorted.slice(0, 5); // prendiamo solo le 5 più recenti
-
-  noteLastBox.classList.remove("hidden");
-  noteLastMeta.textContent = `Showing last ${display.length} note${display.length > 1 ? "s" : ""}`;
-
-  const lines = display.map(n => {
-    const who = (n.name && n.name.trim()) ? n.name.trim() : "anonymous";
-    let when = "";
-    if (n.ts) {
-      const d = new Date(n.ts);
-      if (!isNaN(d.getTime())) {
-        when = d.toLocaleString(undefined, {
-          dateStyle: "short",
-          timeStyle: "short"
-        });
-      }
-    }
-    const header = when ? `[${when}] ${who}` : who;
-    return `${header}\n${n.text}`;
-  });
-
-  // pre-wrap in CSS, quindi newline funzionano
-  noteLastText.textContent = lines.join("\n\n");
-}
+    // pre-wrap in CSS, quindi newline funzionano
+    noteLastText.textContent = lines.join("\n\n");
+  }
 
   // --- Realtime listener ---
   onValue(indicatorRef, (snapshot) => {
@@ -1155,38 +1224,36 @@
     lastUpdateEl.textContent = formatTimestamp(data.last_update);
 
     renderInProgressGroups(data.in_progress_groups, data.in_progress_synced_at);
-
-    // guest last note (QUI dentro, con data definito)
-  // Guest notes: usa guest_notes (array) se c'è, altrimenti guest_last_note singola
-  let notesArr = [];
-  if (Array.isArray(data.guest_notes)) {
-    notesArr = data.guest_notes.filter(n => n && typeof n.text === "string");
-  } else if (data.guest_last_note && typeof data.guest_last_note.text === "string") {
-    notesArr = [data.guest_last_note];
-  }
-
-  recentNotes = notesArr;
-  renderNotesList(notesArr);
   }, (error) => {
     console.error(error);
     statusDisplay.textContent = "error";
     lastUpdateEl.textContent = "Last update: error";
   });
 
-  // --- Login con password ---
-  pwBtn.addEventListener("click", tryUnlock);
-  pwInput.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      tryUnlock();
-    }
+  const recentNotesQuery = query(guestNotesRef, orderByChild("ts"), limitToLast(5));
+  onValue(recentNotesQuery, (snapshot) => {
+    const value = snapshot.val() || {};
+    recentNotes = Object.entries(value)
+      .map(([id, note]) => ({ id, ...(note || {}) }))
+      .filter((note) => typeof note.text === "string");
+    renderNotesList(recentNotes);
+  }, (error) => {
+    console.error("Guest notes read error", error);
+    noteStatus.textContent = "Cannot load notes.";
   });
 
-  if (sessionStorage.getItem(SESSION_UNLOCK_KEY) === "1") {
-    unlockUi();
-  } else {
-    lockUi();
-  }
+  // --- Firebase Auth ---
+  authBtn.addEventListener("click", handleAuthAction);
+  [emailInput, pwInput].forEach((input) => {
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        handleAuthAction();
+      }
+    });
+  });
+
+  onAuthStateChanged(auth, handleAuthState);
 
   // --- Bottoni stato ---
   buttons.forEach(btn => {
@@ -1229,55 +1296,43 @@
     });
   }
 
- // Guest note send handler
-if (noteSendBtn) {
-  noteSendBtn.addEventListener("click", async () => {
-    const text = (noteInput?.value || "").trim();
-    const name = (noteName?.value || "").trim();
+  // Guest note send handler
+  if (noteSendBtn) {
+    noteSendBtn.addEventListener("click", async () => {
+      const text = (noteInput?.value || "").trim();
+      const name = (noteName?.value || "").trim();
 
-    if (!text) {
-      noteStatus.textContent = "Message is empty.";
-      return;
-    }
-    if (text.length > 300) {
-      noteStatus.textContent = "Message is too long.";
-      return;
-    }
+      if (!text) {
+        noteStatus.textContent = "Message is empty.";
+        return;
+      }
+      if (text.length > 300) {
+        noteStatus.textContent = "Message is too long.";
+        return;
+      }
 
-    noteStatus.textContent = "Sending…";
+      noteStatus.textContent = "Sending…";
 
-    try {
-      const payload = {
-        text,
-        name: name || null,
-        ts: Date.now()
-      };
+      try {
+        await ensureGuestAuth();
+        const payload = {
+          text,
+          name: name || null,
+          ts: Date.now()
+        };
 
-      // partiamo da quello che abbiamo in memoria
-      const base = Array.isArray(recentNotes) ? recentNotes.slice() : [];
-      base.push(payload);
+        await set(push(guestNotesRef), payload);
 
-      // tieni solo le ultime 5 (in base all'ordine di arrivo)
-      const trimmed = base.slice(-5);
+        noteInput.value = "";
+        noteStatus.textContent = "Sent";
 
-      await update(indicatorRef, {
-        guest_last_note: payload,  // per compatibilità
-        guest_notes: trimmed       // array con max 5 note
-      });
-
-      noteInput.value = "";
-      noteStatus.textContent = "Sent";
-
-      recentNotes = trimmed;
-      renderNotesList(recentNotes);
-
-      setTimeout(() => { noteStatus.textContent = ""; }, 2000);
-    } catch (err) {
-      console.error("Guest note write error", err);
-      noteStatus.textContent = "Error sending message.";
-    }
-  });
-}
+        setTimeout(() => { noteStatus.textContent = ""; }, 2000);
+      } catch (err) {
+        console.error("Guest note write error", err);
+        noteStatus.textContent = "Error sending message.";
+      }
+    });
+  }
 
 </script>
 

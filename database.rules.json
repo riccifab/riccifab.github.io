@@ -1,0 +1,41 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "admins": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": false,
+        ".validate": "newData.isBoolean()"
+      }
+    },
+
+    "indicator": {
+      ".read": true,
+      ".write": "auth != null && root.child('admins').child(auth.uid).val() === true",
+
+      "status": {
+        ".validate": "newData.isString() && newData.val().matches(/^(default|lab|busy|free|away|x)$/)"
+      },
+
+      "last_update": {
+        ".validate": "newData.isNumber()"
+      },
+
+      "tag": {
+        ".validate": "newData.isString() && newData.val().length <= 32"
+      }
+    },
+
+    "guest_notes": {
+      ".read": true,
+      ".write": false,
+
+      "$noteId": {
+        ".write": "auth != null && !data.exists()",
+        ".validate": "newData.hasChildren(['text', 'ts']) && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 300 && (!newData.child('name').exists() || (newData.child('name').isString() && newData.child('name').val().length <= 40)) && newData.child('ts').isNumber()"
+      }
+    }
+  }
+}
