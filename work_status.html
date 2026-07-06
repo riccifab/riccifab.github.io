@@ -836,7 +836,6 @@
     getDatabase,
     ref,
     onValue,
-    get,
     update,
     push,
     set,
@@ -1104,12 +1103,6 @@
     }
   }
 
-  async function isAdminUser(user) {
-    if (!user || user.isAnonymous) return false;
-    const snapshot = await get(ref(db, `admins/${user.uid}`));
-    return snapshot.val() === true;
-  }
-
   async function handleAuthState(user) {
     if (!user) {
       lockUi();
@@ -1120,20 +1113,7 @@
       return;
     }
 
-    authInfo.textContent = "Checking account…";
-    authBtn.textContent = "Sign out";
-    setAuthFieldsVisible(false);
-
-    try {
-      if (await isAdminUser(user)) {
-        unlockUi(user);
-      } else {
-        lockUi("Not authorized");
-      }
-    } catch (err) {
-      console.error("Admin check failed", err);
-      lockUi("Cannot verify admin");
-    }
+    unlockUi(user);
   }
 
   async function handleAuthAction() {
