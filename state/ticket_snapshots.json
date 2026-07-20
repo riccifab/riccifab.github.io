@@ -86,6 +86,7 @@
     "whyNotDeferredText": "There is only one Fabio"
   },
   "82z5n1jqWXIqF5tBy050": {
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "mechanics",
@@ -97,6 +98,7 @@
     "deferTo": "",
     "definitionOfDone": "Order placed",
     "description": "Emergency configuration of fast order via MISUMI",
+    "effortAdmin": "",
     "effortGuess": "M",
     "estimatedCostEUR": null,
     "expectedDeliveryDate": "2026-07-14",
@@ -127,10 +129,10 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-07-15T15:33:26.259000+00:00",
-    "status": "NEW",
+    "status": "CLOSED",
     "tags": [],
     "title": "Design of DIY desks",
-    "updatedAt": "2026-07-15T15:33:26.259000+00:00",
+    "updatedAt": "2026-07-20T08:48:38.118000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": ""
   },
