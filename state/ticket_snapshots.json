@@ -575,7 +575,7 @@
     "whyNotDeferredText": "Fabio's design and contacts for titanium printing"
   },
   "P0wvWZiN20TBGlbdUYBo": {
-    "adminNotes": "First try with screws, then braces",
+    "adminNotes": "Screws seems to work",
     "assigneeEmail": "",
     "canBeDeferred": "yes",
     "category": "mechanics",
@@ -620,12 +620,12 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-05-29T14:54:08.022000+00:00",
-    "status": "IN_PROGRESS",
+    "status": "TRIAGE",
     "tags": [
       "2P"
     ],
     "title": "Brace for 2P mouse holder",
-    "updatedAt": "2026-07-02T09:42:42.721000+00:00",
+    "updatedAt": "2026-07-23T08:08:02.051000+00:00",
     "whyNotDeferredCode": "",
     "whyNotDeferredText": ""
   },
