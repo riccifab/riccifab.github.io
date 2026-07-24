@@ -132,13 +132,13 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-07-24T10:22:58.150000+00:00",
-    "status": "IN_PROGRESS",
+    "status": "CLOSED",
     "tags": [
       "LED",
       "pupillometry"
     ],
     "title": "Set up IR LED driver/power",
-    "updatedAt": "2026-07-24T13:34:59.492000+00:00",
+    "updatedAt": "2026-07-24T14:02:05.596000+00:00",
     "whyNotDeferredCode": "",
     "whyNotDeferredText": ""
   },
