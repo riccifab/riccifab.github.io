@@ -1,16 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520" role="img">
 <rect width="100%" height="100%" rx="28" fill="#f8fafc" />
-<path d="M 252.000 112.000 A 168 168 0 1 1 95.613 218.623 L 162.636 244.927 A 96 96 0 1 0 252.000 184.000 Z" fill="#2563eb" />
-<path d="M 95.613 218.623 A 168 168 0 0 1 120.652 175.254 L 176.944 220.145 A 96 96 0 0 0 162.636 244.927 Z" fill="#0f766e" />
-<path d="M 120.652 175.254 A 168 168 0 0 1 157.362 141.192 L 197.921 200.681 A 96 96 0 0 0 176.944 220.145 Z" fill="#f97316" />
-<path d="M 157.362 141.192 A 168 168 0 0 1 202.481 119.464 L 223.704 188.265 A 96 96 0 0 0 197.921 200.681 Z" fill="#8b5cf6" />
-<path d="M 202.481 119.464 A 168 168 0 0 1 252.000 112.000 L 252.000 184.000 A 96 96 0 0 0 223.704 188.265 Z" fill="#ec4899" />
+<path d="M 252.000 112.000 A 168 168 0 1 1 99.182 210.210 L 164.675 240.120 A 96 96 0 1 0 252.000 184.000 Z" fill="#2563eb" />
+<path d="M 99.182 210.210 A 168 168 0 0 1 125.034 169.983 L 179.448 217.133 A 96 96 0 0 0 164.675 240.120 Z" fill="#0f766e" />
+<path d="M 125.034 169.983 A 168 168 0 0 1 161.172 138.669 L 200.098 199.240 A 96 96 0 0 0 179.448 217.133 Z" fill="#f97316" />
+<path d="M 161.172 138.669 A 168 168 0 0 1 204.669 118.805 L 224.954 187.889 A 96 96 0 0 0 200.098 199.240 Z" fill="#8b5cf6" />
+<path d="M 204.669 118.805 A 168 168 0 0 1 252.000 112.000 L 252.000 184.000 A 96 96 0 0 0 224.954 187.889 Z" fill="#ec4899" />
 <circle cx="252" cy="280" r="94" fill="#ffffff" />
 <text x="252" y="268" text-anchor="middle" fill="#64748b" font-size="15" font-family="Arial, sans-serif">Total</text>
-<text x="252" y="304" text-anchor="middle" fill="#0f172a" font-size="40" font-family="Arial, sans-serif" font-weight="700">21</text>
+<text x="252" y="304" text-anchor="middle" fill="#0f172a" font-size="40" font-family="Arial, sans-serif" font-weight="700">22</text>
 <circle cx="500" cy="118" r="10" fill="#2563eb" />
 <text x="520" y="114" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">CLOSED</text>
-<text x="520" y="138" fill="#475569" font-size="14" font-family="Arial, sans-serif">17 tickets • 81%</text>
+<text x="520" y="138" fill="#475569" font-size="14" font-family="Arial, sans-serif">18 tickets • 82%</text>
 <circle cx="500" cy="178" r="10" fill="#0f766e" />
 <text x="520" y="174" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">WAITING_ON_PROCUREMENT</text>
 <text x="520" y="198" fill="#475569" font-size="14" font-family="Arial, sans-serif">1 tickets • 5%</text>
