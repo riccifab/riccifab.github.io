@@ -17,7 +17,7 @@
 <text x="610.7" y="502" text-anchor="middle" fill="#64748b" font-size="12" font-family="Arial, sans-serif">01 Jun</text>
 <text x="748.3" y="502" text-anchor="middle" fill="#64748b" font-size="12" font-family="Arial, sans-serif">29 Jun</text>
 <text x="886.0" y="502" text-anchor="middle" fill="#64748b" font-size="12" font-family="Arial, sans-serif">27 Jul</text>
-<polyline fill="none" stroke="#2563eb" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="60.00,426.33 94.42,319.33 128.83,319.33 163.25,301.50 197.67,265.83 232.08,265.83 266.50,248.00 300.92,212.33 335.33,194.50 369.75,158.83 404.17,141.00 438.58,141.00 473.00,141.00 507.42,141.00 541.83,141.00 576.25,123.17 610.67,123.17 645.08,123.17 679.50,105.33 713.92,105.33 748.33,105.33 782.75,105.33 817.17,87.50 851.58,69.67 886.00,69.67" />
+<polyline fill="none" stroke="#2563eb" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="60.00,426.33 94.42,319.33 128.83,319.33 163.25,301.50 197.67,265.83 232.08,265.83 266.50,248.00 300.92,212.33 335.33,194.50 369.75,158.83 404.17,141.00 438.58,141.00 473.00,141.00 507.42,141.00 541.83,141.00 576.25,123.17 610.67,123.17 645.08,123.17 679.50,105.33 713.92,105.33 748.33,105.33 782.75,105.33 817.17,87.50 851.58,69.67 886.00,51.83" />
 <circle cx="60.00" cy="426.33" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
 <circle cx="94.42" cy="319.33" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
 <circle cx="128.83" cy="319.33" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
@@ -42,7 +42,7 @@
 <circle cx="782.75" cy="105.33" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
 <circle cx="817.17" cy="87.50" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
 <circle cx="851.58" cy="69.67" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
-<circle cx="886.00" cy="69.67" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
+<circle cx="886.00" cy="51.83" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="2" />
 <polyline fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="60.00,462.00 94.42,444.17 128.83,426.33 163.25,408.50 197.67,408.50 232.08,372.83 266.50,372.83 300.92,355.00 335.33,337.17 369.75,301.50 404.17,283.67 438.58,248.00 473.00,248.00 507.42,248.00 541.83,230.17 576.25,230.17 610.67,230.17 645.08,212.33 679.50,194.50 713.92,176.67 748.33,176.67 782.75,176.67 817.17,176.67 851.58,141.00 886.00,141.00" />
 <circle cx="60.00" cy="462.00" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
 <circle cx="94.42" cy="444.17" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
@@ -69,7 +69,7 @@
 <circle cx="817.17" cy="176.67" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
 <circle cx="851.58" cy="141.00" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
 <circle cx="886.00" cy="141.00" r="4.5" fill="#10b981" stroke="#fff" stroke-width="2" />
-<polyline fill="none" stroke="#f97316" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="60.00,426.33 94.42,337.17 128.83,355.00 163.25,355.00 197.67,319.33 232.08,355.00 266.50,337.17 300.92,319.33 335.33,319.33 369.75,319.33 404.17,319.33 438.58,355.00 473.00,355.00 507.42,355.00 541.83,372.83 576.25,355.00 610.67,355.00 645.08,372.83 679.50,372.83 713.92,390.67 748.33,390.67 782.75,390.67 817.17,372.83 851.58,390.67 886.00,390.67" />
+<polyline fill="none" stroke="#f97316" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="60.00,426.33 94.42,337.17 128.83,355.00 163.25,355.00 197.67,319.33 232.08,355.00 266.50,337.17 300.92,319.33 335.33,319.33 369.75,319.33 404.17,319.33 438.58,355.00 473.00,355.00 507.42,355.00 541.83,372.83 576.25,355.00 610.67,355.00 645.08,372.83 679.50,372.83 713.92,390.67 748.33,390.67 782.75,390.67 817.17,372.83 851.58,390.67 886.00,372.83" />
 <circle cx="60.00" cy="426.33" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
 <circle cx="94.42" cy="337.17" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
 <circle cx="128.83" cy="355.00" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
@@ -94,14 +94,14 @@
 <circle cx="782.75" cy="390.67" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
 <circle cx="817.17" cy="372.83" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
 <circle cx="851.58" cy="390.67" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
-<circle cx="886.00" cy="390.67" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
-<rect x="904" y="56.7" width="112" height="26" rx="13" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" />
-<circle cx="918" cy="69.7" r="5" fill="#2563eb" />
-<text x="930" y="73.7" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Created 22</text>
+<circle cx="886.00" cy="372.83" r="4.5" fill="#f97316" stroke="#fff" stroke-width="2" />
+<rect x="904" y="38.8" width="112" height="26" rx="13" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" />
+<circle cx="918" cy="51.8" r="5" fill="#2563eb" />
+<text x="930" y="55.8" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Created 23</text>
 <rect x="904" y="128.0" width="112" height="26" rx="13" fill="#ffffff" stroke="#10b981" stroke-width="1.5" />
 <circle cx="918" cy="141.0" r="5" fill="#10b981" />
 <text x="930" y="145.0" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Closed 18</text>
-<rect x="904" y="377.7" width="112" height="26" rx="13" fill="#ffffff" stroke="#f97316" stroke-width="1.5" />
-<circle cx="918" cy="390.7" r="5" fill="#f97316" />
-<text x="930" y="394.7" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Open 4</text>
+<rect x="904" y="359.8" width="112" height="26" rx="13" fill="#ffffff" stroke="#f97316" stroke-width="1.5" />
+<circle cx="918" cy="372.8" r="5" fill="#f97316" />
+<text x="930" y="376.8" fill="#0f172a" font-size="12" font-family="Arial, sans-serif" font-weight="700">Open 5</text>
 </svg>
