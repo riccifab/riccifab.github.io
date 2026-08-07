@@ -997,6 +997,7 @@
     "whyNotDeferredText": "Requires knowledge of electronics, and implementation of designs already done by Fabio already"
   },
   "ml9WtzOVbdTr1wag9RoQ": {
+    "adminNotes": "Fit failed, need to be changed front part of cradle holder (Workshop)",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "mechanics",
@@ -1008,6 +1009,7 @@
     "deferTo": "",
     "definitionOfDone": "-install the brace on the outside of the MRI\n-test the installation of the removable animal cradle + optical holders",
     "description": "check if the MRI-compatible setup of the system fits into the scanner as intended \n(needs coil-free MR scanner bore)\nAnnika (me) will join this joyful activity!",
+    "effortAdmin": "M",
     "effortGuess": "M",
     "estimatedCostEUR": 0,
     "expectedDeliveryDate": "2026-07-27",
@@ -1043,7 +1045,7 @@
       "whyNotDeferredText": "Fabio needs to see how the fit fits and how stuff potentially needs to be adjusted"
     },
     "requesterSubmittedAt": "2026-07-27T11:05:09.639000+00:00",
-    "status": "NEW",
+    "status": "CLOSED",
     "tags": [
       "WFI",
       "MRI",
@@ -1051,7 +1053,7 @@
       "mechanical fitting"
     ],
     "title": "mechanical test of MR-compatible WFI setup",
-    "updatedAt": "2026-07-27T11:05:09.639000+00:00",
+    "updatedAt": "2026-08-07T17:47:28.542000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "Fabio needs to see how the fit fits and how stuff potentially needs to be adjusted"
   },
