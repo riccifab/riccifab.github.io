@@ -194,6 +194,7 @@
     "whyNotDeferredText": ""
   },
   "8FaYnAOACOzpiTAcCsxN": {
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "mechanics",
@@ -205,6 +206,7 @@
     "deferTo": "",
     "definitionOfDone": "-holder fits into the MRI",
     "description": "The MRI front table+slider is getting in the way of the front holder of the WFI insert. Design of the aluminium piece needs to be adjusted/updated. Possibly first as a plastic prototype, then as the stable aluminium piece. Existing piece can potentially adjusted?",
+    "effortAdmin": "M",
     "effortGuess": "M",
     "estimatedCostEUR": null,
     "expectedDeliveryDate": "2026-10-05",
@@ -238,13 +240,13 @@
       "whyNotDeferredText": "expertise in mechanical adjustment/alteration of thick aluminium piece"
     },
     "requesterSubmittedAt": "2026-08-25T10:30:17.708000+00:00",
-    "status": "NEW",
+    "status": "IN_PROGRESS",
     "tags": [
       "WFI holder adjustment",
       "WFI/MRI"
     ],
     "title": "Fix mechanical front holder of the WFI/MRI system",
-    "updatedAt": "2026-08-25T10:30:17.708000+00:00",
+    "updatedAt": "2026-08-25T14:10:47.267000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "expertise in mechanical adjustment/alteration of thick aluminium piece"
   },
@@ -632,6 +634,7 @@
     "whyNotDeferredText": ""
   },
   "JLx6kjYMitobyVF6A6Xq": {
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "electronics",
@@ -643,9 +646,10 @@
     "deferTo": "",
     "definitionOfDone": "LED should reliably switch states according to the trigger from BPOD",
     "description": "I have an LED circuit that you designed, which currently has no configuration to accept external triggers. I want to modify this circuit to add an external trigger receptor",
+    "effortAdmin": "S",
     "effortGuess": "M",
     "estimatedCostEUR": null,
-    "expectedDeliveryDate": "2026-09-04",
+    "expectedDeliveryDate": "2026-09-01",
     "hardDeadline": false,
     "hardDeadlineDate": "",
     "lab": "Iurilli",
@@ -684,7 +688,7 @@
       "circuit"
     ],
     "title": "Modifying a circuit to add a trigger from BPOD",
-    "updatedAt": "2026-08-25T09:57:58.915000+00:00",
+    "updatedAt": "2026-08-25T14:09:58.412000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": ""
   },
