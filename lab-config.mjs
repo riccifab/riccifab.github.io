@@ -5,7 +5,8 @@ export const CANONICAL_LABS = Object.freeze([
   "Rossi",
 ]);
 
-export const CUSTOM_LAB_VALUE = "__other__";
+export const OTHER_LAB_NAME = "Other";
+export const LAB_OPTIONS = Object.freeze([...CANONICAL_LABS, OTHER_LAB_NAME]);
 
 export function cleanLabName(value) {
   return String(value ?? "").trim().replace(/\s+/g, " ");
@@ -25,7 +26,7 @@ export function normalizeLabKey(value) {
 }
 
 const CANONICAL_LAB_BY_KEY = new Map(
-  CANONICAL_LABS.map((lab) => [normalizeLabKey(lab), lab]),
+  LAB_OPTIONS.map((lab) => [normalizeLabKey(lab), lab]),
 );
 
 export function canonicalizeLabName(value) {

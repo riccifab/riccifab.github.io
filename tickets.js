@@ -1,10 +1,11 @@
 import {
   CANONICAL_LABS,
-  CUSTOM_LAB_VALUE,
+  LAB_OPTIONS,
+  OTHER_LAB_NAME,
   canonicalizeLabName,
   legacyLabAliases,
   normalizeLabKey,
-} from "./lab-config.mjs?v=20260825a";
+} from "./lab-config.mjs?v=20260825b";
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
@@ -92,8 +93,6 @@ const btnCloseModal = $("btnCloseModal");
 const ticketForm = $("ticketForm");
 const formMsg = $("formMsg");
 const tLab = $("tLab");
-const tLabOther = $("tLabOther");
-const tLabOtherField = $("tLabOtherField");
 
 /* ========= State ========= */
 let currentUser = null;
@@ -140,34 +139,24 @@ function safeHttpUrl(value) {
   }
 }
 function resolvedLabSelection() {
-  const rawValue = tLab.value === CUSTOM_LAB_VALUE ? tLabOther.value : tLab.value;
-  const lab = canonicalizeLabName(rawValue);
+  const lab = canonicalizeLabName(tLab.value);
   return { lab, labKey: normalizeLabKey(lab) };
 }
 function setLabSelectorValue(value) {
   const canonical = canonicalizeLabName(value);
   if (!canonical) {
     tLab.value = "";
-    tLabOther.value = "";
     return;
   }
 
-  if (CANONICAL_LABS.includes(canonical)) {
-    tLab.value = canonical;
-    tLabOther.value = "";
-    return;
-  }
-
-  tLab.value = CUSTOM_LAB_VALUE;
-  tLabOther.value = canonical;
+  tLab.value = LAB_OPTIONS.includes(canonical) ? canonical : OTHER_LAB_NAME;
 }
 function populateLabSelector() {
   const placeholder = new Option("Select a lab", "", true, true);
   placeholder.disabled = true;
   tLab.replaceChildren(
     placeholder,
-    ...CANONICAL_LABS.map((lab) => new Option(lab, lab)),
-    new Option("Other", CUSTOM_LAB_VALUE),
+    ...LAB_OPTIONS.map((lab) => new Option(lab, lab)),
   );
 }
 populateLabSelector();
@@ -436,7 +425,7 @@ async function refreshTickets() {
     if (key && !labsByKey.has(key)) labsByKey.set(key, label);
   });
 
-  const canonicalOrder = new Map(CANONICAL_LABS.map((lab, index) => [normalizeLabKey(lab), index]));
+  const canonicalOrder = new Map(LAB_OPTIONS.map((lab, index) => [normalizeLabKey(lab), index]));
   const labOptions = Array.from(labsByKey, ([key, label]) => ({ key, label })).sort((a, b) => {
     const aOrder = canonicalOrder.get(a.key) ?? Number.MAX_SAFE_INTEGER;
     const bOrder = canonicalOrder.get(b.key) ?? Number.MAX_SAFE_INTEGER;
@@ -732,12 +721,6 @@ function bindNewTicketDynamicLogic() {
   const tWhyNotText = $("tWhyNotText");
 
   function apply() {
-    const usesCustomLab = tLab.value === CUSTOM_LAB_VALUE;
-    tLabOtherField.classList.toggle("hidden", !usesCustomLab);
-    tLabOther.disabled = !usesCustomLab;
-    if (!usesCustomLab) tLabOther.value = "";
-    syncConditionalRequiredField(tLabOther, usesCustomLab);
-
     if (tHardDeadline.value === "yes") tHardDeadlineDate.disabled = false;
     else { tHardDeadlineDate.value = ""; tHardDeadlineDate.disabled = true; }
     syncConditionalRequiredField(tHardDeadlineDate, tHardDeadline.value === "yes");
@@ -763,7 +746,7 @@ function bindNewTicketDynamicLogic() {
     syncConditionalRequiredField(tWhyNotText, false);
   }
 
-  [tLab, tHardDeadline, tCommercially, tDeferred].forEach(el => el.addEventListener("change", apply));
+  [tHardDeadline, tCommercially, tDeferred].forEach(el => el.addEventListener("change", apply));
   apply();
   return apply;
 }
@@ -776,11 +759,14 @@ ticketForm.addEventListener("submit", async (e) => {
   if (!currentUser) return;
 
   const selectedLab = resolvedLabSelection();
-  const labKey = selectedLab.labKey;
+  const assignedLabUsesOtherOption = selectedLab.lab === OTHER_LAB_NAME
+    && currentLab
+    && !CANONICAL_LABS.includes(canonicalizeLabName(currentLab));
   const usesAssignedLab = ["postdoc", "phd"].includes(currentRole)
     && currentLab
-    && currentLabKey === labKey;
+    && (currentLabKey === selectedLab.labKey || assignedLabUsesOtherOption);
   const lab = usesAssignedLab ? currentLab : selectedLab.lab;
+  const labKey = usesAssignedLab ? currentLabKey : selectedLab.labKey;
   const category = $("tCategory").value;
   const priority = $("tPriority").value;
   const expectedDeliveryDate = $("tExpected").value;
