@@ -32,5 +32,9 @@ for (const lab of LAB_OPTIONS) {
 assert.doesNotMatch(ticketsHtml, /<input id="tLab"/);
 assert.doesNotMatch(ticketsHtml, /id="tLabOther"/);
 assert.doesNotMatch(ticketsHtml, />Other lab</);
+assert.match(ticketsHtml, /<option value="S">S \(less than a day\)<\/option>/);
+assert.match(ticketsHtml, /<option value="M" selected>M \(less than a week\)<\/option>/);
+assert.match(ticketsHtml, /<option value="L">L \(less than a month\)<\/option>/);
+assert.match(ticketsHtml, /<option value="XL">XL<\/option>/);
 
 console.log("Lab selector checks passed.");
