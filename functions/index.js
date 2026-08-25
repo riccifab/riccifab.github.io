@@ -10,9 +10,34 @@ const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
 const BREVO_API_KEY = process.env.BREVO_API_KEY;
 const FROM_EMAIL = process.env.FROM_EMAIL; // es: "tickets@iit.it"
 const SITE_URL = process.env.SITE_URL || ""; // es: "https://riccifab.github.io/xxx"
+const CANONICAL_LABS = new Map([
+  ["gozzi", "Gozzi"],
+  ["iurilli", "Iurilli"],
+  ["lombardo", "Lombardo"],
+  ["rossi", "Rossi"],
+]);
 
 // opzionale: se vuoi escludere anche DONE
 const EXCLUDE_DONE = (process.env.EXCLUDE_DONE || "0") === "1";
+
+function normalizeLabKey(value) {
+  const parts = String(value || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+  if (parts.at(-1) === "lab") parts.pop();
+  return parts.join("");
+}
+
+function ticketLab(ticket) {
+  const raw = String(ticket.lab || ticket.labKey || "").trim().replace(/\s+/g, " ");
+  const key = normalizeLabKey(ticket.labKey || raw);
+  return { key: key || "-", label: CANONICAL_LABS.get(key) || raw || "-" };
+}
 
 // prende gli admin dalla allowlist
 async function getAdminEmails() {
@@ -25,7 +50,7 @@ async function getAdminEmails() {
 function fmtTicketLine(t) {
   const pr = t.priority || "-";
   const st = t.status || "-";
-  const lab = t.lab || "-";
+  const lab = ticketLab(t).label;
   const exp = t.expectedDeliveryDate || "-";
   const title = (t.title || "").toString().replace(/\s+/g, " ").trim();
   return `- [${pr}] [${st}] [${lab}] exp:${exp} - ${title}`;
@@ -96,17 +121,19 @@ export const monthlyOpenTicketsDigest = onSchedule(
     // summary per lab
     const byLab = new Map();
     for (const t of tickets) {
-      const lab = (t.lab || "-").toString();
-      byLab.set(lab, (byLab.get(lab) || 0) + 1);
+      const { key, label } = ticketLab(t);
+      const current = byLab.get(key) || { label, count: 0 };
+      current.count += 1;
+      byLab.set(key, current);
     }
-    const labsSorted = Array.from(byLab.entries()).sort((a, b) => b[1] - a[1]);
+    const labsSorted = Array.from(byLab.values()).sort((a, b) => b.count - a.count);
 
     const header = [];
     header.push("Monthly digest: OPEN tickets");
     header.push(`Total: ${tickets.length}`);
     header.push("");
     header.push("By lab:");
-    for (const [lab, n] of labsSorted) header.push(`- ${lab}: ${n}`);
+    for (const { label, count } of labsSorted) header.push(`- ${label}: ${count}`);
     header.push("");
     if (SITE_URL) header.push(`Site: ${SITE_URL.replace(/\/$/, "")}/tickets.html`);
     header.push("");

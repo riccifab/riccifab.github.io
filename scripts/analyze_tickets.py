@@ -17,6 +17,8 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
+from lab_names import canonical_lab_name, normalize_lab_key
+
 
 DATE_FMT = "%Y-%m-%d"
 OPEN_STATUSES = {"NEW", "TRIAGE", "IN_PROGRESS", "WAITING", "WAITING_ON_PI", "WAITING_ON_PROCUREMENT", "BLOCKED"}
@@ -260,6 +262,10 @@ def normalize_group(value: Any, default: str = "Unspecified") -> str:
     return default
 
 
+def normalize_lab_group(value: Any, lab_key: Any = None, default: str = "Unspecified") -> str:
+    return canonical_lab_name(value or lab_key) or default
+
+
 def normalize_effort(value: Any) -> str:
     if not isinstance(value, str):
         return ""
@@ -425,6 +431,14 @@ def analyze_tickets(
     keyword_buckets: dict[tuple[str, str], Counter[str]] = defaultdict(Counter)
     comment_counts: list[int] = []
     resolution_ages: list[float] = []
+    lab_labels_by_key: dict[str, str] = {}
+
+    def grouped_lab_name(value: Any, lab_key: Any = None) -> str:
+        label = normalize_lab_group(value, lab_key)
+        stable_key = normalize_lab_key(lab_key or value)
+        if not stable_key:
+            return label
+        return lab_labels_by_key.setdefault(stable_key, label)
 
     for ticket in tickets_raw:
         if not isinstance(ticket, dict):
@@ -437,8 +451,8 @@ def analyze_tickets(
         requester = ticket.get("requesterSubmission") if isinstance(ticket.get("requesterSubmission"), dict) else {}
 
         status = normalize_group(ticket.get("status"), default="UNKNOWN")
-        current_lab = normalize_group(ticket.get("lab"))
-        requested_lab = normalize_group(requester.get("lab"))
+        current_lab = grouped_lab_name(ticket.get("lab"), ticket.get("labKey"))
+        requested_lab = grouped_lab_name(requester.get("lab"), requester.get("labKey"))
         category = normalize_group(ticket.get("category"))
         priority = normalize_group(ticket.get("priority"))
         requested_priority = normalize_group(requester.get("priority"))

@@ -39,6 +39,12 @@ Configure these secrets where email jobs run:
 - `BREVO_API_KEY`
 - `MAIL_FROM`
 
+Configure `LAB_PI_MAP` as a repository variable containing a JSON object whose
+keys are lab names and whose values are PI email addresses. Matching ignores
+case, spacing, punctuation, and an optional trailing `Lab`. `other` can be used
+as the recipient for custom labs; `LAB_PI_FALLBACK` is the optional final
+fallback and defaults to the maintainer notification address.
+
 The Firebase scheduled function in `functions/index.js` also expects `BREVO_API_KEY` in its deployed environment.
 
 ---

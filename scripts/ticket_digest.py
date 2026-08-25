@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from brevo_mail import send_brevo_email
 from google.cloud import firestore
 from google.oauth2 import service_account
+from lab_names import canonical_lab_name, normalize_lab_key
 
 PROJECT_ID = os.environ["FIREBASE_PROJECT_ID"]
 SITE_URL = os.environ.get("SITE_URL", "").rstrip("/")
@@ -61,17 +62,23 @@ def get_open_tickets(db, limit_n=500):
 
 
 def by_lab_counts(tickets):
-    m = {}
+    groups = {}
     for t in tickets:
-        lab = (t.get("lab") or "-").strip()
-        m[lab] = m.get(lab, 0) + 1
-    return sorted(m.items(), key=lambda kv: kv[1], reverse=True)
+        lab = canonical_lab_name(t.get("lab") or t.get("labKey")) or "-"
+        lab_key = normalize_lab_key(t.get("labKey") or lab) or "-"
+        group = groups.setdefault(lab_key, {"label": lab, "count": 0})
+        group["count"] += 1
+    return sorted(
+        ((group["label"], group["count"]) for group in groups.values()),
+        key=lambda row: row[1],
+        reverse=True,
+    )
 
 
 def fmt_ticket(t):
     pr = t.get("priority", "-")
     st = t.get("status", "-")
-    lab = (t.get("lab") or "-").strip()
+    lab = canonical_lab_name(t.get("lab") or t.get("labKey")) or "-"
     exp = t.get("expectedDeliveryDate", "-")
     title = " ".join((t.get("title") or "").split())
     tid = (t.get("id") or "")[:8]

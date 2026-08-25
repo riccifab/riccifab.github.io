@@ -1,48 +1,31 @@
 import os
 import base64
 import json
-import re
 from datetime import datetime, timezone, timedelta
 from typing import Any
 
 from brevo_mail import send_brevo_email
 from google.cloud import firestore
 from google.oauth2 import service_account
+from lab_names import DEFAULT_LABS, canonical_lab_name, normalize_lab_key
 
 
 # ----------------------------
 # Config
 # ----------------------------
 STATE_PATH = "state/last_run.json"
+NOTIFIED_PATH = "state/notified_ticket_ids.json"
 LOOKBACK_MINUTES = 3         # evita buchi tra run
 MAX_SCAN = 300               # limite sicurezza per run
 ALWAYS_CC = ["fabio.ricci@iit.it"]
+KNOWN_LAB_KEYS = {normalize_lab_key(lab) for lab in DEFAULT_LABS}
 
 
 # ----------------------------
 # Normalization helpers
 # ----------------------------
 def norm_lab(x: Any) -> str:
-    """
-    Normalize lab strings to a stable key:
-    - lower
-    - trim
-    - collapse spaces
-    - remove punctuation
-    - remove optional trailing 'lab'
-    - remove spaces
-    Examples:
-      "Gozzi Lab" -> "gozzi"
-      "ROSSI-lab" -> "rossi"
-    """
-    if x is None:
-        return ""
-    s = str(x).strip().lower()
-    s = re.sub(r"\s+", " ", s)
-    s = re.sub(r"[^a-z0-9 ]+", "", s)
-    s = s.replace(" lab", "")
-    s = s.replace(" ", "")
-    return s
+    return normalize_lab_key(x)
 
 
 def split_emails(x: Any) -> list[str]:
@@ -156,6 +139,25 @@ def save_state(dt: datetime) -> None:
         json.dump(obj, f)
 
 
+def load_notified_ticket_ids() -> set[str]:
+    try:
+        with open(NOTIFIED_PATH, "r", encoding="utf-8") as f:
+            obj = json.load(f)
+        values = obj.get("ticket_ids", []) if isinstance(obj, dict) else []
+        return {str(value).strip() for value in values if str(value).strip()}
+    except FileNotFoundError:
+        return set()
+    except Exception as e:
+        print(f"WARNING: cannot read state ({NOTIFIED_PATH}): {e}")
+        return set()
+
+
+def save_notified_ticket_ids(ticket_ids: set[str]) -> None:
+    os.makedirs(os.path.dirname(NOTIFIED_PATH), exist_ok=True)
+    with open(NOTIFIED_PATH, "w", encoding="utf-8") as f:
+        json.dump({"ticket_ids": sorted(ticket_ids)}, f)
+
+
 def build_stats_link(site_url: str) -> str:
     if not site_url:
         return ""
@@ -179,6 +181,7 @@ def main() -> None:
 
     brevo_api_key = os.environ["BREVO_API_KEY"]
     mail_from = os.environ["MAIL_FROM"]
+    fallback_recipients = split_emails(os.environ.get("LAB_PI_FALLBACK")) or ALWAYS_CC
 
     lab_pi_map_json = os.environ.get("LAB_PI_MAP", "{}").strip()
     try:
@@ -192,6 +195,7 @@ def main() -> None:
     lab_map: dict[str, str] = {norm_lab(k): str(v).strip() for k, v in raw_map.items()}
 
     last_run = load_state()
+    notified_ticket_ids = load_notified_ticket_ids()
     since = (last_run - timedelta(minutes=LOOKBACK_MINUTES)).astimezone(timezone.utc)
 
     db = db_client(project_id)
@@ -216,6 +220,8 @@ def main() -> None:
         if tid in seen_ids:
             continue
         seen_ids.add(tid)
+        if tid in notified_ticket_ids:
+            continue
 
         t = doc.to_dict() or {}
 
@@ -228,7 +234,7 @@ def main() -> None:
             continue
 
         # Prendi lab in modo robusto
-        lab_disp = (t.get("lab") or "").strip()
+        lab_disp = canonical_lab_name(t.get("lab") or t.get("labKey"))
         lab_key = norm_lab(t.get("labKey") or lab_disp)
 
         if not lab_key:
@@ -236,17 +242,15 @@ def main() -> None:
             continue
 
         pi_value = lab_map.get(lab_key)
-        if not pi_value:
-            print(
-                f"SKIP: ticket={tid} lab='{lab_disp}' labKey='{t.get('labKey')}' "
-                f"computed_key='{lab_key}' (not in LAB_PI_MAP)"
-            )
-            continue
-
+        if not pi_value and lab_key not in KNOWN_LAB_KEYS:
+            pi_value = lab_map.get("other")
         to_list = split_emails(pi_value)
         if not to_list:
-            print(f"SKIP: ticket={tid} mapped PI list empty for lab_key='{lab_key}' value='{pi_value}'")
-            continue
+            to_list = fallback_recipients
+            print(
+                f"FALLBACK: ticket={tid} lab='{lab_disp}' labKey='{t.get('labKey')}' "
+                f"computed_key='{lab_key}' recipients={to_list}"
+            )
 
         title = " ".join((t.get("title") or "").split())
         pr = t.get("priority", "-")
@@ -276,6 +280,8 @@ def main() -> None:
         )
 
         send_brevo_email(brevo_api_key, mail_from, to_list, subject, body, cc_list=ALWAYS_CC)
+        notified_ticket_ids.add(tid)
+        save_notified_ticket_ids(notified_ticket_ids)
         sent += 1
         print(f"SENT: ticket={tid} to={to_list} lab_key={lab_key} createdAt={created_dt.isoformat()}")
 

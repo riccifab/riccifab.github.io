@@ -13,6 +13,7 @@ import requests
 from google.auth.transport.requests import Request
 from google.cloud import firestore
 from google.oauth2 import service_account
+from lab_names import canonical_lab_name, clean_lab_name, normalize_lab_key
 
 
 DEFAULT_RTDB_URL = "https://workstatus-5a293-default-rtdb.europe-west1.firebasedatabase.app"
@@ -34,7 +35,7 @@ KNOWN_LABS = [
     for lab in (os.getenv("WORKSTATUS_PI_LABS") or "Gozzi,Iurilli,Lombardo,Rossi").split(",")
     if lab.strip()
 ]
-LAB_ALIASES = {" ".join(lab.split()).casefold(): lab for lab in KNOWN_LABS}
+LAB_ALIASES = {normalize_lab_key(lab): lab for lab in KNOWN_LABS}
 
 
 def load_credentials() -> service_account.Credentials:
@@ -100,7 +101,7 @@ def ticket_sort_key(ticket: dict[str, Any]) -> tuple[int, str, float, str]:
 
 
 def normalize_lab_name(value: Any) -> str:
-    return " ".join((value or "").strip().split())
+    return clean_lab_name(value)
 
 
 def resolve_group_lab(value: Any) -> str:
@@ -108,7 +109,7 @@ def resolve_group_lab(value: Any) -> str:
     if not normalized:
         return DEFAULT_GROUP
 
-    return LAB_ALIASES.get(normalized.casefold(), DEFAULT_GROUP)
+    return LAB_ALIASES.get(normalize_lab_key(normalized), DEFAULT_GROUP)
 
 
 def fetch_in_progress(db: firestore.Client) -> dict[str, list[dict[str, Any]]]:
@@ -119,8 +120,9 @@ def fetch_in_progress(db: firestore.Client) -> dict[str, list[dict[str, Any]]]:
 
     for doc in query.stream():
         ticket = doc.to_dict() or {}
-        source_lab = normalize_lab_name(ticket.get("lab"))
-        group_lab = resolve_group_lab(ticket.get("lab"))
+        lab_value = ticket.get("lab") or ticket.get("labKey")
+        source_lab = canonical_lab_name(lab_value, KNOWN_LABS)
+        group_lab = resolve_group_lab(lab_value)
         grouped.setdefault(group_lab, [])
         grouped[group_lab].append(
             {

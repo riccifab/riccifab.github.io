@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>Neurotech – PI Ticketing</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="tickets.css" />
+  <link rel="stylesheet" href="tickets.css?v=20260825a" />
   <link rel="icon" href="assets/favicon.ico" sizes="any">
 </head>
 
@@ -173,10 +173,10 @@
     </section>
 
     <!-- MODAL: NEW TICKET -->
-    <div id="modal" class="modal hidden" aria-hidden="true">
+    <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="newTicketTitle" aria-hidden="true">
       <div class="modalCard">
         <div class="row space">
-          <h2 style="margin:0;">New ticket</h2>
+          <h2 id="newTicketTitle" style="margin:0;">New ticket</h2>
           <button id="btnCloseModal" class="btn" type="button" aria-label="Close new ticket modal">✕</button>
         </div>
 
@@ -186,7 +186,14 @@
           <div class="grid2">
             <label class="required-field">
               <span class="label-text">Lab (group) <span class="required-mark">*</span></span>
-              <input id="tLab" type="text" placeholder="Iurilli / Rossi / Gozzi..." required />
+              <select id="tLab" required>
+                <option value="" selected disabled>Select a lab</option>
+              </select>
+            </label>
+
+            <label id="tLabOtherField" class="required-field hidden">
+              <span class="label-text">Other lab <span class="required-mark">*</span></span>
+              <input id="tLabOther" type="text" maxlength="80" placeholder="Enter the lab or group name" disabled />
             </label>
 
             <label class="required-field">
@@ -340,6 +347,6 @@
     <footer class="footer">IIT Neurotech.</footer>
   </div>
 
-  <script type="module" src="tickets.js?v=20260315g"></script>
+  <script type="module" src="tickets.js?v=20260825a"></script>
 </body>
 </html>

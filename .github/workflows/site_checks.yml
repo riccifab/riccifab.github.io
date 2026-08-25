@@ -1,0 +1,62 @@
+name: Site checks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "tickets.html"
+      - "tickets.css"
+      - "tickets.js"
+      - "lab-config.mjs"
+      - "functions/index.js"
+      - "scripts/*.py"
+      - ".github/workflows/ticket_notify_pi.yml"
+      - ".github/workflows/ticket_update.yml"
+      - ".github/workflows/site_checks.yml"
+  pull_request:
+    paths:
+      - "tickets.html"
+      - "tickets.css"
+      - "tickets.js"
+      - "lab-config.mjs"
+      - "functions/index.js"
+      - "scripts/*.py"
+      - ".github/workflows/ticket_notify_pi.yml"
+      - ".github/workflows/ticket_update.yml"
+      - ".github/workflows/site_checks.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Check JavaScript and lab selector
+        run: |
+          node --input-type=module --check < tickets.js
+          node --check functions/index.js
+          node scripts/test_lab_config.mjs
+
+      - name: Check Python lab handling
+        run: |
+          python scripts/test_lab_names.py
+          python scripts/test_bot_state.py
+          python -m py_compile \
+            scripts/lab_names.py \
+            scripts/merge_bot_state.py \
+            scripts/ticket_notify_pi.py \
+            scripts/ticket_update.py \
+            scripts/ticket_digest.py \
+            scripts/sync_work_status.py \
+            scripts/analyze_tickets.py

@@ -132,6 +132,11 @@ input, select, textarea {
 textarea { resize: vertical; }
 input:focus, select:focus, textarea:focus { border-color: rgba(74,222,128,0.65); }
 
+:is(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid rgba(74,222,128,0.82);
+  outline-offset: 2px;
+}
+
 input[type="date"] {
   color-scheme: dark;
 }
@@ -252,6 +257,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .table tr:hover td {
   background: rgba(74,222,128,0.06);
+  cursor: pointer;
+}
+
+.ticket-open {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--fg);
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
   cursor: pointer;
 }
 

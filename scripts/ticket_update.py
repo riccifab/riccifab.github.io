@@ -465,6 +465,7 @@ def main() -> int:
 
     sent = 0
     scanned = 0
+    failed = 0
 
     for ticket_id in candidate_ids:
         scanned += 1
@@ -530,18 +531,23 @@ def main() -> int:
             sent += 1
             print(f"SENT: ticket={ticket_id} to={creator_email} updatedAt={_to_iso(updated_at)}")
         except Exception as e:
-            # Don't block the whole run; just log.
+            failed += 1
             print(f"ERROR: ticket={ticket_id} to={creator_email} err={e}")
+            continue
 
         snapshots[ticket_id] = new_snapshot
 
-    # Only move last_run forward after scanning finishes.
-    new_last_run = _now_utc()
+    # Keep the previous cursor when a delivery fails so the update is retried.
+    new_last_run = last_run if failed else _now_utc()
     write_json(state_last_run_path, {"last_run": _to_iso(new_last_run)})
     write_json(snapshots_path, snapshots)
 
-    print(f"OK: scanned={scanned} sent={sent} since={_to_iso(since)} last_run={_to_iso(new_last_run)}")
-    return 0
+    result = "ERROR" if failed else "OK"
+    print(
+        f"{result}: scanned={scanned} sent={sent} failed={failed} "
+        f"since={_to_iso(since)} last_run={_to_iso(new_last_run)}"
+    )
+    return 1 if failed else 0
 
 
 if __name__ == "__main__":

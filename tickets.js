@@ -1,4 +1,10 @@
-
+import {
+  CANONICAL_LABS,
+  CUSTOM_LAB_VALUE,
+  canonicalizeLabName,
+  legacyLabAliases,
+  normalizeLabKey,
+} from "./lab-config.mjs?v=20260825a";
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
@@ -85,15 +91,20 @@ const modal = $("modal");
 const btnCloseModal = $("btnCloseModal");
 const ticketForm = $("ticketForm");
 const formMsg = $("formMsg");
+const tLab = $("tLab");
+const tLabOther = $("tLabOther");
+const tLabOtherField = $("tLabOtherField");
 
 /* ========= State ========= */
 let currentUser = null;
 let currentRole = null; // "admin" | "pi"
 let currentLab = null;
+let currentLabKey = null;
 
 let ticketsCache = [];
 let selectedTicketId = null;
 let refreshNewTicketFormState = () => {};
+let modalReturnFocus = null;
 
 const STATUS = ["NEW","TRIAGE","APPROVED","REJECTED","IN_PROGRESS","WAITING_ON_PI","WAITING_ON_PROCUREMENT","BLOCKED","DONE","CLOSED"];
 const PRIORITY = ["P0","P1","P2","P3"];
@@ -116,7 +127,50 @@ function setMsg(el, text, type = "") {
   el.classList.remove("ok", "err");
   if (type) el.classList.add(type);
 }
-function safeText(s) { return (s ?? "").toString().replace(/[<>]/g, ""); }
+function safeText(value) {
+  const escapes = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
+  return String(value ?? "").replace(/[&<>"']/g, (character) => escapes[character]);
+}
+function safeHttpUrl(value) {
+  try {
+    const url = new URL(String(value || ""));
+    return ["http:", "https:"].includes(url.protocol) ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+function resolvedLabSelection() {
+  const rawValue = tLab.value === CUSTOM_LAB_VALUE ? tLabOther.value : tLab.value;
+  const lab = canonicalizeLabName(rawValue);
+  return { lab, labKey: normalizeLabKey(lab) };
+}
+function setLabSelectorValue(value) {
+  const canonical = canonicalizeLabName(value);
+  if (!canonical) {
+    tLab.value = "";
+    tLabOther.value = "";
+    return;
+  }
+
+  if (CANONICAL_LABS.includes(canonical)) {
+    tLab.value = canonical;
+    tLabOther.value = "";
+    return;
+  }
+
+  tLab.value = CUSTOM_LAB_VALUE;
+  tLabOther.value = canonical;
+}
+function populateLabSelector() {
+  const placeholder = new Option("Select a lab", "", true, true);
+  placeholder.disabled = true;
+  tLab.replaceChildren(
+    placeholder,
+    ...CANONICAL_LABS.map((lab) => new Option(lab, lab)),
+    new Option("Other", CUSTOM_LAB_VALUE),
+  );
+}
+populateLabSelector();
 function optionList(options, selectedValue, { allowCustom = false, emptyLabel = null } = {}) {
   const rendered = [];
 
@@ -163,6 +217,7 @@ function buildRequesterSubmissionSnapshot(data) {
     description: data.description || "",
     definitionOfDone: data.definitionOfDone || "",
     lab: data.lab || "",
+    labKey: data.labKey || normalizeLabKey(data.lab),
     category: data.category || "",
     priority: data.priority || "",
     expectedDeliveryDate: data.expectedDeliveryDate || "",
@@ -192,7 +247,7 @@ function requesterSnapshotHtml(t) {
     <div class="grid2" style="margin-top:0.6rem;">
       <div><div class="muted small">Requested priority</div><div class="code">${safeText(r.priority || "-")}</div></div>
       <div><div class="muted small">Requested ETA</div><div class="code">${safeText(r.expectedDeliveryDate || "-")}</div></div>
-      <div><div class="muted small">Requested lab / category</div><div class="code">${safeText(r.lab || "-")} • ${safeText(r.category || "-")}</div></div>
+      <div><div class="muted small">Requested lab / category</div><div class="code">${safeText(canonicalizeLabName(r.lab || r.labKey) || "-")} • ${safeText(r.category || "-")}</div></div>
       <div><div class="muted small">Requested effort</div><div class="code">${safeText(r.effortGuess || "-")}</div></div>
     </div>
   `;
@@ -205,23 +260,39 @@ function syncConditionalRequiredField(input, active) {
   if (label) label.classList.toggle("required-field", active || label.querySelector("[required]") !== null);
 }
 
+function setModalBackgroundInert(active) {
+  Array.from(modal.parentElement?.children || [])
+    .filter((element) => element !== modal)
+    .forEach((element) => { element.inert = active; });
+}
+
 function openModal() {
+  modalReturnFocus = document.activeElement;
   modal.classList.remove("hidden");
   modal.setAttribute("aria-hidden", "false");
+  setModalBackgroundInert(true);
   setMsg(formMsg, "");
+  setLabSelectorValue(currentLab);
   refreshNewTicketFormState();
+  requestAnimationFrame(() => tLab.focus());
 }
 function closeModal() {
   modal.classList.add("hidden");
   modal.setAttribute("aria-hidden", "true");
+  setModalBackgroundInert(false);
   ticketForm.reset();
   setMsg(formMsg, "");
   refreshNewTicketFormState();
+  if (modalReturnFocus instanceof HTMLElement) modalReturnFocus.focus();
+  modalReturnFocus = null;
 }
 
 /* ========= Modal wiring ========= */
 btnCloseModal.addEventListener("click", closeModal);
 btnNewTicket.addEventListener("click", openModal);
+modal.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") closeModal();
+});
 bindAutoDatePickers(document);
 
 /* ========= Allowlist ========= */
@@ -241,8 +312,9 @@ async function ensureAllowedOrThrow(user) {
   if (!allowedRoles.includes(role)) throw new Error(`Invalid role in allowlist: "${role}"`);
 
   currentRole = role;
-  currentLab = (data.lab || "").toString().trim();
-  return { role, lab: currentLab };
+  currentLab = (data.lab || "").toString().trim().replace(/\s+/g, " ");
+  currentLabKey = normalizeLabKey(data.labKey || currentLab);
+  return { role, lab: canonicalizeLabName(currentLab), labKey: currentLabKey };
 }
 
 /* ========= Auth ========= */
@@ -335,18 +407,19 @@ async function refreshTickets() {
   renderComments(null);
 
   const tcol = collection(db, "tickets");
-  let snap;
+  let ticketDocs;
 
   if (currentRole === "admin" || currentRole === "pi") {
-    snap = await getDocs(query(tcol, orderBy("updatedAt", "desc"), limit(300)));
+    const snap = await getDocs(query(tcol, orderBy("updatedAt", "desc"), limit(300)));
+    ticketDocs = snap.docs;
   } else if (currentRole === "postdoc" || currentRole === "phd") {
-  // prendi tutti i ticket del lab, senza orderBy (eviti index), poi sort client-side
-    snap = await getDocs(query(tcol, where("lab", "==", currentLab), limit(300)));
+    ticketDocs = await loadScopedTicketDocs(tcol);
   } else {
-    snap = await getDocs(query(tcol, where("createdByUid", "==", currentUser.uid), limit(300)));
+    const snap = await getDocs(query(tcol, where("createdByUid", "==", currentUser.uid), limit(300)));
+    ticketDocs = snap.docs;
   }
 
-  ticketsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  ticketsCache = ticketDocs.map(d => ({ id: d.id, ...d.data() }));
 
   // client sort for PI (and safe fallback)
   ticketsCache.sort((a,b) => {
@@ -355,10 +428,64 @@ async function refreshTickets() {
     return tb - ta;
   });
 
-  const labs = Array.from(new Set(ticketsCache.map(t => (t.lab || "").trim()).filter(Boolean))).sort();
-  fLab.innerHTML = `<option value="">(all)</option>` + labs.map(l => `<option>${safeText(l)}</option>`).join("");
+  const previousLabFilter = fLab.value;
+  const labsByKey = new Map();
+  ticketsCache.forEach((ticket) => {
+    const label = canonicalizeLabName(ticket.lab || ticket.labKey);
+    const key = normalizeLabKey(ticket.labKey || label);
+    if (key && !labsByKey.has(key)) labsByKey.set(key, label);
+  });
+
+  const canonicalOrder = new Map(CANONICAL_LABS.map((lab, index) => [normalizeLabKey(lab), index]));
+  const labOptions = Array.from(labsByKey, ([key, label]) => ({ key, label })).sort((a, b) => {
+    const aOrder = canonicalOrder.get(a.key) ?? Number.MAX_SAFE_INTEGER;
+    const bOrder = canonicalOrder.get(b.key) ?? Number.MAX_SAFE_INTEGER;
+    return aOrder - bOrder || a.label.localeCompare(b.label, undefined, { sensitivity: "base" });
+  });
+
+  fLab.replaceChildren(
+    new Option("(all)", ""),
+    ...labOptions.map(({ key, label }) => new Option(label, key)),
+  );
+  if (labOptions.some(({ key }) => key === previousLabFilter)) fLab.value = previousLabFilter;
 
   applyFiltersAndRender();
+}
+
+async function loadScopedTicketDocs(tcol) {
+  const scopes = [];
+  const seenScopes = new Set();
+  const addScope = (field, operator, value) => {
+    if (!value || (Array.isArray(value) && value.length === 0)) return;
+    const scopeKey = `${field}:${operator}:${JSON.stringify(value)}`;
+    if (seenScopes.has(scopeKey)) return;
+    seenScopes.add(scopeKey);
+    scopes.push({ field, operator, value });
+  };
+
+  // Keep the exact legacy query for compatibility, then include canonical and keyed records.
+  const legacyAliases = legacyLabAliases(currentLab);
+  addScope("lab", "==", currentLab);
+  addScope("lab", "==", canonicalizeLabName(currentLab));
+  if (legacyAliases.length > 1) addScope("lab", "in", legacyAliases);
+  addScope("labKey", "==", currentLabKey);
+  addScope("createdByUid", "==", currentUser?.uid);
+
+  const results = await Promise.allSettled(
+    scopes.map(({ field, operator, value }) => getDocs(query(tcol, where(field, operator, value), limit(300)))),
+  );
+  const successful = results.filter((result) => result.status === "fulfilled");
+  if (successful.length === 0) throw results[0]?.reason || new Error("Unable to load lab tickets.");
+
+  results.forEach((result, index) => {
+    if (result.status === "rejected") {
+      console.warn(`Lab scope query unavailable (${scopes[index].field}).`, result.reason);
+    }
+  });
+
+  const documents = new Map();
+  successful.forEach(({ value }) => value.docs.forEach((ticketDoc) => documents.set(ticketDoc.id, ticketDoc)));
+  return Array.from(documents.values());
 }
 
 function applyFiltersAndRender() {
@@ -375,7 +502,7 @@ function applyFiltersAndRender() {
     list = list.filter(t => t.status === st);
   }
   if (pr) list = list.filter(t => t.priority === pr);
-  if (lb) list = list.filter(t => (t.lab || "") === lb);
+  if (lb) list = list.filter(t => normalizeLabKey(t.labKey || t.lab) === lb);
   if (cat) list = list.filter(t => t.category === cat);
 
   if (s) {
@@ -402,11 +529,11 @@ function renderTicketsTable(list) {
   for (const t of list) {
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td class="code">${safeText(t.id.slice(0,6))}</td>
+      <td><button type="button" class="ticket-open code" aria-label="Open ticket ${safeText(t.title || t.id)}">${safeText(t.id.slice(0,6))}</button></td>
       <td>${safeText(t.title || "-")}</td>
       <td class="code">${safeText(t.priority || "-")}</td>
       <td class="code">${safeText(t.status || "-")}</td>
-      <td>${safeText(t.lab || "-")}</td>
+      <td>${safeText(canonicalizeLabName(t.lab || t.labKey) || "-")}</td>
       <td>${safeText(t.category || "-")}</td>
       <td class="code">${safeText(t.procurementNeeded || "unknown")}</td>
       <td class="code">${safeText(t.expectedDeliveryDate || "-")}</td>
@@ -414,6 +541,10 @@ function renderTicketsTable(list) {
       <td class="code">${fmtDateTime(t.updatedAt)}</td>
     `;
     tr.onclick = () => selectTicket(t.id);
+    tr.querySelector(".ticket-open").onclick = (event) => {
+      event.stopPropagation();
+      selectTicket(t.id);
+    };
     ticketsTbody.appendChild(tr);
   }
 }
@@ -444,6 +575,12 @@ function renderDetails(t) {
 
   const tags = Array.isArray(t.tags) ? t.tags.join(", ") : "";
   const isAdmin = currentRole === "admin";
+  const commercialUrl = safeHttpUrl(t.commercialLink);
+  const commercialLinkHtml = !t.commercialLink
+    ? "-"
+    : commercialUrl
+      ? `<a href="${safeText(commercialUrl)}" target="_blank" rel="noreferrer">${safeText(t.commercialLink)}</a>`
+      : `${safeText(t.commercialLink)} <span class="muted">(invalid link)</span>`;
 
   ticketDetails.innerHTML = `
     <div class="row space">
@@ -453,7 +590,7 @@ function renderDetails(t) {
         <div class="muted small" style="margin-top:0.4rem;">
           Created by <span class="code">${safeText(t.createdByEmail || "-")}</span>
           • Category <span class="code">${safeText(t.category || "-")}</span>
-          • Lab <span class="code">${safeText(t.lab || "-")}</span>
+          • Lab <span class="code">${safeText(canonicalizeLabName(t.lab || t.labKey) || "-")}</span>
         </div>
       </div>
       <div class="row">
@@ -470,7 +607,7 @@ function renderDetails(t) {
       <div><div class="muted small">Hard deadline</div><div class="code">${t.hardDeadline?"yes":"no"}${t.hardDeadlineDate? " • "+safeText(t.hardDeadlineDate):""}</div></div>
       <div><div class="muted small">Commercially available</div><div class="code">${safeText(t.commerciallyAvailable || "unknown")}</div></div>
       <div><div class="muted small">Procurement needed</div><div class="code">${safeText(t.procurementNeeded || "unknown")}</div></div>
-      <div><div class="muted small">Commercial link</div><div class="code">${t.commercialLink ? `<a href="${safeText(t.commercialLink)}" target="_blank" rel="noreferrer">${safeText(t.commercialLink)}</a>` : "-"}</div></div>
+      <div><div class="muted small">Commercial link</div><div class="code">${commercialLinkHtml}</div></div>
       <div><div class="muted small">Deferred</div><div class="code">${safeText(t.canBeDeferred || "-")}${t.deferTo ? " • "+safeText(t.deferTo):""}</div></div>
       <div><div class="muted small">Why not deferred</div><div class="code">${safeText(t.whyNotDeferredCode || "-")}${t.whyNotDeferredText ? " • "+safeText(t.whyNotDeferredText):""}</div></div>
       <div><div class="muted small">Effort</div><div class="code">${safeText(t.effortGuess || "-")}</div></div>
@@ -595,6 +732,12 @@ function bindNewTicketDynamicLogic() {
   const tWhyNotText = $("tWhyNotText");
 
   function apply() {
+    const usesCustomLab = tLab.value === CUSTOM_LAB_VALUE;
+    tLabOtherField.classList.toggle("hidden", !usesCustomLab);
+    tLabOther.disabled = !usesCustomLab;
+    if (!usesCustomLab) tLabOther.value = "";
+    syncConditionalRequiredField(tLabOther, usesCustomLab);
+
     if (tHardDeadline.value === "yes") tHardDeadlineDate.disabled = false;
     else { tHardDeadlineDate.value = ""; tHardDeadlineDate.disabled = true; }
     syncConditionalRequiredField(tHardDeadlineDate, tHardDeadline.value === "yes");
@@ -620,7 +763,7 @@ function bindNewTicketDynamicLogic() {
     syncConditionalRequiredField(tWhyNotText, false);
   }
 
-  [tHardDeadline, tCommercially, tDeferred].forEach(el => el.addEventListener("change", apply));
+  [tLab, tHardDeadline, tCommercially, tDeferred].forEach(el => el.addEventListener("change", apply));
   apply();
   return apply;
 }
@@ -632,7 +775,12 @@ ticketForm.addEventListener("submit", async (e) => {
 
   if (!currentUser) return;
 
-  const lab = ($("tLab").value || "").trim();
+  const selectedLab = resolvedLabSelection();
+  const labKey = selectedLab.labKey;
+  const usesAssignedLab = ["postdoc", "phd"].includes(currentRole)
+    && currentLab
+    && currentLabKey === labKey;
+  const lab = usesAssignedLab ? currentLab : selectedLab.lab;
   const category = $("tCategory").value;
   const priority = $("tPriority").value;
   const expectedDeliveryDate = $("tExpected").value;
@@ -663,6 +811,7 @@ ticketForm.addEventListener("submit", async (e) => {
     description,
     definitionOfDone,
     lab,
+    labKey,
     category,
     priority,
     expectedDeliveryDate,
@@ -680,7 +829,7 @@ ticketForm.addEventListener("submit", async (e) => {
     tags
   });
 
-  if (!lab || !title || !description || !definitionOfDone || !expectedDeliveryDate) { setMsg(formMsg, "Fill required fields.", "err"); return; }
+  if (!lab || !labKey || !title || !description || !definitionOfDone || !expectedDeliveryDate) { setMsg(formMsg, "Fill required fields.", "err"); return; }
   if (hardDeadline && !hardDeadlineDate) { setMsg(formMsg, "Hard deadline date required.", "err"); return; }
   if (commerciallyAvailable === "yes" && !commercialLink) { setMsg(formMsg, "Commercial link required.", "err"); return; }
   if (canBeDeferred === "yes" && !deferTo) { setMsg(formMsg, "If deferred=yes specify who.", "err"); return; }
@@ -692,6 +841,7 @@ ticketForm.addEventListener("submit", async (e) => {
       description,
       definitionOfDone,
       lab,
+      labKey,
       category,
       priority,
       status: "NEW",

@@ -131,6 +131,16 @@ def merge_snapshots(source_dir: Path, target_dir: Path) -> None:
     write_json(target_dir / "ticket_snapshots.json", merged)
 
 
+def merge_notified_ticket_ids(source_dir: Path, target_dir: Path) -> None:
+    filename = "notified_ticket_ids.json"
+    source = read_json(source_dir / filename, {})
+    target = read_json(target_dir / filename, {})
+    source_ids = source.get("ticket_ids", []) if isinstance(source, dict) else []
+    target_ids = target.get("ticket_ids", []) if isinstance(target, dict) else []
+    merged = sorted({str(value).strip() for value in [*source_ids, *target_ids] if str(value).strip()})
+    write_json(target_dir / filename, {"ticket_ids": merged})
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-dir", default="state")
@@ -147,6 +157,9 @@ def main() -> int:
 
     if (source_dir / "ticket_snapshots.json").exists() or (target_dir / "ticket_snapshots.json").exists():
         merge_snapshots(source_dir, target_dir)
+
+    if (source_dir / "notified_ticket_ids.json").exists() or (target_dir / "notified_ticket_ids.json").exists():
+        merge_notified_ticket_ids(source_dir, target_dir)
 
     return 0
 
