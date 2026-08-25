@@ -193,6 +193,61 @@
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": ""
   },
+  "8FaYnAOACOzpiTAcCsxN": {
+    "assigneeEmail": "",
+    "canBeDeferred": "no",
+    "category": "mechanics",
+    "commercialLink": "",
+    "commerciallyAvailable": "no",
+    "createdAt": "2026-08-25T10:30:17.708000+00:00",
+    "createdByEmail": "annika.michalek@iit.it",
+    "createdByUid": "YAr96nF7a0cpu0KPZZs5umz6bLq2",
+    "deferTo": "",
+    "definitionOfDone": "-holder fits into the MRI",
+    "description": "The MRI front table+slider is getting in the way of the front holder of the WFI insert. Design of the aluminium piece needs to be adjusted/updated. Possibly first as a plastic prototype, then as the stable aluminium piece. Existing piece can potentially adjusted?",
+    "effortGuess": "M",
+    "estimatedCostEUR": null,
+    "expectedDeliveryDate": "2026-10-05",
+    "hardDeadline": false,
+    "hardDeadlineDate": "",
+    "lab": "Gozzi",
+    "priority": "P1",
+    "procurementNeeded": "unknown",
+    "requesterSubmission": {
+      "canBeDeferred": "no",
+      "category": "mechanics",
+      "commercialLink": "",
+      "commerciallyAvailable": "no",
+      "deferTo": "",
+      "definitionOfDone": "-holder fits into the MRI",
+      "description": "The MRI front table+slider is getting in the way of the front holder of the WFI insert. Design of the aluminium piece needs to be adjusted/updated. Possibly first as a plastic prototype, then as the stable aluminium piece. Existing piece can potentially adjusted?",
+      "effortGuess": "M",
+      "estimatedCostEUR": null,
+      "expectedDeliveryDate": "2026-10-05",
+      "hardDeadline": false,
+      "hardDeadlineDate": "",
+      "lab": "Gozzi",
+      "priority": "P1",
+      "procurementNeeded": "unknown",
+      "tags": [
+        "WFI holder adjustment",
+        "WFI/MRI"
+      ],
+      "title": "Fix mechanical front holder of the WFI/MRI system",
+      "whyNotDeferredCode": "skills",
+      "whyNotDeferredText": "expertise in mechanical adjustment/alteration of thick aluminium piece"
+    },
+    "requesterSubmittedAt": "2026-08-25T10:30:17.708000+00:00",
+    "status": "NEW",
+    "tags": [
+      "WFI holder adjustment",
+      "WFI/MRI"
+    ],
+    "title": "Fix mechanical front holder of the WFI/MRI system",
+    "updatedAt": "2026-08-25T10:30:17.708000+00:00",
+    "whyNotDeferredCode": "skills",
+    "whyNotDeferredText": "expertise in mechanical adjustment/alteration of thick aluminium piece"
+  },
   "90ATtOV4zQpED5FNPiOR": {
     "adminEtaDate": "2026-03-17",
     "adminNotes": "",
@@ -1017,7 +1072,7 @@
     "hardDeadlineDate": "",
     "impact": "not_blocking",
     "lab": "Rossi",
-    "priority": "P2",
+    "priority": "P3",
     "procurementNeeded": "yes",
     "requesterSubmission": {
       "canBeDeferred": "no",
@@ -1049,7 +1104,7 @@
       "teensy"
     ],
     "title": "New screen VR with reward and lickometer",
-    "updatedAt": "2026-05-12T10:39:59.149000+00:00",
+    "updatedAt": "2026-08-25T10:47:19.488000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "Requires knowledge of electronics, and implementation of designs already done by Fabio already"
   },
