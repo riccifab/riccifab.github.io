@@ -55,6 +55,7 @@
     "whyNotDeferredText": "Skill missing"
   },
   "4uxJ0nsC0gEkhnCsRLvx": {
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "no",
     "category": "mechanics",
@@ -66,6 +67,7 @@
     "deferTo": "",
     "definitionOfDone": "- works when the cabinet is mounted and functioning \n- work is done and tested when we run a trial for a behavioural test with mice in vivo",
     "description": "Need for a behavioral cabinet as the one we discussed",
+    "effortAdmin": "M",
     "effortGuess": "M",
     "estimatedCostEUR": 1450,
     "expectedDeliveryDate": "2026-10-05",
@@ -74,7 +76,7 @@
     "lab": "Gozzi",
     "labKey": "gozzi",
     "priority": "P2",
-    "procurementNeeded": "unknown",
+    "procurementNeeded": "yes",
     "requesterSubmission": {
       "canBeDeferred": "no",
       "category": "mechanics",
@@ -98,10 +100,10 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-08-25T18:46:08.435000+00:00",
-    "status": "NEW",
+    "status": "WAITING_ON_PROCUREMENT",
     "tags": [],
     "title": "designing and assembling a rig",
-    "updatedAt": "2026-08-25T18:46:08.435000+00:00",
+    "updatedAt": "2026-08-26T08:41:56.703000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": ""
   },
