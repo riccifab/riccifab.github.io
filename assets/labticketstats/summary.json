@@ -1,26 +1,26 @@
 {
-  "approx_resolution_days_average": 25.2,
-  "approx_resolution_days_median": 11.3,
+  "approx_resolution_days_average": 28.3,
+  "approx_resolution_days_median": 11.7,
   "average_comment_count": 0.5,
-  "done_tickets": 19,
-  "effort_changes": 9,
-  "eta_changes": 7,
-  "generated_at": "2026-08-25T06:22:49.749162+00:00",
+  "done_tickets": 20,
+  "effort_changes": 10,
+  "eta_changes": 8,
+  "generated_at": "2026-08-26T06:24:44.384044+00:00",
   "median_comment_count": 0.0,
-  "open_tickets": 4,
-  "overdue_open_tickets": 2,
-  "priority_changes": 0,
-  "tickets_total": 23,
+  "open_tickets": 6,
+  "overdue_open_tickets": 1,
+  "priority_changes": 1,
+  "tickets_total": 26,
   "tickets_with_comments": 7,
-  "tickets_with_requester_snapshot": 20,
+  "tickets_with_requester_snapshot": 23,
   "top_categories": [
     [
       "mechanics",
-      10
+      12
     ],
     [
       "electronics",
-      9
+      10
     ],
     [
       "software",
@@ -38,7 +38,7 @@
   "top_labs": [
     [
       "Gozzi",
-      15
+      17
     ],
     [
       "Rossi",
@@ -46,6 +46,10 @@
     ],
     [
       "Lombardo",
+      1
+    ],
+    [
+      "Iurilli",
       1
     ]
   ]
