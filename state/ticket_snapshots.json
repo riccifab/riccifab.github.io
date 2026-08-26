@@ -262,12 +262,12 @@
     "effortAdmin": "M",
     "effortGuess": "M",
     "estimatedCostEUR": null,
-    "expectedDeliveryDate": "2026-10-05",
+    "expectedDeliveryDate": "2026-09-21",
     "hardDeadline": false,
     "hardDeadlineDate": "",
     "lab": "Gozzi",
     "priority": "P1",
-    "procurementNeeded": "unknown",
+    "procurementNeeded": "yes",
     "requesterSubmission": {
       "canBeDeferred": "no",
       "category": "mechanics",
@@ -293,13 +293,13 @@
       "whyNotDeferredText": "expertise in mechanical adjustment/alteration of thick aluminium piece"
     },
     "requesterSubmittedAt": "2026-08-25T10:30:17.708000+00:00",
-    "status": "IN_PROGRESS",
+    "status": "WAITING_ON_PROCUREMENT",
     "tags": [
       "WFI holder adjustment",
       "WFI/MRI"
     ],
     "title": "Fix mechanical front holder of the WFI/MRI system",
-    "updatedAt": "2026-08-25T14:10:47.267000+00:00",
+    "updatedAt": "2026-08-26T12:52:17.608000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "expertise in mechanical adjustment/alteration of thick aluminium piece"
   },
