@@ -734,14 +734,14 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-08-25T09:57:58.915000+00:00",
-    "status": "NEW",
+    "status": "CLOSED",
     "tags": [
       "ttl",
       "LED",
       "circuit"
     ],
     "title": "Modifying a circuit to add a trigger from BPOD",
-    "updatedAt": "2026-08-25T14:09:58.412000+00:00",
+    "updatedAt": "2026-08-28T09:57:01.554000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": ""
   },
