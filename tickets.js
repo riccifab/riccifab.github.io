@@ -96,7 +96,7 @@ const tLab = $("tLab");
 
 /* ========= State ========= */
 let currentUser = null;
-let currentRole = null; // "admin" | "pi"
+let currentRole = null; // "admin" | "pi" | "technician" | "postdoc" | "phd"
 let currentLab = null;
 let currentLabKey = null;
 
@@ -296,8 +296,9 @@ async function ensureAllowedOrThrow(user) {
   if (!snap.exists()) throw new Error(`Email not in allowlist: ${email}`);
 
   const data = snap.data();
-  const role = (data.role || "phd").toString().trim().toLowerCase();
-  const allowedRoles = ["admin","pi","postdoc","phd"];
+  const rawRole = (data.role || "phd").toString().trim().toLowerCase();
+  const role = rawRole === "technicians" ? "technician" : rawRole;
+  const allowedRoles = ["admin","pi","technician","postdoc","phd"];
   if (!allowedRoles.includes(role)) throw new Error(`Invalid role in allowlist: "${role}"`);
 
   currentRole = role;
@@ -398,7 +399,7 @@ async function refreshTickets() {
   const tcol = collection(db, "tickets");
   let ticketDocs;
 
-  if (currentRole === "admin" || currentRole === "pi") {
+  if (["admin", "pi", "technician"].includes(currentRole)) {
     const snap = await getDocs(query(tcol, orderBy("updatedAt", "desc"), limit(300)));
     ticketDocs = snap.docs;
   } else if (currentRole === "postdoc" || currentRole === "phd") {
@@ -563,7 +564,7 @@ function renderDetails(t) {
   }
 
   const tags = Array.isArray(t.tags) ? t.tags.join(", ") : "";
-  const isAdmin = currentRole === "admin";
+  const canManageTickets = ["admin", "technician"].includes(currentRole);
   const commercialUrl = safeHttpUrl(t.commercialLink);
   const commercialLinkHtml = !t.commercialLink
     ? "-"
@@ -609,14 +610,14 @@ function renderDetails(t) {
     <div style="margin-top:0.9rem;"><div class="muted small">DoD</div><div style="white-space:pre-wrap; margin-top:0.35rem;">${safeText(t.definitionOfDone || "")}</div></div>
 
     ${requesterSnapshotHtml(t)}
-    ${isAdmin ? adminControlsHtml(t) : ""}
+    ${canManageTickets ? ticketControlsHtml(t) : ""}
   `;
 
-  if (isAdmin) wireAdminControls(t);
+  if (canManageTickets) wireTicketControls(t);
   bindAutoDatePickers(ticketDetails);
 }
 
-function adminControlsHtml(t) {
+function ticketControlsHtml(t) {
   const statusOptions = optionList(STATUS, t.status, { allowCustom: true });
   const prioOptions = optionList(PRIORITY, t.priority, { allowCustom: true });
   const categoryOptions = optionList(CATEGORIES, t.category, { allowCustom: true });
@@ -625,7 +626,7 @@ function adminControlsHtml(t) {
   return `
     <hr class="sep"/>
     <div class="row space">
-      <div class="muted small">Admin controls</div>
+      <div class="muted small">Ticket controls</div>
       <div id="adminSaveMsg" class="msg" style="margin:0;"></div>
     </div>
 
@@ -640,7 +641,7 @@ function adminControlsHtml(t) {
       <label>Assignee email<input id="aAssigneeEmail" type="text" value="${safeText(t.assigneeEmail || "")}" /></label>
       <label>Procurement needed<select id="aProcurement">${procurementOptions}</select></label>
       <label>Commercial link<input id="aCommercialLink" type="url" placeholder="https://..." value="${safeText(t.commercialLink || "")}" /></label>
-      <label>Effort (admin)
+      <label>Effort (technical)
         <select id="aEffort">
           <option value="" ${!t.effortAdmin?"selected":""}>(none)</option>
           <option value="S" ${t.effortAdmin==="S"?"selected":""}>S</option>
@@ -662,7 +663,7 @@ function adminControlsHtml(t) {
   `;
 }
 
-function wireAdminControls(t) {
+function wireTicketControls(t) {
   const adminSaveMsg = $("adminSaveMsg");
   const aStatus = $("aStatus");
   const aPriority = $("aPriority");

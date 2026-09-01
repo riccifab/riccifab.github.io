@@ -8,6 +8,9 @@ on:
       - "tickets.css"
       - "tickets.js"
       - "lab-config.mjs"
+      - "firestore.rules"
+      - "firebase.json"
+      - ".firebaserc"
       - "functions/index.js"
       - "scripts/*.py"
       - ".github/workflows/ticket_notify_pi.yml"
@@ -19,6 +22,9 @@ on:
       - "tickets.css"
       - "tickets.js"
       - "lab-config.mjs"
+      - "firestore.rules"
+      - "firebase.json"
+      - ".firebaserc"
       - "functions/index.js"
       - "scripts/*.py"
       - ".github/workflows/ticket_notify_pi.yml"
@@ -52,11 +58,17 @@ jobs:
         run: |
           python scripts/test_lab_names.py
           python scripts/test_bot_state.py
+          python scripts/test_firestore_rules.py
           python -m py_compile \
             scripts/lab_names.py \
+            scripts/test_firestore_rules.py \
             scripts/merge_bot_state.py \
             scripts/ticket_notify_pi.py \
             scripts/ticket_update.py \
             scripts/ticket_digest.py \
             scripts/sync_work_status.py \
             scripts/analyze_tickets.py
+
+      - name: Check Firebase configuration
+        run: |
+          python -c "import json; [json.load(open(path, encoding='utf-8')) for path in ('firebase.json', '.firebaserc')]"

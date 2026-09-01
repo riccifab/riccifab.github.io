@@ -1,0 +1,131 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function email() {
+      return request.auth.token.email;
+    }
+
+    function myAllowlistDoc() {
+      return get(/databases/$(database)/documents/allowlist/$(email()));
+    }
+
+    function isAllowed() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/allowlist/$(email()));
+    }
+
+    function role() {
+      return myAllowlistDoc().data.role;
+    }
+
+    function isAdmin() {
+      return isAllowed() && role() == "admin";
+    }
+
+    function isPI() {
+      return isAllowed() && role() == "pi";
+    }
+
+    function isTechnician() {
+      return isAllowed()
+        && (role() == "technician" || role() == "technicians");
+    }
+
+    function isPostdoc() {
+      return isAllowed() && role() == "postdoc";
+    }
+
+    function isPhD() {
+      return isAllowed() && role() == "phd";
+    }
+
+    function isLabMember() {
+      return isPostdoc() || isPhD();
+    }
+
+    function userLab() {
+      return myAllowlistDoc().data.lab;
+    }
+
+    function createsOwnLabOrOther() {
+      return request.resource.data.lab == userLab()
+        || (
+          request.resource.data.lab == "Other"
+          && request.resource.data.labKey == "other"
+        );
+    }
+
+    match /allowlist/{docId} {
+      allow read: if signedIn() && (docId == email() || isAdmin());
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /users/{uid} {
+      allow read, write: if isAdmin();
+    }
+
+    match /tickets/{ticketId} {
+      function isTicketCreator() {
+        return signedIn() && resource.data.createdByUid == request.auth.uid;
+      }
+
+      function technicianUpdateFieldsOnly() {
+        return request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          "requesterSubmission",
+          "status",
+          "priority",
+          "category",
+          "assigneeEmail",
+          "procurementNeeded",
+          "commercialLink",
+          "effortAdmin",
+          "adminNotes",
+          "expectedDeliveryDate",
+          "updatedAt"
+        ]);
+      }
+
+      allow create: if isAllowed() && (
+        isAdmin()
+        || isPI()
+        || isTechnician()
+        || (isLabMember() && createsOwnLabOrOther())
+      );
+
+      allow read: if isAdmin()
+        || isPI()
+        || isTechnician()
+        || (isLabMember() && (
+          resource.data.lab == userLab() || isTicketCreator()
+        ));
+
+      allow update: if isAdmin()
+        || (isTechnician() && technicianUpdateFieldsOnly());
+      allow delete: if isAdmin();
+
+      match /comments/{commentId} {
+        function parentTicket() {
+          return get(/databases/$(database)/documents/tickets/$(ticketId));
+        }
+
+        function canReadParentTicket() {
+          return isAdmin()
+            || isPI()
+            || isTechnician()
+            || (isLabMember() && (
+              parentTicket().data.lab == userLab()
+              || parentTicket().data.createdByUid == request.auth.uid
+            ));
+        }
+
+        allow read, create: if canReadParentTicket();
+        allow update, delete: if isAdmin();
+      }
+    }
+  }
+}

@@ -23,6 +23,7 @@ A lightweight, GitHub Pages-hosted ticketing website used to track lab/tech requ
 ## Features
 
 - Create and manage tickets (status, due date, notes, etc.)
+- Role-based access for admins, PIs, technicians, postdocs, and PhD users
 - Automated notifications:
   - **New ticket -> PI notification** (based on lab key)
   - **Ticket updated -> requester notification** (diff-style "what changed")
@@ -46,6 +47,25 @@ as the recipient for custom labs; `LAB_PI_FALLBACK` is the optional final
 fallback and defaults to the maintainer notification address.
 
 The Firebase scheduled function in `functions/index.js` also expects `BREVO_API_KEY` in its deployed environment.
+
+---
+
+## Firestore access rules
+
+Firestore rules are versioned in `firestore.rules`. Supported allowlist roles are
+`admin`, `pi`, `technician`, `postdoc`, and `phd`; the legacy plural value
+`technicians` is accepted and normalized by the frontend.
+
+Technicians can read all tickets, create tickets for any lab, update the fields
+exposed by the ticket controls, and add comments. They cannot manage the
+allowlist/users or delete tickets/comments. Postdocs and PhD users can create
+`Other` tickets and retain access to tickets they created.
+
+Deploy only the Firestore rules with:
+
+```bash
+firebase deploy --only firestore:rules --project workstatus-5a293
+```
 
 ---
 
