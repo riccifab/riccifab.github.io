@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#070910" />
   <title>Lab Ticket Stats</title>
   <link rel="icon" href="assets/favicon.ico" sizes="any">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #07111f;
@@ -312,14 +313,273 @@
       }
     }
   </style>
+  <style>
+    /* Shared high-contrast site theme */
+    :root {
+      --bg: #070910;
+      --bg-soft: #0e0e10;
+      --panel: #111620;
+      --panel-alt: #111620;
+      --line: rgba(245, 245, 246, 0.22);
+      --ink: #f5f5f6;
+      --muted: #c7cad2;
+      --dark-ink: #070910;
+      --accent: #9ec1f5;
+      --accent-soft: rgba(158, 193, 245, 0.16);
+      --success: #8ce0b3;
+      --shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+    }
+    html {
+      min-height: 100%;
+      background: var(--bg);
+      color-scheme: dark;
+      overscroll-behavior-y: none;
+    }
+    body {
+      min-height: 100vh;
+      min-height: 100svh;
+      overflow-x: hidden;
+      color: var(--ink);
+      font-family: "Source Sans Pro", Tahoma, Verdana, Segoe, sans-serif;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(70, 111, 176, 0.16), transparent 28rem),
+        radial-gradient(circle at 88% 8%, rgba(80, 160, 122, 0.10), transparent 26rem),
+        var(--bg);
+      overscroll-behavior-y: none;
+    }
+    .page {
+      max-width: 1120px;
+      padding: 24px 20px 48px;
+    }
+    h1, h2, h3 {
+      font-family: Roboto, Arial, Helvetica, sans-serif;
+      letter-spacing: -0.02em;
+    }
+    .hero {
+      gap: 16px;
+      margin-bottom: 16px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(14, 14, 16, 0.94);
+      box-shadow: var(--shadow);
+    }
+    .eyebrow {
+      min-height: 32px;
+      padding: 6px 11px;
+      border: 1px solid rgba(245, 245, 246, 0.22);
+      background: #111620;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      background: var(--success);
+      box-shadow: none;
+    }
+    .hero h1 {
+      max-width: none;
+      font-size: clamp(2.15rem, 5vw, 3.2rem);
+      line-height: 1.02;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.58;
+    }
+    .hero-links {
+      gap: 9px;
+    }
+    .hero-link {
+      min-height: 44px;
+      padding: 10px 15px;
+      border: 1px solid rgba(245, 245, 246, 0.28);
+      background: #111620;
+      color: var(--ink);
+      font-weight: 600;
+      transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease;
+    }
+    .hero-link:hover {
+      transform: none;
+      border-color: rgba(245, 245, 246, 0.58);
+      background: #18202d;
+    }
+    .hero-link.primary,
+    .hero-link.primary:hover {
+      border-color: #f5f5f6;
+      background: #f5f5f6;
+      color: var(--dark-ink);
+    }
+    .hero-link:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+    .meta {
+      gap: 8px;
+    }
+    .meta span {
+      padding: 7px 10px;
+      border: 1px solid rgba(245, 245, 246, 0.18);
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+    .hero .kpis {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 2px 0 0;
+    }
+    .kpi {
+      min-width: 0;
+      padding: 15px 16px;
+      border: 1px solid rgba(245, 245, 246, 0.20);
+      border-radius: 14px;
+      background: var(--panel);
+      box-shadow: none;
+    }
+    .kpi::before,
+    .insight::before {
+      display: none;
+    }
+    .kpi::after,
+    .insight::after {
+      height: 3px;
+      background: linear-gradient(90deg, var(--tone, var(--accent)), transparent 86%);
+      opacity: 0.72;
+    }
+    .kpi-label {
+      min-height: 2.4em;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .kpi-value {
+      font-family: Roboto, Arial, Helvetica, sans-serif;
+      font-size: clamp(1.65rem, 4vw, 2rem);
+      color: var(--ink);
+    }
+    .insights {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .insight,
+    .plot-card,
+    .list-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(17, 22, 32, 0.94);
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.22);
+      backdrop-filter: none;
+    }
+    .insight {
+      padding: 17px 18px 19px;
+    }
+    .insight h3 {
+      color: var(--ink);
+      font-size: 1.02rem;
+    }
+    .insight p {
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .plot-grid {
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .plot-card {
+      border-radius: 16px;
+    }
+    .plot-meta {
+      padding: 17px 17px 12px;
+    }
+    .plot-meta h3 {
+      font-size: 1.05rem;
+    }
+    .plot-meta p {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .plot-card img {
+      width: calc(100% - 24px);
+      margin: 0 12px 12px;
+      border: 1px solid rgba(245, 245, 246, 0.22);
+      border-radius: 10px;
+      background: #f8fafc;
+    }
+    .lists {
+      gap: 14px;
+    }
+    .list-card {
+      padding: 18px;
+    }
+    .list-card li,
+    .muted {
+      color: var(--muted);
+    }
+    .list-card strong {
+      color: var(--ink);
+    }
+    @media (max-width: 820px) {
+      .plot-card,
+      .plot-card.half,
+      .plot-card.wide {
+        grid-column: 1 / -1;
+      }
+    }
+    @media (max-width: 640px) {
+      .page {
+        padding: 14px 12px 32px;
+      }
+      .hero {
+        padding: 18px;
+        border-radius: 16px;
+      }
+      .hero h1 {
+        font-size: clamp(2rem, 11vw, 2.65rem);
+      }
+      .hero-links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .hero-link {
+        width: 100%;
+        text-align: center;
+      }
+      .hero-link.primary {
+        grid-column: 1 / -1;
+      }
+      .hero .kpis {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .insights,
+      .lists {
+        grid-template-columns: 1fr;
+      }
+      .insight,
+      .plot-card,
+      .list-card {
+        border-radius: 14px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-link {
+        transition: none;
+      }
+    }
+  </style>
 </head>
 <body>
   <main class="page">
     <section class="hero">
-      <div class="eyebrow">Live page snapshot</div>
+      <div class="eyebrow">Technical request analytics</div>
       <h1>Lab Ticket Stats</h1>
-      <p>This page gives a quick view of which labs are sending the most tickets, which categories are filling up, how large requests are, and where work is getting delayed or discussed the most.</p>
-      <div class="hero-links"><a class="hero-link primary" href="index.html">Back to home</a><a class="hero-link" href="tickets.html">Ticketing portal</a><a class="hero-link" href="work_status.html">Work status</a></div>
+      <p>Operational overview of request volume, workload mix, delivery risk, and discussion activity across the laboratories.</p>
+      <nav aria-label="Site navigation" class="hero-links"><a class="hero-link primary" href="index.html">Back to home</a><a class="hero-link" href="tickets.html">Ticketing portal</a><a class="hero-link" href="work_status.html">Work status</a></nav>
       <div class="meta"><span>Updated: 01/09/2026, 12:37</span></div>
       <section class="kpis"><div class="kpi tone-emerald"><div class="kpi-label">Total tickets</div><div class="kpi-value">26</div></div><div class="kpi tone-sky"><div class="kpi-label">Open tickets</div><div class="kpi-value">5</div></div><div class="kpi tone-violet"><div class="kpi-label">Done / closed</div><div class="kpi-value">21</div></div><div class="kpi tone-rose"><div class="kpi-label">Overdue open</div><div class="kpi-value">1</div></div><div class="kpi tone-amber"><div class="kpi-label">Avg comments</div><div class="kpi-value">0.5</div></div><div class="kpi tone-cyan"><div class="kpi-label">Median closure days</div><div class="kpi-value">11.3</div></div></section>
     </section>

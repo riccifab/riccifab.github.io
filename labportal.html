@@ -13,6 +13,7 @@
 	<meta content="Ticketing portal and lab tools: submit technical requests, track delivery dates, and check work status." name="description" />
 	<meta charset="utf-8" />
 	<meta content="width=device-width" name="viewport" />
+	<meta content="#0e0e10" name="theme-color" />
 	<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;800;900" rel="stylesheet" type="text/css" />
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@200;300;400;500;700;900" rel="stylesheet" type="text/css" />
 	<style>
@@ -34,10 +35,26 @@
 			background-color: #0e0e10
 		}
 
+		html {
+			background-color: #0e0e10;
+			color-scheme: dark;
+			min-height: 100%;
+			overscroll-behavior-y: none
+		}
+
 		body {
 			background-color: #0e0e10;
 			color: #dddddf;
-			font-family: Source Sans Pro, Tahoma, Verdana, Segoe, sans-serif
+			font-family: Source Sans Pro, Tahoma, Verdana, Segoe, sans-serif;
+			min-height: 100%;
+			overflow-x: hidden;
+			overscroll-behavior-y: none
+		}
+
+		.bee-page-container {
+			background-color: #0e0e10;
+			min-height: 100vh;
+			min-height: 100dvh
 		}
 
 		a {
@@ -930,6 +947,213 @@
 				text-align: center !important
 			}
 		}
+
+		/* Compact, accessible site navigation */
+		.site-menu-toggle,
+		.bee-row-1 .bee-col-2 .bee-block-1 .bee-menu ul.bee-horizontal li.mobile-menu-only {
+			display: none
+		}
+
+		.bee-row-1 .bee-row-content {
+			display: grid;
+			grid-template-columns: minmax(145px, 1fr) auto minmax(145px, 1fr);
+			align-items: center;
+			gap: 12px
+		}
+
+		.bee-row-1 .bee-col-1 {
+			grid-column: 1
+		}
+
+		.bee-row-1 .bee-col-2 {
+			grid-column: 2
+		}
+
+		.bee-row-1 .bee-col-3 {
+			grid-column: 3;
+			justify-self: end
+		}
+
+		@media (max-width:1160px) {
+			.bee-row-1 {
+				position: relative;
+				z-index: 100;
+				border-bottom: 1px solid rgba(221, 221, 223, 0.16);
+				background: rgba(14, 14, 16, 0.98)
+			}
+
+			.bee-row-1 .bee-row-content {
+				display: grid !important;
+				grid-template-columns: minmax(0, 1fr) auto;
+				align-items: center;
+				gap: 12px;
+				overflow: visible;
+				padding: 10px 15px !important
+			}
+
+			.bee-row-1 .bee-col-1 {
+				grid-column: 1;
+				grid-row: 1;
+				min-width: 0;
+				padding: 0 !important
+			}
+
+			.bee-row-1 .bee-col-1 .bee-block-1 {
+				overflow: visible
+			}
+
+			.bee-row-1 .bee-col-1 img {
+				display: block;
+				max-width: 118px !important
+			}
+
+			.bee-row-1 .bee-col-2 {
+				position: relative;
+				z-index: 102;
+				grid-column: 2;
+				grid-row: 1;
+				padding: 0 !important
+			}
+
+			.bee-row-1 .bee-col-2 .bee-block-1 {
+				padding: 0
+			}
+
+			.bee-row-1 .bee-col-3 {
+				display: none !important
+			}
+
+			.site-menu-toggle {
+				position: relative;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				width: 44px;
+				height: 44px;
+				margin-left: auto;
+				padding: 0;
+				border: 1px solid rgba(221, 221, 223, 0.28);
+				border-radius: 999px;
+				background: #111620;
+				color: #f5f5f6;
+				cursor: pointer
+			}
+
+			.site-menu-toggle:hover,
+			.site-menu-toggle:focus-visible {
+				border-color: rgba(221, 221, 223, 0.62);
+				background: #18202d;
+				outline: none
+			}
+
+			.site-menu-icon {
+				position: relative;
+				display: block;
+				width: 18px;
+				height: 2px;
+				border-radius: 999px;
+				background: currentColor;
+				transition: transform 160ms ease, opacity 160ms ease
+			}
+
+			.site-menu-icon::before,
+			.site-menu-icon::after {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 18px;
+				height: 2px;
+				border-radius: 999px;
+				background: currentColor;
+				content: "";
+				transition: transform 160ms ease, opacity 160ms ease
+			}
+
+			.site-menu-icon::before {
+				transform: translateY(-6px)
+			}
+
+			.site-menu-icon::after {
+				transform: translateY(6px)
+			}
+
+			.site-menu-toggle[aria-expanded="true"] .site-menu-icon {
+				background: transparent
+			}
+
+			.site-menu-toggle[aria-expanded="true"] .site-menu-icon::before {
+				transform: rotate(45deg)
+			}
+
+			.site-menu-toggle[aria-expanded="true"] .site-menu-icon::after {
+				transform: rotate(-45deg)
+			}
+
+			.bee-row-1 .bee-col-2 .bee-block-1 .bee-menu ul.bee-horizontal {
+				position: absolute;
+				top: calc(100% + 10px);
+				right: 0;
+				z-index: 110;
+				display: none !important;
+				width: min(320px, calc(100vw - 30px));
+				margin: 0;
+				padding: 8px;
+				border: 1px solid rgba(221, 221, 223, 0.24);
+				border-radius: 16px;
+				background: #111620;
+				box-shadow: 0 20px 48px rgba(0, 0, 0, 0.48)
+			}
+
+			.bee-row-1 .bee-col-2 .bee-block-1 .bee-menu ul.bee-horizontal.is-open {
+				display: block !important
+			}
+
+			.bee-row-1 .bee-col-2 .bee-block-1 .bee-menu ul.bee-horizontal li,
+			.mobile-menu-only {
+				display: block !important;
+				width: 100%;
+				padding: 0;
+				text-align: left
+			}
+
+			.bee-row-1 .bee-col-2 .bee-block-1 .bee-menu ul.bee-horizontal li a {
+				display: flex;
+				align-items: center;
+				min-height: 44px;
+				width: 100%;
+				padding: 10px 12px;
+				border: 0;
+				border-radius: 10px;
+				background: transparent;
+				color: #f5f5f6;
+				font-size: 13px;
+				letter-spacing: 1px;
+				line-height: 1.2;
+				text-align: left
+			}
+
+			.bee-row-1 .bee-col-2 .bee-block-1 .bee-menu ul.bee-horizontal li a:hover,
+			.bee-row-1 .bee-col-2 .bee-block-1 .bee-menu ul.bee-horizontal li a:focus-visible {
+				background: rgba(221, 221, 223, 0.10);
+				color: #ffffff;
+				outline: none
+			}
+
+			.bee-row-1 .bee-col-2 .bee-block-1 .bee-menu ul.bee-horizontal .mobile-menu-only a {
+				margin-top: 4px;
+				border-top: 1px solid rgba(221, 221, 223, 0.16);
+				border-radius: 0 0 10px 10px;
+				color: #b9d2f6
+			}
+		}
+
+		@media (prefers-reduced-motion:reduce) {
+			.site-menu-icon,
+			.site-menu-icon::before,
+			.site-menu-icon::after {
+				transition: none
+			}
+		}
 	</style>
 </head>
 
@@ -947,17 +1171,17 @@
 
 			<div class="bee-col bee-col-2 bee-col-w6">
 			<div class="bee-block bee-block-1 bee-menu">
-				<nav class="bee-menu">
-				<input class="bee-hamburger-trigger" id="bee-hamburger-menu-r0c1m0" type="checkbox" />
-				<label class="bee-hamburger-controls" for="bee-hamburger-menu-r0c1m0">
-					<span class="bee-hamburger-open"></span><span class="bee-hamburger-close"></span>
-				</label>
-				<ul class="bee-horizontal with-bee-hamburger">
+				<nav aria-label="Primary navigation" class="bee-menu">
+				<button aria-controls="site-primary-navigation" aria-expanded="false" aria-label="Open navigation menu" class="site-menu-toggle" type="button">
+					<span aria-hidden="true" class="site-menu-icon"></span>
+				</button>
+				<ul class="bee-horizontal with-bee-hamburger" id="site-primary-navigation">
 					<li><a href="index.html" target="_self" title="Home">Home</a></li>
 					<li><a href="tickets.html" target="_self" title="Ticketing portal">Ticketing portal</a></li>
 					<li><a href="labticketstats.html" target="_self" title="Lab ticket stats">Lab ticket stats</a></li>
 					<li><a href="work_status.html" target="_self" title="Work status">Work status</a></li>
 					<li><a href="https://github.com/riccifab" target="_blank" rel="noreferrer" title="GitHub">GitHub</a></li>
+					<li class="mobile-menu-only"><a href="assets/guide/Ticketing_guide.pdf" target="_blank" rel="noopener" title="Open guide">Open guide</a></li>
 				</ul>
 				</nav>
 			</div>
@@ -1286,6 +1510,38 @@
 	<script>
 		// lightweight “last updated” indicator (client-side)
 		document.getElementById('lastUpdate').textContent = new Date().toISOString().slice(0, 10);
+
+		const menuToggle = document.querySelector('.site-menu-toggle');
+		const primaryNavigation = document.getElementById('site-primary-navigation');
+
+		function setMenu(open) {
+			menuToggle.setAttribute('aria-expanded', String(open));
+			menuToggle.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+			primaryNavigation.classList.toggle('is-open', open);
+		}
+
+		menuToggle.addEventListener('click', () => {
+			setMenu(menuToggle.getAttribute('aria-expanded') !== 'true');
+		});
+
+		primaryNavigation.addEventListener('click', (event) => {
+			if (event.target.closest('a')) setMenu(false);
+		});
+
+		document.addEventListener('click', (event) => {
+			if (!event.target.closest('.bee-row-1 .bee-menu')) setMenu(false);
+		});
+
+		document.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape' && menuToggle.getAttribute('aria-expanded') === 'true') {
+				setMenu(false);
+				menuToggle.focus();
+			}
+		});
+
+		window.addEventListener('resize', () => {
+			if (window.innerWidth > 1160) setMenu(false);
+		});
 	</script>
 </body>
 
