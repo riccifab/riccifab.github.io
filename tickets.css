@@ -569,3 +569,421 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   text-align: center;
   color: var(--muted);
 }
+
+/* Authenticated workspace */
+body:not(.auth-view) .page {
+  max-width: 1280px;
+}
+
+body:not(.auth-view) .topbar {
+  margin-bottom: 1.75rem;
+}
+
+#app .card {
+  margin-bottom: 1.35rem;
+  padding: 1.55rem 1.65rem;
+  border-color: rgba(221, 221, 223, 0.18);
+  border-radius: 24px;
+  background: rgba(5, 7, 18, 0.58);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.26);
+  backdrop-filter: blur(14px);
+}
+
+#app .card h2,
+body:not(.auth-view) .modalCard h2 {
+  font-family: Roboto, Tahoma, Verdana, "Segoe UI", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+#app .card > .row.space {
+  align-items: flex-start;
+}
+
+body:not(.auth-view) .btn {
+  min-height: 40px;
+  padding: 0.58rem 1rem;
+  border-color: rgba(221, 221, 223, 0.24);
+  background: rgba(5, 7, 18, 0.28);
+  color: rgba(221, 221, 223, 0.92);
+  font-weight: 600;
+  transition: transform 0.15s ease, color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+body:not(.auth-view) .btn:hover {
+  transform: none;
+  border-color: rgba(221, 221, 223, 0.55);
+  background: rgba(221, 221, 223, 0.08);
+  box-shadow: none;
+}
+
+body:not(.auth-view) .btn.primary {
+  border-color: #dddddf;
+  background: #dddddf;
+  color: #0e0e10;
+}
+
+body:not(.auth-view) .btn.primary:hover {
+  border-color: #dddddf;
+  background: transparent;
+  color: #dddddf;
+}
+
+body:not(.auth-view) .btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  transform: none;
+}
+
+body:not(.auth-view) :is(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline-color: rgba(113, 148, 206, 0.92);
+}
+
+body:not(.auth-view) :is(.pill, .pill-link) {
+  border-color: rgba(221, 221, 223, 0.22);
+  background: rgba(5, 7, 18, 0.28);
+  color: rgba(221, 221, 223, 0.82);
+}
+
+body:not(.auth-view) .pill-link:hover {
+  border-color: rgba(221, 221, 223, 0.52);
+  background: rgba(221, 221, 223, 0.07);
+  color: #dddddf;
+}
+
+#app .filters {
+  grid-template-columns: minmax(230px, 1.4fr) minmax(150px, 0.8fr) minmax(110px, 0.6fr) minmax(150px, 0.8fr) minmax(150px, 0.8fr);
+  gap: 0.85rem;
+  margin-top: 1.15rem;
+  padding: 1rem;
+  border: 1px solid rgba(221, 221, 223, 0.14);
+  border-radius: 18px;
+  background: rgba(14, 14, 16, 0.28);
+}
+
+#app label,
+body:not(.auth-view) .modalCard label {
+  gap: 0.45rem;
+  color: rgba(221, 221, 223, 0.72);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+#app :is(input, select, textarea),
+body:not(.auth-view) .modalCard :is(input, select, textarea) {
+  min-height: 42px;
+  border-color: rgba(221, 221, 223, 0.2);
+  border-radius: 12px;
+  background: rgba(14, 14, 16, 0.68);
+  color: #dddddf;
+  font-family: inherit;
+  font-size: 0.92rem;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+#app textarea,
+body:not(.auth-view) .modalCard textarea {
+  min-height: 96px;
+  line-height: 1.5;
+}
+
+#app :is(input, select, textarea):focus,
+body:not(.auth-view) .modalCard :is(input, select, textarea):focus {
+  border-color: rgba(113, 148, 206, 0.88);
+  background: rgba(14, 14, 16, 0.9);
+  box-shadow: 0 0 0 4px rgba(113, 148, 206, 0.11);
+}
+
+#app .required-field :is(input, select, textarea),
+body:not(.auth-view) .modalCard .required-field :is(input, select, textarea) {
+  border-color: rgba(221, 221, 223, 0.2);
+  box-shadow: inset 3px 0 rgba(251, 113, 133, 0.28);
+}
+
+#app .required-field :is(input, select, textarea):focus,
+body:not(.auth-view) .modalCard .required-field :is(input, select, textarea):focus {
+  border-color: rgba(113, 148, 206, 0.88);
+  box-shadow: 0 0 0 4px rgba(113, 148, 206, 0.11), inset 3px 0 rgba(251, 113, 133, 0.28);
+}
+
+#app .tableWrap {
+  margin-top: 1rem;
+  border-color: rgba(221, 221, 223, 0.16);
+  border-radius: 18px;
+  background: rgba(14, 14, 16, 0.3);
+}
+
+#app .tableWrap:focus-visible {
+  outline: 3px solid rgba(113, 148, 206, 0.82);
+  outline-offset: 3px;
+}
+
+#app .table th,
+#app .table td {
+  padding: 0.8rem 0.72rem;
+  border-bottom-color: rgba(221, 221, 223, 0.1);
+}
+
+#app .table td {
+  transition: background-color 0.15s ease;
+}
+
+#app .table th {
+  z-index: 1;
+  color: rgba(221, 221, 223, 0.62);
+  background: rgba(14, 14, 16, 0.94);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+#app .table tbody tr {
+  transition: background 0.15s ease;
+}
+
+#app .table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+#app .table tr:hover td {
+  background: rgba(113, 148, 206, 0.08);
+}
+
+#app .ticket-open {
+  color: #a9c5f0;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgba(169, 197, 240, 0.45);
+  text-underline-offset: 0.18em;
+}
+
+#app .ticket-open:hover {
+  color: #c6d9f6;
+  text-decoration-color: currentColor;
+}
+
+#ticketsCount {
+  display: block;
+  padding: 0.75rem 0.15rem 0;
+  color: rgba(221, 221, 223, 0.56);
+}
+
+#app > .grid2 {
+  gap: 1.25rem;
+}
+
+#ticketDetails {
+  color: rgba(221, 221, 223, 0.9);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+#ticketDetails > .grid2 > div,
+#ticketDetails > .grid2 + .grid2 > div {
+  padding: 0.1rem 0 0.45rem;
+  border-bottom: 1px solid rgba(221, 221, 223, 0.09);
+}
+
+#ticketDetails > .grid2 {
+  min-width: 0;
+  padding: 0.9rem;
+  border: 1px solid rgba(221, 221, 223, 0.12);
+  border-radius: 16px;
+  background: rgba(14, 14, 16, 0.25);
+}
+
+#ticketDetails > .grid2 > :is(div, label) {
+  min-width: 0;
+}
+
+#ticketDetails a {
+  color: #a9c5f0;
+}
+
+#app .sep {
+  border-top-color: rgba(221, 221, 223, 0.14);
+  margin: 1.2rem 0;
+}
+
+#app .comments {
+  min-height: 260px;
+  border-color: rgba(221, 221, 223, 0.16);
+  border-radius: 18px;
+  background: rgba(14, 14, 16, 0.42);
+  padding: 0.85rem;
+}
+
+#app .commentItem {
+  padding: 0.85rem 0.75rem;
+  margin-bottom: 0.65rem;
+  border: 1px solid rgba(221, 221, 223, 0.1);
+  border-radius: 14px;
+  background: rgba(5, 7, 18, 0.34);
+}
+
+#app .commentItem:last-child {
+  margin-bottom: 0;
+  border-bottom: 1px solid rgba(221, 221, 223, 0.1);
+}
+
+#app .commentMeta {
+  color: rgba(221, 221, 223, 0.52);
+}
+
+#commentsBox {
+  overflow-wrap: anywhere;
+}
+
+#app .comments + .row {
+  align-items: stretch;
+  flex-wrap: nowrap;
+}
+
+#commentInput {
+  flex: 1 1 220px;
+  width: auto;
+}
+
+#btnAddComment {
+  min-width: 88px;
+}
+
+body:not(.auth-view) .modal {
+  align-items: center;
+  background: rgba(3, 6, 12, 0.82);
+  backdrop-filter: blur(8px);
+}
+
+body:not(.auth-view) .modalCard {
+  width: min(940px, 100%);
+  padding: 1.55rem 1.65rem;
+  border-color: rgba(221, 221, 223, 0.2);
+  border-radius: 28px;
+  background: rgba(5, 7, 18, 0.97);
+  box-shadow: 0 32px 90px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(18px);
+}
+
+body:not(.auth-view) .modalCard .grid2 {
+  gap: 1rem;
+}
+
+body:not(.auth-view) .modalCard form > :is(.grid2, label) {
+  margin-top: 0.9rem;
+}
+
+body:not(.auth-view) .modalCard form > .row.space.mt {
+  margin-top: 1.25rem;
+}
+
+body:not(.auth-view) #btnCloseModal {
+  width: 42px;
+  min-width: 42px;
+  padding: 0;
+}
+
+body:not(.auth-view) .footer {
+  color: rgba(221, 221, 223, 0.5);
+}
+
+body:not(.auth-view),
+body:not(.auth-view) * {
+  scrollbar-color: rgba(221, 221, 223, 0.32) rgba(14, 14, 16, 0.32);
+  scrollbar-width: thin;
+}
+
+body:not(.auth-view) *::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+body:not(.auth-view) *::-webkit-scrollbar-track {
+  background: rgba(14, 14, 16, 0.32);
+}
+
+body:not(.auth-view) *::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: rgba(221, 221, 223, 0.28);
+  background-clip: padding-box;
+}
+
+body:not(.auth-view) *::-webkit-scrollbar-thumb:hover {
+  background: rgba(221, 221, 223, 0.42);
+  background-clip: padding-box;
+}
+
+#app :is(input, textarea)::placeholder,
+body:not(.auth-view) .modalCard :is(input, textarea)::placeholder {
+  color: rgba(221, 221, 223, 0.4);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body:not(.auth-view) .btn,
+  #app .table td {
+    transition: none;
+  }
+}
+
+@media (max-width: 1060px) {
+  #app .filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #app .filters label:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 700px) {
+  body:not(.auth-view) .topbar {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  body:not(.auth-view) .top-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 600px) {
+  body:not(.auth-view) .page {
+    padding: 1rem 0.75rem 1.5rem;
+  }
+
+  #app .card {
+    padding: 1.15rem;
+    border-radius: 20px;
+  }
+
+  #app .filters {
+    grid-template-columns: 1fr;
+    padding: 0.85rem;
+  }
+
+  #app .filters label:first-child {
+    grid-column: auto;
+  }
+
+  #app .table th,
+  #app .table td {
+    padding: 0.7rem 0.62rem;
+  }
+
+  body:not(.auth-view) .modal {
+    align-items: flex-start;
+    padding: 0.65rem;
+  }
+
+  body:not(.auth-view) .modalCard {
+    max-height: calc(100vh - 1.3rem);
+    padding: 1.15rem;
+    border-radius: 20px;
+  }
+
+}
