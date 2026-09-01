@@ -58,6 +58,7 @@ const pillText = $("pillText");
 const authCard = $("authCard");
 const authMsg = $("authMsg");
 
+const loginForm = $("loginForm");
 const loginEmail = $("loginEmail");
 const loginPass = $("loginPass");
 const btnSignIn = $("btnSignIn");
@@ -308,11 +309,18 @@ async function ensureAllowedOrThrow(user) {
 }
 
 /* ========= Auth ========= */
-btnSignIn.onclick = async () => {
+loginForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (btnSignIn.disabled) return;
+
   setMsg(authMsg, "Signing in...");
+  btnSignIn.disabled = true;
+  btnSignIn.setAttribute("aria-busy", "true");
+  btnSignIn.textContent = "Signing in...";
+
   try {
     const email = (loginEmail.value || "").trim();
-    const pass = (loginPass.value || "").trim();
+    const pass = loginPass.value || "";
     if (!email || !pass) {
       setMsg(authMsg, "Insert email + password.", "err");
       return;
@@ -320,8 +328,12 @@ btnSignIn.onclick = async () => {
     await signInWithEmailAndPassword(auth, email, pass);
   } catch (e) {
     setMsg(authMsg, `Login error: ${e?.message || e}`, "err");
+  } finally {
+    btnSignIn.disabled = false;
+    btnSignIn.removeAttribute("aria-busy");
+    btnSignIn.textContent = "Sign in";
   }
-};
+});
 
 btnReset.onclick = async () => {
   try {

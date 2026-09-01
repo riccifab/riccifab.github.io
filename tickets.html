@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>Neurotech – PI Ticketing</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="tickets.css?v=20260825a" />
+  <link rel="stylesheet" href="tickets.css?v=20260901b" />
   <link rel="icon" href="assets/favicon.ico" sizes="any">
 </head>
 
@@ -26,31 +26,39 @@
     </header>
 
     <!-- LOGIN -->
-    <section id="authCard" class="card">
-      <h2>Access</h2>
-      <p>
-        Sign in with IIT email + password (created by admin in Firebase Auth).
-        Your email must exist in Firestore <code>allowlist/{email}</code>.
-      </p>
-
-      <div class="grid2">
-        <label>
-          Email
-          <input id="loginEmail" type="email" placeholder="name.surname@iit.it" autocomplete="username" />
-        </label>
-        <label>
-          Password
-          <input id="loginPass" type="password" placeholder="password" autocomplete="current-password" />
-        </label>
+    <section id="authCard" class="card auth-card" aria-labelledby="authTitle">
+      <div class="auth-brand">
+        <span class="auth-mark" aria-hidden="true">NT</span>
+        <span>Neurotech Operations</span>
       </div>
 
-      <div class="row mt">
-        <button id="btnSignIn" class="btn primary">Sign in</button>
-        <button id="btnReset" class="btn">Reset password</button>
-        <button id="btnSignOut" class="btn hidden">Sign out</button>
+      <div class="auth-intro">
+        <div class="auth-eyebrow">Secure workspace</div>
+        <h2 id="authTitle">Welcome back</h2>
+        <p>Sign in with your authorized IIT account to access PI Ticketing.</p>
       </div>
 
-      <div id="authMsg" class="msg"></div>
+      <form id="loginForm" class="auth-form">
+        <div class="auth-fields">
+          <label class="auth-field">
+            <span>Email address</span>
+            <input id="loginEmail" type="email" placeholder="name.surname@iit.it" autocomplete="username" autocapitalize="none" spellcheck="false" required />
+          </label>
+          <label class="auth-field">
+            <span>Password</span>
+            <input id="loginPass" type="password" placeholder="Enter your password" autocomplete="current-password" required />
+          </label>
+        </div>
+
+        <div class="auth-actions">
+          <button id="btnSignIn" class="btn primary auth-primary" type="submit">Sign in</button>
+          <button id="btnReset" class="btn auth-secondary" type="button">Reset password</button>
+          <button id="btnSignOut" class="btn hidden" type="button">Sign out</button>
+        </div>
+
+        <div id="authMsg" class="msg auth-message" role="status" aria-live="polite"></div>
+        <p class="auth-footnote">Press Enter after typing your password to continue.</p>
+      </form>
     </section>
 
     <!-- APP -->
@@ -347,6 +355,6 @@
     <footer class="footer">IIT Neurotech.</footer>
   </div>
 
-  <script type="module" src="tickets.js?v=20260901a"></script>
+  <script type="module" src="tickets.js?v=20260901b"></script>
 </body>
 </html>
