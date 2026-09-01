@@ -362,6 +362,7 @@ onAuthStateChanged(auth, async (user) => {
   renderComments(null);
 
   if (!user) {
+    document.body.classList.add("auth-view");
     authCard.classList.remove("hidden");
     appSection.classList.add("hidden");
     btnSignOut.classList.add("hidden");
@@ -376,6 +377,7 @@ onAuthStateChanged(auth, async (user) => {
   try {
     const { role, lab } = await ensureAllowedOrThrow(user);
 
+    document.body.classList.remove("auth-view");
     authCard.classList.add("hidden");
     appSection.classList.remove("hidden");
 

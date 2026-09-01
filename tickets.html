@@ -2,22 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Neurotech – PI Ticketing</title>
+  <title>Fabio Ricci — Technical Request Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="tickets.css?v=20260901b" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="tickets.css?v=20260901d" />
   <link rel="icon" href="assets/favicon.ico" sizes="any">
 </head>
 
-<body>
+<body class="auth-view">
   <div class="page">
     <header class="topbar">
-      <div>
-        <h1>PI Ticketing</h1>
-        <small>Requests → triage → delivery. Email/password (Firebase) + allowlist.</small>
-      </div>
+      <a class="portal-brand" href="labportal.html" aria-label="Technical Request Portal home">
+        <img src="assets/logo.png" alt="Istituto Italiano di Tecnologia" />
+        <span class="portal-brand-copy">
+          <h1>Technical Request Portal</h1>
+          <small>Technical requests and delivery tracking</small>
+        </span>
+      </a>
 
       <div class="top-actions">
-        <a class="pill-link" href="index.html">← Home</a>
+        <a class="pill-link" href="labportal.html">← Lab portal</a>
         <div id="sessionPill" class="pill">
           <span class="pill-dot" id="pillDot"></span>
           <span id="pillText">Signed out</span>
@@ -28,14 +34,14 @@
     <!-- LOGIN -->
     <section id="authCard" class="card auth-card" aria-labelledby="authTitle">
       <div class="auth-brand">
-        <span class="auth-mark" aria-hidden="true">NT</span>
-        <span>Neurotech Operations</span>
+        <span>Fabio Ricci</span>
+        <span class="auth-brand-divider" aria-hidden="true"></span>
+        <span>IIT</span>
       </div>
 
       <div class="auth-intro">
-        <div class="auth-eyebrow">Secure workspace</div>
-        <h2 id="authTitle">Welcome back</h2>
-        <p>Sign in with your IIT account to submit technical requests, track their progress, and collaborate with the Neurotech team.</p>
+        <h2 id="authTitle">Sign in</h2>
+        <p>Use your IIT email and password to submit a technical request or check its status.</p>
       </div>
 
       <form id="loginForm" class="auth-form">
@@ -57,7 +63,6 @@
         </div>
 
         <div id="authMsg" class="msg auth-message" role="status" aria-live="polite"></div>
-        <p class="auth-footnote">Press Enter after typing your password to continue.</p>
       </form>
     </section>
 
@@ -352,9 +357,9 @@
       </div>
     </div>
 
-    <footer class="footer">IIT Neurotech.</footer>
+    <footer class="footer">Fabio Ricci · IIT — CNCS Rovereto</footer>
   </div>
 
-  <script type="module" src="tickets.js?v=20260901b"></script>
+  <script type="module" src="tickets.js?v=20260901d"></script>
 </body>
 </html>
