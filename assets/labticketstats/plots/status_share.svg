@@ -2,9 +2,8 @@
 <rect width="100%" height="100%" rx="28" fill="#f8fafc" />
 <path d="M 252.000 112.000 A 168 168 0 1 1 86.552 250.827 L 157.458 263.330 A 96 96 0 1 0 252.000 184.000 Z" fill="#2563eb" />
 <path d="M 86.552 250.827 A 168 168 0 0 1 144.012 151.305 L 190.292 206.460 A 96 96 0 0 0 157.458 263.330 Z" fill="#0f766e" />
-<path d="M 144.012 151.305 A 168 168 0 0 1 176.602 129.870 L 208.915 194.211 A 96 96 0 0 0 190.292 206.460 Z" fill="#f97316" />
-<path d="M 176.602 129.870 A 168 168 0 0 1 213.257 116.528 L 229.861 186.588 A 96 96 0 0 0 208.915 194.211 Z" fill="#8b5cf6" />
-<path d="M 213.257 116.528 A 168 168 0 0 1 252.000 112.000 L 252.000 184.000 A 96 96 0 0 0 229.861 186.588 Z" fill="#ec4899" />
+<path d="M 144.012 151.305 A 168 168 0 0 1 213.257 116.528 L 229.861 186.588 A 96 96 0 0 0 190.292 206.460 Z" fill="#f97316" />
+<path d="M 213.257 116.528 A 168 168 0 0 1 252.000 112.000 L 252.000 184.000 A 96 96 0 0 0 229.861 186.588 Z" fill="#8b5cf6" />
 <circle cx="252" cy="280" r="94" fill="#ffffff" />
 <text x="252" y="268" text-anchor="middle" fill="#64748b" font-size="15" font-family="Arial, sans-serif">Total</text>
 <text x="252" y="304" text-anchor="middle" fill="#0f172a" font-size="40" font-family="Arial, sans-serif" font-weight="700">27</text>
@@ -15,12 +14,9 @@
 <text x="520" y="174" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">WAITING_ON_PROCUREMENT</text>
 <text x="520" y="198" fill="#475569" font-size="14" font-family="Arial, sans-serif">3 tickets • 11%</text>
 <circle cx="500" cy="238" r="10" fill="#f97316" />
-<text x="520" y="234" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">NEW</text>
-<text x="520" y="258" fill="#475569" font-size="14" font-family="Arial, sans-serif">1 tickets • 4%</text>
+<text x="520" y="234" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">IN_PROGRESS</text>
+<text x="520" y="258" fill="#475569" font-size="14" font-family="Arial, sans-serif">2 tickets • 7%</text>
 <circle cx="500" cy="298" r="10" fill="#8b5cf6" />
-<text x="520" y="294" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">IN_PROGRESS</text>
+<text x="520" y="294" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">BLOCKED</text>
 <text x="520" y="318" fill="#475569" font-size="14" font-family="Arial, sans-serif">1 tickets • 4%</text>
-<circle cx="500" cy="358" r="10" fill="#ec4899" />
-<text x="520" y="354" fill="#0f172a" font-size="16" font-family="Arial, sans-serif" font-weight="600">BLOCKED</text>
-<text x="520" y="378" fill="#475569" font-size="14" font-family="Arial, sans-serif">1 tickets • 4%</text>
 </svg>
