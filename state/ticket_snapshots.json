@@ -1,5 +1,6 @@
 {
   "0xe2wGl8McqBY1n8VuFH": {
+    "adminNotes": "",
     "assigneeEmail": "",
     "canBeDeferred": "yes",
     "category": "mechanics",
@@ -11,6 +12,7 @@
     "deferTo": "Heather",
     "definitionOfDone": "- All components mounted\n- Minimal mess please",
     "description": "Our lab ordered a bunch of Misumi stuff and it needs to be assembled",
+    "effortAdmin": "M",
     "effortGuess": "M",
     "estimatedCostEUR": null,
     "expectedDeliveryDate": "2026-09-18",
@@ -19,7 +21,7 @@
     "lab": "Rossi",
     "labKey": "rossi",
     "priority": "P2",
-    "procurementNeeded": "unknown",
+    "procurementNeeded": "no",
     "requesterSubmission": {
       "canBeDeferred": "yes",
       "category": "mechanics",
@@ -43,10 +45,10 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-09-01T14:13:16.343000+00:00",
-    "status": "NEW",
+    "status": "IN_PROGRESS",
     "tags": [],
     "title": "Misumi assembly",
-    "updatedAt": "2026-09-01T14:13:16.343000+00:00",
+    "updatedAt": "2026-09-03T07:28:38.573000+00:00",
     "whyNotDeferredCode": "",
     "whyNotDeferredText": ""
   },
