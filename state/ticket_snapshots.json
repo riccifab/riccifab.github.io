@@ -346,13 +346,13 @@
       "whyNotDeferredText": "expertise in mechanical adjustment/alteration of thick aluminium piece"
     },
     "requesterSubmittedAt": "2026-08-25T10:30:17.708000+00:00",
-    "status": "WAITING_ON_PROCUREMENT",
+    "status": "CLOSED",
     "tags": [
       "WFI holder adjustment",
       "WFI/MRI"
     ],
     "title": "Fix mechanical front holder of the WFI/MRI system",
-    "updatedAt": "2026-08-26T12:52:17.608000+00:00",
+    "updatedAt": "2026-09-07T13:42:32.290000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "expertise in mechanical adjustment/alteration of thick aluminium piece"
   },
@@ -1552,7 +1552,7 @@
     "deferTo": "",
     "definitionOfDone": "- sostituire gli elettrodi che non funzionano nelle cuffie",
     "description": "Ciao Fabio,\nabbiamo di nuovo delle cuffie eeg da sistemare, come la scorsa volta ci potrebbero essere elettrodi da sostituire e magari la retina da rivedere.\ndovremmo avere già il materiale per rimpiazzare le cose dalla scorsa volta",
-    "effortAdmin": "M",
+    "effortAdmin": "L",
     "effortGuess": "S",
     "estimatedCostEUR": 0,
     "expectedDeliveryDate": "2026-10-01",
@@ -1583,10 +1583,10 @@
       "whyNotDeferredCode": "skills",
       "whyNotDeferredText": "servono specifici strumenti e qualcuno che sappia cosa fare"
     },
-    "status": "WAITING_ON_PROCUREMENT",
+    "status": "CLOSED",
     "tags": [],
     "title": "Cuffie eeg",
-    "updatedAt": "2026-06-05T09:59:54.142000+00:00",
+    "updatedAt": "2026-09-07T13:41:49.480000+00:00",
     "whyNotDeferredCode": "skills",
     "whyNotDeferredText": "servono specifici strumenti e qualcuno che sappia cosa fare"
   },
