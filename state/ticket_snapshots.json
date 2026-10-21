@@ -1,6 +1,6 @@
 {
   "0xe2wGl8McqBY1n8VuFH": {
-    "adminNotes": "",
+    "adminNotes": "We need to cut some acrylic",
     "assigneeEmail": "",
     "canBeDeferred": "yes",
     "category": "mechanics",
@@ -15,13 +15,13 @@
     "effortAdmin": "M",
     "effortGuess": "M",
     "estimatedCostEUR": null,
-    "expectedDeliveryDate": "2026-09-18",
+    "expectedDeliveryDate": "2026-11-30",
     "hardDeadline": false,
     "hardDeadlineDate": "",
     "lab": "Rossi",
     "labKey": "rossi",
     "priority": "P2",
-    "procurementNeeded": "no",
+    "procurementNeeded": "yes",
     "requesterSubmission": {
       "canBeDeferred": "yes",
       "category": "mechanics",
@@ -45,10 +45,10 @@
       "whyNotDeferredText": ""
     },
     "requesterSubmittedAt": "2026-09-01T14:13:16.343000+00:00",
-    "status": "IN_PROGRESS",
+    "status": "WAITING_ON_PROCUREMENT",
     "tags": [],
     "title": "Misumi assembly",
-    "updatedAt": "2026-09-03T07:28:38.573000+00:00",
+    "updatedAt": "2026-10-21T16:33:28.921000+00:00",
     "whyNotDeferredCode": "",
     "whyNotDeferredText": ""
   },
