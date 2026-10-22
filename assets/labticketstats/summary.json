@@ -4,15 +4,15 @@
   "average_comment_count": 0.4,
   "done_tickets": 23,
   "effort_changes": 10,
-  "eta_changes": 9,
-  "generated_at": "2026-10-21T10:42:56.576837+00:00",
+  "eta_changes": 10,
+  "generated_at": "2026-10-22T10:44:29.517591+00:00",
   "median_comment_count": 0.0,
-  "open_tickets": 4,
-  "overdue_open_tickets": 3,
+  "open_tickets": 5,
+  "overdue_open_tickets": 2,
   "priority_changes": 1,
-  "tickets_total": 27,
+  "tickets_total": 28,
   "tickets_with_comments": 7,
-  "tickets_with_requester_snapshot": 24,
+  "tickets_with_requester_snapshot": 25,
   "top_categories": [
     [
       "mechanics",
@@ -20,7 +20,7 @@
     ],
     [
       "electronics",
-      10
+      11
     ],
     [
       "software",
@@ -46,7 +46,7 @@
     ],
     [
       "Lombardo",
-      1
+      2
     ],
     [
       "Iurilli",
