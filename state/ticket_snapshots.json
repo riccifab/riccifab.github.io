@@ -98,10 +98,10 @@
       "whyNotDeferredText": "resin printer"
     },
     "requesterSubmittedAt": "2026-11-03T13:59:39.642000+00:00",
-    "status": "IN_PROGRESS",
+    "status": "CLOSED",
     "tags": [],
     "title": "Brain cube with model inset",
-    "updatedAt": "2026-11-05T08:28:53.623000+00:00",
+    "updatedAt": "2026-11-11T09:24:12.568000+00:00",
     "whyNotDeferredCode": "tools",
     "whyNotDeferredText": "resin printer"
   },
