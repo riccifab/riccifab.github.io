@@ -1,7 +1,6 @@
 # Workstatus Ticketing Website
 
 [![Notify PI](https://github.com/riccifab/riccifab.github.io/actions/workflows/ticket_notify_pi.yml/badge.svg?branch=main)](https://github.com/riccifab/riccifab.github.io/actions/workflows/ticket_notify_pi.yml)
-[![Weekly digest](https://github.com/riccifab/riccifab.github.io/actions/workflows/weekly_ticket_digest.yml/badge.svg?branch=main)](https://github.com/riccifab/riccifab.github.io/actions/workflows/weekly_ticket_digest.yml)
 [![ticket-update-notify](https://github.com/riccifab/riccifab.github.io/actions/workflows/ticket_update.yml/badge.svg)](https://github.com/riccifab/riccifab.github.io/actions/workflows/ticket_update.yml)
 [![Daily ticket analysis](https://github.com/riccifab/riccifab.github.io/actions/workflows/daily_ticket_analysis.yml/badge.svg)](https://github.com/riccifab/riccifab.github.io/actions/workflows/daily_ticket_analysis.yml)
 [![Sync work_status in-progress tickets](https://github.com/riccifab/riccifab.github.io/actions/workflows/work_status_sync.yml/badge.svg)](https://github.com/riccifab/riccifab.github.io/actions/workflows/work_status_sync.yml)
@@ -27,7 +26,7 @@ A lightweight, GitHub Pages-hosted ticketing website used to track lab/tech requ
 - Automated notifications:
   - **New ticket -> PI notification** (based on lab key)
   - **Ticket updated -> requester notification** (diff-style "what changed")
-  - **Weekly digest** (summary email)
+- **Weekly digest:** automatic delivery is temporarily paused; the admin summary remains available through a manual GitHub Actions run.
 - Bot state persisted in a separate branch (`bot-state`) so scheduled workflows are deterministic
 <img width="464" height="647" alt="Screenshot 2026-02-13 alle 21 23 18" src="https://github.com/user-attachments/assets/fdb06d8c-114f-4c58-9f6a-f439913aa9e9" />
 
