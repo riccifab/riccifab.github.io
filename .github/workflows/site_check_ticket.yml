@@ -1,0 +1,29 @@
+name: File tickets for failed site checks
+
+on:
+  workflow_run:
+    workflows: [Site checks]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  file-ticket:
+    if: >-
+      github.event.workflow_run.conclusion == 'failure' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    environment: site-check-ticketing
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Create or locate the Firestore ticket
+        env:
+          SITE_CHECK_TICKET_EMAIL: ${{ secrets.SITE_CHECK_TICKET_EMAIL }}
+          SITE_CHECK_TICKET_PASSWORD: ${{ secrets.SITE_CHECK_TICKET_PASSWORD }}
+        run: python3 scripts/create_site_check_ticket.py

@@ -32,6 +32,19 @@ A lightweight, GitHub Pages-hosted ticketing website used to track lab/tech requ
 
 ---
 
+## Tickets for failed site checks
+
+When Site checks fails on a push to `main`, GitHub Actions creates one `NEW`
+software ticket per failing commit. The ticket links to the failed run, uses
+`Other` for the lab, and goes through the existing ticket notifications.
+
+Create a dedicated Firebase Auth account and add it to the portal allowlist
+with the `postdoc` role and a separate lab label such as `Site Automation`.
+This lets the account file `Other` tickets and read its own submissions.
+In the GitHub `site-check-ticketing` environment, add `SITE_CHECK_TICKET_EMAIL`
+and `SITE_CHECK_TICKET_PASSWORD` as environment secrets. Limit deployments for
+this environment to `main`.
+
 ## Email setup
 
 Configure these secrets where email jobs run:

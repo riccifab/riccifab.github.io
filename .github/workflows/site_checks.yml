@@ -15,6 +15,7 @@ on:
       - "scripts/*.py"
       - ".github/workflows/ticket_notify_pi.yml"
       - ".github/workflows/ticket_update.yml"
+      - ".github/workflows/site_check_ticket.yml"
       - ".github/workflows/site_checks.yml"
   pull_request:
     paths:
@@ -29,6 +30,7 @@ on:
       - "scripts/*.py"
       - ".github/workflows/ticket_notify_pi.yml"
       - ".github/workflows/ticket_update.yml"
+      - ".github/workflows/site_check_ticket.yml"
       - ".github/workflows/site_checks.yml"
 
 permissions:
@@ -67,6 +69,7 @@ jobs:
             scripts/ticket_update.py \
             scripts/ticket_digest.py \
             scripts/sync_work_status.py \
+            scripts/create_site_check_ticket.py \
             scripts/analyze_tickets.py
 
       - name: Check Firebase configuration
