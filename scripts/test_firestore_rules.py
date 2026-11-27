@@ -22,6 +22,15 @@ class FirestoreRulesTest(unittest.TestCase):
         self.assertIn('rawRole === "technicians" ? "technician" : rawRole', TICKETS_JS)
         self.assertIn('"admin", "pi", "technician"', TICKETS_JS)
 
+    def test_wfi_inspection_directory_queries_are_opt_in_and_bounded(self) -> None:
+        self.assertRegex(
+            RULES,
+            r'allow list: if isAllowed\(\)\s*'
+            r'&& myAllowlistDoc\(\)\.data\.get\("wfiInspectionDirectoryReader", false\) == true\s*'
+            r'&& request\.query\.limit <= 2\s*'
+            r'&& resource\.data\.wfiInspectionDirectory == true;',
+        )
+
     def test_technician_updates_are_field_limited(self) -> None:
         self.assertIn("technicianUpdateFieldsOnly", RULES)
         self.assertIn("affectedKeys().hasOnly", RULES)
