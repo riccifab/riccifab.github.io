@@ -66,6 +66,23 @@ Deploy only the Firestore rules with:
 firebase deploy --only firestore:rules --project workstatus-5a293
 ```
 
+### WFI inspection email lookup
+
+The WFI inspection notifier can resolve an inspector's name using existing
+`allowlist/{email}` documents. Use boolean values for the two opt-in fields.
+
+- On the notifier account's own allowlist document, set
+  `wfiInspectionDirectoryReader` to `true`.
+- On each participating recipient's allowlist document, set
+  `wfiInspectionDirectory` to `true` and set `wfiInspectionNames` to an array of
+  strings containing the recipient's name and any explicit aliases.
+
+Normalize each name with Unicode NFKC, case folding, and trimming and
+collapsing whitespace. For example, store `["maria rossi", "m. rossi"]` if
+reports use both spellings. The lookup filters for opted-in entries, matches a
+name exactly against the array, and requests at most two document IDs so it
+can detect ambiguous matches. A unique matching document ID is the email.
+
 ---
 
 ## Local export and analysis

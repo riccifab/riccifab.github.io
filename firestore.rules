@@ -62,6 +62,10 @@ service cloud.firestore {
 
     match /allowlist/{docId} {
       allow read: if signedIn() && (docId == email() || isAdmin());
+      allow list: if isAllowed()
+        && myAllowlistDoc().data.get("wfiInspectionDirectoryReader", false) == true
+        && request.query.limit <= 2
+        && resource.data.wfiInspectionDirectory == true;
       allow create, update, delete: if isAdmin();
     }
 
