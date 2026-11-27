@@ -82,6 +82,7 @@ collapsing whitespace. For example, store `["maria rossi", "m. rossi"]` if
 reports use both spellings. The lookup filters for opted-in entries, matches a
 name exactly against the array, and requests at most two document IDs so it
 can detect ambiguous matches. A unique matching document ID is the email.
+The designated reader can read full opted-in entries in bounded queries.
 
 ---
 
